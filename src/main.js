@@ -1,32 +1,25 @@
 import {createSiteMenuTemplate} from './view/site-menu-view.js';
 import {createFilterTemplate} from './view/filter-view.js';
-import {createLoadMoreButtonTemplate} from './view/sorting-view.js';
-import {createTaskTemplate} from './view/form-add-view.js';
-import {createTaskEditTemplate} from './view/form-edit-view.js';
-import {createBoardTemplate} from './view/point-list-view.js';
+import {createSortTemplate} from './view/sort-view.js';
+import {editPointTemplate} from './view/form-edit-view.js';
+// import {addPointTemplate} from './view/form-add-view.js';
+import {createPointTemplate} from './view/point-list-view.js';
 import {renderTemplate, RenderPosition} from './render.js';
 
 const TASK_COUNT = 3;
 
-const siteHeaderElement = document.querySelector('.page-header');
-const siteNavigationElement = siteHeaderElement.querySelector('.trip-controls__navigation');
-const siteFiltersElement = siteHeaderElement.querySelector('.trip-controls__filters');
-const tripView = siteFiltersElement.querySelector('.visually-hidden');
-const FilterEvent = siteNavigationElement.querySelector('.visually-hidden');
-const siteMainElement = document.querySelector('.page-body__page-main');
-const tripEvents = siteMainElement.querySelector('.visually-hidden');
+const siteBodyElement = document.querySelector('.page-body');
+const siteNavigationElement = siteBodyElement.querySelector('.trip-controls__navigation');
+const siteFiltersElement = siteBodyElement.querySelector('.trip-controls__filters');
+const siteEventsElement = siteBodyElement.querySelector('.trip-events');
+// const siteAddingElement = siteBodyElement.querySelector('.trip-main__event-add-btn');
 
-renderTemplate(siteHeaderElement, createSiteMenuTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(siteMainElement, createFilterTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(siteMainElement, createBoardTemplate(), RenderPosition.BEFOREEND);
-
-const boardElement = siteMainElement.querySelector('.board');
-const taskListElement = boardElement.querySelector('.board__tasks');
-
-renderTemplate(taskListElement, createTaskEditTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(siteFiltersElement, createFilterTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(siteNavigationElement, createSiteMenuTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(siteEventsElement, editPointTemplate(), RenderPosition.AFTERBEGIN);
+renderTemplate(siteEventsElement, editPointTemplate(), RenderPosition.AFTERBEGIN);
+renderTemplate(siteEventsElement, createSortTemplate(), RenderPosition.BEFOREEND);
 
 for (let i = 0; i < TASK_COUNT; i++) {
-  renderTemplate(taskListElement, createTaskTemplate(), RenderPosition.BEFOREEND);
+  renderTemplate(siteEventsElement, createPointTemplate(), RenderPosition.BEFOREEND);
 }
-
-renderTemplate(boardElement, createLoadMoreButtonTemplate(), RenderPosition.BEFOREEND);
