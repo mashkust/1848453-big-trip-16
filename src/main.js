@@ -8,6 +8,7 @@ import {renderTemplate, RenderPosition} from './render.js';
 
 const TASK_COUNT = 3;
 
+
 const siteBodyElement = document.querySelector('.page-body');
 const siteNavigationElement = siteBodyElement.querySelector('.trip-controls__navigation');
 const siteFiltersElement = siteBodyElement.querySelector('.trip-controls__filters');
