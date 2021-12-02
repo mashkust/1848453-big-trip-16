@@ -18,7 +18,7 @@ const createPoints = () => {
   return POINTS_ARRAY;
 };
 
-const POINTS = createPoints();
+export const POINTS = createPoints();
 console.log(POINTS);
 
 const siteBodyElement = document.querySelector('.page-body');
