@@ -31,7 +31,7 @@ const siteEventsListElement = siteEventsElement .querySelector('.trip-events__li
 renderTemplate(siteFiltersElement, createFilterTemplate(), RenderPosition.BEFOREEND);
 renderTemplate(siteNavigationElement, createSiteMenuTemplate(), RenderPosition.BEFOREEND);
 renderTemplate(siteEventsElement, createSortTemplate(), RenderPosition.AFTERBEGIN);
-renderTemplate(siteEventsElement, editPointTemplate(), RenderPosition.AFTERBEGIN);
+renderTemplate(siteEventsElement, editPointTemplate(POINTS), RenderPosition.AFTERBEGIN);
 
 for (let i = 0; i < TASK_COUNT; i++) {
   renderTemplate(siteEventsListElement, createPointTemplate(POINTS), RenderPosition.BEFOREEND);

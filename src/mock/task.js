@@ -94,7 +94,7 @@ const generateDestination = () => {
     name: generateCity(),
     pictures: [
       {
-        src: 'http://picsum.photos/248/152?r=${getRandomInteger}',
+        src: `http://picsum.photos/248/152?r=${Math.random()}`,
         description: someDescriptions,
       }
     ]
