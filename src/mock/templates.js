@@ -5,10 +5,10 @@ export const createOffersPointTemplate = (POINT) => {
   const ARRAY = [];
   if (POINT.offers.offers !== undefined || POINT.offers.offers.length !== 0) {
     for (let i=0; i<POINT.offers.offers.length ;i++) {
-      const offers= `<span class="event__offer-title">${POINT.offers.offers[i].title}</span>
+      const offersTemplate= `<span class="event__offer-title">${POINT.offers.offers[i].title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${POINT.offers.offers[i].price}</span>`;
-      ARRAY.push(offers);
+      ARRAY.push(offersTemplate);
     }
   }
   return ARRAY;
@@ -16,7 +16,7 @@ export const createOffersPointTemplate = (POINT) => {
 
 export const createFavotiteTemplate = (POINT) => {
   if (POINT.isfavorite===true) {
-    return `event__favorite-btn--active`;
+    return 'event__favorite-btn--active';
   }
   return '';
 };
@@ -32,11 +32,19 @@ export const createPhotosTemplate = (POINT) => {
   return ARRAY;
 };
 
+export const createCheckedTemplate= (POINT,someValue) => {
+  if (POINT.type === String(someValue)) {
+    return 'checked';
+  }
+  return '';
+};
+
 export const editOffersPointTemplate = (POINT) => {
   const offerForEdititing = generateOfferForEdititing(POINT.type, offers);
+  console.log(offerForEdititing);
   const ARRAY = [];
   if (offerForEdititing.offers !== undefined || offerForEdititing.offers.length !== 0) {
-    for (let i=0; i<POINT.offers.offers.length ;i++) {
+    for (let i=0; i<offerForEdititing.offers.length ;i++) {
       const template= `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="${offerForEdititing.offers[i].id}" type="checkbox" name="${offerForEdititing.offers[i].id}" >
       <label class="event__offer-label" for="${offerForEdititing.offers[i].id}">
