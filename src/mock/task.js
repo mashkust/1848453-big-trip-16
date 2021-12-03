@@ -76,7 +76,7 @@ const generateOffer = (someType, offersArray) => {
   else {
     const offer ={
       type: someType,
-      offers: getRandomArray(0)
+      offers: [],
     };
     return offer;
   }
