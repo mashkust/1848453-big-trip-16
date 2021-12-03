@@ -96,57 +96,6 @@ export const offers=[
     ]
   },
 ];
-// export const offers=[
-//   {
-//     id: 1,
-//     title: 'Upgrade to a business class',
-//     price: 120
-//   }, {
-//     id: 2,
-//     title: 'Choose the radio station',
-//     price: 60
-//   }, {
-//     id: 3,
-//     title: 'Order Ubern',
-//     price: 20
-//   }, {
-//     id: 4,
-//     title: 'Add luggage',
-//     price: 50
-//   }, {
-//     id: 5,
-//     title: 'Switch to comfort',
-//     price: 100
-//   }, {
-//     id: 6,
-//     title: 'Add meal',
-//     price: 15
-//   }, {
-//     id: 7,
-//     title: 'Choose seats',
-//     price: 5
-//   }, {
-//     id: 8,
-//     title: 'Travel by train',
-//     price: 40
-//   }, {
-//     id: 9,
-//     title: 'Rent a carn',
-//     price: 200
-//   }, {
-//     id: 10,
-//     title: 'Add breakfast',
-//     price: 50
-//   }, {
-//     id: 11,
-//     title: 'Book tickets',
-//     price: 40
-//   }, {
-//     id: 12,
-//     title: 'Lunch in city',
-//     price: 30
-//   }
-// ];
 
 export const descriptions=[
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',

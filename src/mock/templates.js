@@ -41,7 +41,6 @@ export const createCheckedTemplate= (POINT,someValue) => {
 
 export const editOffersPointTemplate = (POINT) => {
   const offerForEdititing = generateOfferForEdititing(POINT.type, offers);
-  console.log(offerForEdititing);
   const ARRAY = [];
   if (offerForEdititing.offers !== undefined || offerForEdititing.offers.length !== 0) {
     for (let i=0; i<offerForEdititing.offers.length ;i++) {

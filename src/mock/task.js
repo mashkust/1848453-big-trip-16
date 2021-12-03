@@ -8,10 +8,6 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-// const getRandomIndex = (descriptions)=> {
-//   getRandomInteger(0, descriptions.length - 1);
-// };
-
 const getRandomArray = (some) => {
   const ARRAY = [];
   if (some===undefined ) {
@@ -28,41 +24,6 @@ const getRandomArray = (some) => {
   }
   return ARRAY;
 };
-
-// const createOffersArray = (someType)=> {
-//   const someArray = [];
-//   if (someType === types[0]) {
-//     for (let i=0; i<=2; i++) {
-//       someArray.push(offers[i]);
-//     }
-//   }
-//   else if (someType === types[5]) {
-//     for (let i=3; i<=7; i++) {
-//       someArray.push(offers[i]);
-//       return someArray;
-//     }
-//   }
-//   else if (someType === types[6]) {
-//     for (let i=9; i<=9; i++) {
-//       someArray.push(offers[i]);
-//       return someArray;
-//     }
-//   }
-//   else if (someType === types[7]) {
-//     for (let i=10; i<=11; i++) {
-//       someArray.push(offers[i]);
-//       return someArray;
-//     }
-//   }
-//   else if (someType === types[4]) {
-//     for (let i=8; i<=8; i++) {
-//       someArray.push(offers[i]);
-//       return someArray;
-//     }
-//   }
-//   else {
-//     return someArray;}
-// };
 
 const generateOffer = (someType, offersArray) => {
   const someoffer = offersArray.find((el) => el.type === someType);
