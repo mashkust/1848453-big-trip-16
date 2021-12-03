@@ -1,3 +1,6 @@
+import {generateOfferForEdititing} from './task.js';
+import {offers} from './arrays.js';
+
 export const createOffersPointTemplate = (POINT) => {
   const ARRAY = [];
   if (POINT.offers.offers !== undefined || POINT.offers.offers.length !== 0) {
@@ -30,18 +33,19 @@ export const createPhotosTemplate = (POINT) => {
 };
 
 export const editOffersPointTemplate = (POINT) => {
+  const offerForEdititing = generateOfferForEdititing(POINT.type, offers);
   const ARRAY = [];
-  if (POINT.offers.offers !== undefined || POINT.offers.offers.length !== 0) {
+  if (offerForEdititing.offers !== undefined || offerForEdititing.offers.length !== 0) {
     for (let i=0; i<POINT.offers.offers.length ;i++) {
-      const offers= `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="${POINT.offers.offers[i].id}" type="checkbox" name="${POINT.offers.offers[i].id}" >
-      <label class="event__offer-label" for="${POINT.offers.offers[i].id}">
-        <span class="event__offer-title">${POINT.offers.offers[i].title}e</span>
+      const template= `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="${offerForEdititing.offers[i].id}" type="checkbox" name="${offerForEdititing.offers[i].id}" >
+      <label class="event__offer-label" for="${offerForEdititing.offers[i].id}">
+        <span class="event__offer-title">${offerForEdititing.offers[i].title}e</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${POINT.offers.offers[i].price}</span>
+        <span class="event__offer-price">${offerForEdititing.offers[i].price}</span>
       </label>
     </div>`;
-      ARRAY.push(offers);
+      ARRAY.push(template);
     }
   }
   return ARRAY;

@@ -1,4 +1,4 @@
-import {createFavotiteTemplate,createOffersPointTemplate} from './templates.js';
+import {createFavotiteTemplate,createOffersPointTemplate} from '../mock/templates.js';
 
 export const createPointTemplate = (POINTS) => {
   const ARRAY = [];

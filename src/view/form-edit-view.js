@@ -1,4 +1,4 @@
-import {createPhotosTemplate, editOffersPointTemplate} from './templates.js';
+import {createPhotosTemplate, editOffersPointTemplate} from '../mock/templates.js';
 
 export const editPointTemplate = (POINT)=> (
   `<ul class="trip-events__list">

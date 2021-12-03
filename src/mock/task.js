@@ -82,6 +82,24 @@ const generateOffer = (someType, offersArray) => {
   }
 };
 
+export const generateOfferForEdititing = (someType, offersArray) => {
+  const someoffer = offersArray.find((el) => el.type === someType);
+  if (someoffer) {
+    const offer ={
+      type: someType,
+      offers: someoffer.offers,
+    };
+    return offer;
+  }
+  else {
+    const offer ={
+      type: someType,
+      offers: [],
+    };
+    return offer;
+  }
+};
+
 const generateCity = () => {
   const randomIndex = getRandomInteger(0, cities.length - 1);
   return cities[randomIndex];
