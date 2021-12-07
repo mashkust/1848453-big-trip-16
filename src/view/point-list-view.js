@@ -1,6 +1,7 @@
 import {createFavotiteTemplate,createOffersPointTemplate} from '../mock/templates.js';
+import {createElement} from '../render.js';
 
-export const createPointTemplate = (POINTS) => {
+const createPointTemplate = (POINTS) => {
   const ARRAY = [];
   for (let i=1; i<POINTS.length ;i++) {
     const point= `<li class="trip-events__item">
@@ -43,3 +44,22 @@ export const createPointTemplate = (POINTS) => {
   return ARRAY.join('');
 };
 
+export default class SiteMenuView {
+  #element = null;
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createPointTemplate();
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

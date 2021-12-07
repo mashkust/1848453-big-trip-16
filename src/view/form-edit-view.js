@@ -1,7 +1,8 @@
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {types} from '../mock/arrays.js';
+import {createElement} from '../render.js';
 
-export const editPointTemplate = (POINTS)=> (
+const editPointTemplate = (POINTS)=> (
   `<ul class="trip-events__list">
   <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -120,3 +121,23 @@ export const editPointTemplate = (POINTS)=> (
   </li>
   </ul>`
 );
+
+export default class EditorView {
+  #element = null;
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return editPointTemplate();
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
