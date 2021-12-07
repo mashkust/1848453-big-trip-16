@@ -46,6 +46,11 @@ const createPointTemplate = (POINTS) => {
 
 export default class SiteMenuView {
   #element = null;
+  #points = null;
+
+  constructor(points) {
+    this.#points = points;
+  }
 
   get element() {
     if (!this.#element) {
@@ -56,7 +61,7 @@ export default class SiteMenuView {
   }
 
   get template() {
-    return createPointTemplate();
+    return createPointTemplate(this.#points);
   }
 
   removeElement() {
