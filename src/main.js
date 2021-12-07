@@ -3,10 +3,9 @@ import FilterView from './view/filter-view.js';
 import SortView from './view/sort-view.js';
 import EditorView from './view/form-edit-view.js';
 import PointView from './view/point-list-view.js';
-import {renderTemplate,renderElement, RenderPosition} from './render.js';
+import {render, RenderPosition} from './render.js';
 import {generatePoint} from './mock/task.js';
 
-const TASK_COUNT = 1;
 const LENGHT_POINTS_ARRAY =15;
 
 const createPoints = () => {
@@ -25,11 +24,11 @@ const siteFiltersElement = siteBodyElement.querySelector('.trip-controls__filter
 const siteEventsElement = siteBodyElement.querySelector('.trip-events');
 const siteEventsListElement = siteEventsElement .querySelector('.trip-events__list');
 
-renderElement(siteFiltersElement, new FilterView().element, RenderPosition.BEFOREEND);
-renderElement(siteNavigationElement, new SiteMenuView().element, RenderPosition.BEFOREEND);
-renderTemplate(siteEventsElement, new SortView().element, RenderPosition.AFTERBEGIN);
-renderTemplate(siteEventsElement, new EditorView(POINTS).element, RenderPosition.AFTERBEGIN);
+render(siteFiltersElement, new FilterView().element, RenderPosition.BEFOREEND);
+render(siteNavigationElement, new SiteMenuView().element, RenderPosition.BEFOREEND);
+render(siteEventsElement, new SortView().element, RenderPosition.AFTERBEGIN);
+render(siteEventsElement, new EditorView(POINTS).element, RenderPosition.AFTERBEGIN);
 
-for (let i = 0; i < TASK_COUNT; i++) {
-  renderTemplate(siteEventsListElement, new PointView(POINTS).element, RenderPosition.BEFOREEND);
+for (let i=1; i<POINTS.length ;i++) {
+  render(siteEventsListElement, new PointView(POINTS[i]).element, RenderPosition.BEFOREEND);
 }
