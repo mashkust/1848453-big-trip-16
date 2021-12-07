@@ -36,7 +36,7 @@ const renderTask = (taskListElement, point) => {
     taskListElement.replaceChild(taskComponent.element, taskEditComponent.element);
   };
 
-  taskComponent.element.querySelector('.card__btn--edit').addEventListener('click', () => {
+  taskComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceCardToForm();
   });
 
@@ -45,7 +45,6 @@ const renderTask = (taskListElement, point) => {
     replaceFormToCard();
   });
   render(taskListElement, taskComponent.element, RenderPosition.BEFOREEND);
-  // render(taskListElement, taskEditComponent.element, RenderPosition.BEFOREEND);
 };
 
 render(siteFiltersElement, new FilterView().element, RenderPosition.BEFOREEND);
