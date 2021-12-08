@@ -1,17 +1,16 @@
-import {createSiteMenuTemplate} from './view/site-menu-view.js';
-import {createFilterTemplate} from './view/filter-view.js';
-import {createSortTemplate} from './view/sort-view.js';
-import {editPointTemplate} from './view/form-edit-view.js';
-import {createPointTemplate} from './view/point-list-view.js';
-import {renderTemplate, RenderPosition} from './render.js';
+import FormEditView from './view/form-edit-view.js';
+import FilterView from './view/filter-view.js';
+import PointListView from './view/point-list-view.js';
+import SiteMenuView from './view/site-menu-view.js';
+import SortView from './view/sort-view.js';
 import {generatePoint} from './mock/task.js';
+import {render, RenderPosition} from './render.js';
 
-const TASK_COUNT = 1;
-const LENGHT_POINTS_ARRAY =15;
+const LENGTH_POINTS_ARRAY =15;
 
 const createPoints = () => {
   const POINTS_ARRAY = [];
-  for(let index = 0; index <= LENGHT_POINTS_ARRAY-1; index++) {
+  for(let index = 0; index <= LENGTH_POINTS_ARRAY-1; index++) {
     POINTS_ARRAY[index] = generatePoint(index);
   }
   return POINTS_ARRAY;
@@ -25,11 +24,33 @@ const siteFiltersElement = siteBodyElement.querySelector('.trip-controls__filter
 const siteEventsElement = siteBodyElement.querySelector('.trip-events');
 const siteEventsListElement = siteEventsElement .querySelector('.trip-events__list');
 
-renderTemplate(siteFiltersElement, createFilterTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(siteNavigationElement, createSiteMenuTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(siteEventsElement, createSortTemplate(), RenderPosition.AFTERBEGIN);
-renderTemplate(siteEventsElement, editPointTemplate(POINTS), RenderPosition.AFTERBEGIN);
+const renderTask = (taskListElement, point) => {
+  const taskComponent = new PointListView(point);
+  const taskEditComponent = new FormEditView(point);
 
-for (let i = 0; i < TASK_COUNT; i++) {
-  renderTemplate(siteEventsListElement, createPointTemplate(POINTS), RenderPosition.BEFOREEND);
+  const replaceCardToForm = () => {
+    taskListElement.replaceChild(taskEditComponent.element, taskComponent.element);
+  };
+
+  const replaceFormToCard = () => {
+    taskListElement.replaceChild(taskComponent.element, taskEditComponent.element);
+  };
+
+  taskComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceCardToForm();
+  });
+
+  taskEditComponent.element.querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+  });
+  render(taskListElement, taskComponent.element, RenderPosition.BEFOREEND);
+};
+
+render(siteFiltersElement, new FilterView().element, RenderPosition.BEFOREEND);
+render(siteNavigationElement, new SiteMenuView().element, RenderPosition.BEFOREEND);
+render(siteEventsElement, new SortView().element, RenderPosition.AFTERBEGIN);
+
+for (let i=1; i<POINTS.length ;i++) {
+  renderTask(siteEventsListElement, POINTS[i]);
 }
