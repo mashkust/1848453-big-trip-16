@@ -1,3 +1,4 @@
+import FormAddView from './view/form-edit-view.js';
 import FormEditView from './view/form-edit-view.js';
 import FilterView from './view/filter-view.js';
 import PointListView from './view/point-list-view.js';
@@ -7,6 +8,8 @@ import {generatePoint} from './mock/task.js';
 import {render, RenderPosition} from './render.js';
 
 const LENGTH_POINTS_ARRAY =15;
+
+const START_POINT = generatePoint(0);
 
 const createPoints = () => {
   const POINTS_ARRAY = [];
@@ -46,6 +49,10 @@ const renderTask = (taskListElement, point) => {
   });
   render(taskListElement, taskComponent.element, RenderPosition.BEFOREEND);
 };
+
+if (POINTS.length === 0) {
+  render(siteEventsElement, new FormAddView(START_POINT).element, RenderPosition.BEFOREEND);
+}
 
 render(siteFiltersElement, new FilterView().element, RenderPosition.BEFOREEND);
 render(siteNavigationElement, new SiteMenuView().element, RenderPosition.BEFOREEND);
