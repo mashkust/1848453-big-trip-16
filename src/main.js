@@ -55,6 +55,12 @@ const renderTask = (taskListElement, point) => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
   });
+
+  taskEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceFormToCard();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
   render(taskListElement, taskComponent.element, RenderPosition.BEFOREEND);
 };
 
