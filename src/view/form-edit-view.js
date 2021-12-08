@@ -122,7 +122,7 @@ const editPointTemplate = (POINT)=> (
   </ul>`
 );
 
-export default class EditorView {
+export default class FormEditorView {
   #element = null;
   #points = null;
 

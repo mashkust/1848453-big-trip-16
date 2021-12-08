@@ -1,16 +1,16 @@
-import SiteMenuView from './view/site-menu-view.js';
+import FormEditView from './view/form-edit-view.js';
 import FilterView from './view/filter-view.js';
+import PointListView from './view/point-list-view.js';
+import SiteMenuView from './view/site-menu-view.js';
 import SortView from './view/sort-view.js';
-import EditorView from './view/form-edit-view.js';
-import PointView from './view/point-list-view.js';
-import {render, RenderPosition} from './render.js';
 import {generatePoint} from './mock/task.js';
+import {render, RenderPosition} from './render.js';
 
-const LENGHT_POINTS_ARRAY =15;
+const LENGTH_POINTS_ARRAY =15;
 
 const createPoints = () => {
   const POINTS_ARRAY = [];
-  for(let index = 0; index <= LENGHT_POINTS_ARRAY-1; index++) {
+  for(let index = 0; index <= LENGTH_POINTS_ARRAY-1; index++) {
     POINTS_ARRAY[index] = generatePoint(index);
   }
   return POINTS_ARRAY;
@@ -25,8 +25,8 @@ const siteEventsElement = siteBodyElement.querySelector('.trip-events');
 const siteEventsListElement = siteEventsElement .querySelector('.trip-events__list');
 
 const renderTask = (taskListElement, point) => {
-  const taskComponent = new PointView(point);
-  const taskEditComponent = new EditorView(point);
+  const taskComponent = new PointListView(point);
+  const taskEditComponent = new FormEditView(point);
 
   const replaceCardToForm = () => {
     taskListElement.replaceChild(taskEditComponent.element, taskComponent.element);

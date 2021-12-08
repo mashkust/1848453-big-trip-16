@@ -40,7 +40,7 @@ const createPointTemplate = (POINT) => {
   return point;
 };
 
-export default class SiteMenuView {
+export default class PointListView {
   #element = null;
   #points = null;
 
