@@ -1,5 +1,6 @@
 import FormEditView from './view/form-edit-view.js';
 import FilterView from './view/filter-view.js';
+import MessageView from './view/message-view.js';
 import PointListView from './view/point-list-view.js';
 import SiteMenuView from './view/site-menu-view.js';
 import SortView from './view/sort-view.js';
@@ -36,16 +37,36 @@ const renderTask = (taskListElement, point) => {
     taskListElement.replaceChild(taskComponent.element, taskEditComponent.element);
   };
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   taskComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceCardToForm();
+    document.addEventListener('keydown', onEscKeyDown);
   });
 
   taskEditComponent.element.querySelector('form').addEventListener('submit', (evt) => {
     evt.preventDefault();
     replaceFormToCard();
+    document.removeEventListener('keydown', onEscKeyDown);
   });
+
+  taskEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceFormToCard();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
   render(taskListElement, taskComponent.element, RenderPosition.BEFOREEND);
 };
+
+if (POINTS.length === 0) {
+  render(siteEventsElement, new MessageView().element, RenderPosition.BEFOREEND);
+}
 
 render(siteFiltersElement, new FilterView().element, RenderPosition.BEFOREEND);
 render(siteNavigationElement, new SiteMenuView().element, RenderPosition.BEFOREEND);
