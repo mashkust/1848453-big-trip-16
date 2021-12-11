@@ -7,9 +7,9 @@ const createMessageTemplate = ()=> (
 export default class MessageView extends AbstractView {
   #points = null;
 
-  constructor(filters) {
+  constructor(points) {
     super();
-    this.#points = filters;
+    this.#points = points;
   }
 
   get template() {
