@@ -1,6 +1,6 @@
+import AbstractView from './abstract-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {types} from '../mock/arrays.js';
-import {createElement} from '../render.js';
 
 const editPointTemplate = (POINT)=> (
   `<ul class="trip-events__list">
@@ -124,27 +124,15 @@ const editPointTemplate = (POINT)=> (
   </ul>`
 );
 
-export default class FormEditorView {
-  #element = null;
+export default class FormEditView extends AbstractView {
   #points = null;
 
   constructor(points) {
+    super();
     this.#points = points;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return editPointTemplate(this.#points);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

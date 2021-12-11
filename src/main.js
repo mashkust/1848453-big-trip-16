@@ -45,7 +45,7 @@ const renderTask = (taskListElement, point) => {
     }
   };
 
-  taskComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  taskComponent.setEditClickHandler(() => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
