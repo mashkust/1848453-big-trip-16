@@ -50,16 +50,15 @@ const renderTask = (taskListElement, point) => {
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  taskEditComponent.element.querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  taskEditComponent.setFormSubmitHandler(() => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  taskEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
-    replaceFormToCard();
-    document.removeEventListener('keydown', onEscKeyDown);
-  });
+  // taskComponent.setEditClickHandler(() => {
+  //   replaceFormToCard();
+  //   document.removeEventListener('keydown', onEscKeyDown);
+  // });
 
   render(taskListElement, taskComponent.element, RenderPosition.BEFOREEND);
 };

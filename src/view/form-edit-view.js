@@ -135,4 +135,14 @@ export default class FormEditView extends AbstractView {
   get template() {
     return editPointTemplate(this.#points);
   }
+
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
 }
