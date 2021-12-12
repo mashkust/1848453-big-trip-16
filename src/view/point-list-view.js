@@ -63,3 +63,4 @@ export default class PointListView extends AbstractView {
     this._callback.editClick();
   }
 }
+
