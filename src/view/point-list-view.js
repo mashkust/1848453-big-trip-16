@@ -1,5 +1,5 @@
+import AbstractView from './abstract-view.js';
 import {createFavotiteTemplate,createOffersPointTemplate} from '../mock/templates.js';
-import {createElement} from '../render.js';
 
 const createPointTemplate = (POINT) => {
   const point= `<li class="trip-events__item">
@@ -40,27 +40,27 @@ const createPointTemplate = (POINT) => {
   return point;
 };
 
-export default class PointListView {
-  #element = null;
+
+export default class PointListView extends AbstractView {
   #points = null;
 
   constructor(points) {
+    super();
     this.#points = points;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createPointTemplate(this.#points);
   }
 
-  removeElement() {
-    this.#element = null;
+  setEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+  }
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 }
+

@@ -1,10 +1,9 @@
+import AbstractView from './abstract-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {types} from '../mock/arrays.js';
-import {createElement} from '../render.js';
 
 const editPointTemplate = (POINT)=> (
-  `<ul class="trip-events__list">
-  <li class="trip-events__item">
+  `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -120,31 +119,29 @@ const editPointTemplate = (POINT)=> (
       </section>
     </section>
   </form>
-  </li>
-  </ul>`
+  </li>`
 );
 
-export default class FormEditorView {
-  #element = null;
+export default class FormEditView extends AbstractView {
   #points = null;
 
   constructor(points) {
+    super();
     this.#points = points;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return editPointTemplate(this.#points);
   }
 
-  removeElement() {
-    this.#element = null;
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 }
