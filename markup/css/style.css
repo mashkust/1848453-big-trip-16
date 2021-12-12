@@ -442,7 +442,8 @@ main {
 .trip-events__list {
   padding: 0;
   margin: 0;
-  list-style: none; }
+  list-style: none;
+}
 
 .trip-events__item {
   margin-bottom: 54px;

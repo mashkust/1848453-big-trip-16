@@ -19,19 +19,20 @@ export const render = (container, element, place) => {
       parent.before(child);
       break;
     case RenderPosition.AFTERBEGIN:
-      parent.before(child);
+      parent.prepend(child);
       break;
     case RenderPosition.BEFOREEND:
-      parent.before(child);
+      parent.append(child);
       break;
     case RenderPosition.AFTEREND:
-      parent.before(child);
+      parent.after(child);
       break;
   }
 };
 
 export const createElement = (template) => {
   const newElement = document.createElement('ul');
+  newElement.classList.add('trip-events__list');
   newElement.innerHTML = template;
 
   return newElement.firstChild;

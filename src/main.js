@@ -27,6 +27,7 @@ const siteEventsListElement = siteEventsElement .querySelector('.trip-events__li
 
 const renderTask = (taskListElement, point) => {
   const taskComponent = new PointListView(point);
+  //console.log('taskComponent',taskComponent);
   const taskEditComponent = new FormEditView(point);
 
   const replaceCardToForm = () => {
@@ -55,7 +56,7 @@ const renderTask = (taskListElement, point) => {
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
+  render(taskListElement, taskComponent, RenderPosition.AFTERBEGIN);
 };
 
 if (POINTS.length === 0) {
