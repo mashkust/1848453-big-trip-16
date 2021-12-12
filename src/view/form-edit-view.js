@@ -3,8 +3,7 @@ import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} fr
 import {types} from '../mock/arrays.js';
 
 const editPointTemplate = (POINT)=> (
-  `<ul class="trip-events__list">
-  <li class="trip-events__item">
+  `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -120,8 +119,7 @@ const editPointTemplate = (POINT)=> (
       </section>
     </section>
   </form>
-  </li>
-  </ul>`
+  </li>`
 );
 
 export default class FormEditView extends AbstractView {

@@ -64,7 +64,7 @@ if (POINTS.length === 0) {
 
 render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
 render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
-render(siteEventsElement, new SortView(), RenderPosition.AFTERBEGIN);
+render(siteEventsListElement, new SortView(), RenderPosition.BEFOREBEGIN);
 
 for (let i=1; i<POINTS.length ;i++) {
   renderTask(siteEventsListElement, POINTS[i]);
