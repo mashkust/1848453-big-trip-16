@@ -1,30 +1,54 @@
-  const taskComponent = new PointListView(point);
-      const taskEditComponent = new FormEditView(point);
+import FormEditView from '../view/form-edit-view.js';
+import PointListView from '../view/point-list-view.js';
+import {render, RenderPosition, replace} from '../render.js';
 
-      const replaceCardToForm = () => {
-        replace(taskEditComponent, taskComponent);
-      };
+export default class PointPresenter {
+  #taskListContainer = null;
 
-      const replaceFormToCard = () => {
-        replace(taskComponent, taskEditComponent);
-      };
+  #taskComponent = null;
+  #taskEditComponent = null;
 
-      const onEscKeyDown = (evt) => {
-        if (evt.key === 'Escape' || evt.key === 'Esc') {
-          evt.preventDefault();
-          replaceFormToCard();
-          document.removeEventListener('keydown', onEscKeyDown);
-        }
-      };
+  #task = null;
 
-      taskComponent.setEditClickHandler(() => {
-        replaceCardToForm();
-        document.addEventListener('keydown', onEscKeyDown);
-      });
+  constructor(taskListContainer) {
+    this.#taskListContainer = taskListContainer;
+  }
 
-      taskEditComponent.setFormSubmitHandler(() => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', onEscKeyDown);
-      });
+  init = (task) => {
+    this.#task = task;
 
-      render(taskListElement, taskComponent, RenderPosition.AFTERBEGIN);
+    this.#taskComponent = new PointListView(task);
+    this.#taskEditComponent = new FormEditView(task);
+
+    this.#taskComponent.setEditClickHandler(this.#handleEditClick);
+    this.#taskEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
+
+    render(this.#taskListContainer, this.#taskComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  #replaceCardToForm = () => {
+    replace(this.#taskEditComponent, this.#taskComponent);
+  };
+
+  #replaceFormToCard = () => {
+    replace(this.#taskComponent, this.#taskEditComponent);
+  };
+
+  #onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this.#replaceFormToCard();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
+    }
+  };
+
+  #handleEditClick = () => {
+    this.#replaceCardToForm();
+    document.addEventListener('keydown', this.#onEscKeyDown);
+  };
+
+  #handleFormSubmit = () => {
+    this.#replaceFormToCard();
+    document.removeEventListener('keydown',this.#onEscKeyDown);
+  }
+}
