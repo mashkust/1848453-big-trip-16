@@ -4,7 +4,8 @@ import FormEditView from '../view/form-edit-view.js';
 import PointListView from '../view/point-list-view.js';
 // import SiteMenuView from '../view/site-menu-view.js';
 import SortView from '../view/sort-view.js';
-import {render, RenderPosition, replace} from '../utils/render.js';
+import {render, RenderPosition} from '../render.js';
+import TripPresenter from './trip-presenter.js';
 
 export default class PointPresenter {
   #boardContainer = null;
@@ -60,6 +61,7 @@ export default class PointPresenter {
     for (let i=1; i<this.#points.length ;i++) {
       this.#renderTask(this.#boardContainer,this.#points[i]);
     }
+    this.#renderSort();
   }
 
   #renderSort = () => {

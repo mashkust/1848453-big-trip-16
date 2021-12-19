@@ -1,10 +1,10 @@
-import FormEditView from './view/form-edit-view.js';
+// import FormEditView from './view/form-edit-view.js';
 import FilterView from './view/filter-view.js';
 import MessageView from './view/message-view.js';
-import PointListView from './view/point-list-view.js';
+// import PointListView from './view/point-list-view.js';
 import SiteMenuView from './view/site-menu-view.js';
-import SortView from './view/sort-view.js';
-import {render, RenderPosition, replace} from './render.js';
+// import SortView from './view/sort-view.js';
+import {render, RenderPosition} from './render.js';
 import {generatePoint} from './mock/task.js';
 import PointPresenter from './presenter/point-presenter.js';
 
@@ -60,17 +60,12 @@ const siteEventsListElement = siteEventsElement .querySelector('.trip-events__li
 //   render(taskListElement, taskComponent, RenderPosition.AFTERBEGIN);
 // };
 
-const boardPresenter = new PointPresenter(SiteMenuView);
-boardPresenter.init(POINTS);
-
 if (POINTS.length === 0) {
   render(siteEventsElement, new MessageView(), RenderPosition.BEFOREEND);
 }
 
 render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
 render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
-render(siteEventsListElement, new SortView(), RenderPosition.BEFOREBEGIN);
 
-for (let i=1; i<POINTS.length ;i++) {
-  renderTask(siteEventsListElement, POINTS[i]);
-}
+const pointPresenter = new PointPresenter(siteEventsListElement,siteEventsListElement);
+pointPresenter.init(POINTS);
