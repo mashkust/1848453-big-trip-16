@@ -5,22 +5,14 @@ import TripPresenter from './trip-presenter.js';
 export default class PointPresenter {
   #boardContainer = null;
   #sortContainer = null;
-
   #sortComponent = new SortView();
-  // #formEditComponent = new FormEditView();
-  // #filterComponent = new FilterView();
-
   #points = [];
+  #tripPresenter = new Map();
 
   constructor(boardContainer,sortContainer) {
     this.#boardContainer = boardContainer;
     this.#sortContainer = sortContainer;
   }
-
-  #renderTask= (taskListElement, point)=>{
-    const tripPresenter = new TripPresenter(taskListElement);
-    tripPresenter.init(point);
-  };
 
   init = (points) => {
     this.#points = [...points];
@@ -28,6 +20,15 @@ export default class PointPresenter {
       this.#renderTask(this.#boardContainer,this.#points[i]);
     }
     this.#renderSort();
+  }
+
+  #renderTask= (taskListElement, point)=>{
+    const tripPresenter = new TripPresenter(taskListElement, this.#handleModeChange);
+    tripPresenter.init(point);
+  };
+
+  #handleModeChange = () => {
+    this.#tripPresenter.forEach((presenter) => presenter.resetView());
   }
 
   #renderSort = () => {
