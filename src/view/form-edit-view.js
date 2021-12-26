@@ -142,8 +142,6 @@ export default class FormEditView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-   // this.#replaceFormToCard();
-    console.log('gresg')
-    // this._callback.formSubmit(this.#points);
+    this._callback.formSubmit(this.#points);
   }
 }
