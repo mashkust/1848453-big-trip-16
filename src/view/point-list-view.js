@@ -63,6 +63,7 @@ export default class PointListView extends AbstractView {
   // }
 
   #editClickHandler = (evt) => {
+    console.log('jgv')
     evt.preventDefault();
     this._callback.editClick();
   }
