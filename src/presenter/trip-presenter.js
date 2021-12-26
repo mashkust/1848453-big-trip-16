@@ -2,16 +2,17 @@ import FormEditView from '../view/form-edit-view.js';
 import PointListView from '../view/point-list-view.js';
 import {render, RenderPosition, replace} from '../render.js';
 
-export default class PointPresenter {
+export default class TripPresenter {
   #taskListContainer = null;
-
+  #changeData = null;
   #taskComponent = null;
   #taskEditComponent = null;
 
   #task = null;
 
-  constructor(taskListContainer) {
+  constructor(taskListContainer, changeData) {
     this.#taskListContainer = taskListContainer;
+    this.#changeData = changeData;
   }
 
   init = (task) => {
@@ -21,6 +22,7 @@ export default class PointPresenter {
     this.#taskEditComponent = new FormEditView(task);
 
     this.#taskComponent.setEditClickHandler(this.#handleEditClick);
+    // this.#taskComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#taskEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
 
     render(this.#taskListContainer, this.#taskComponent, RenderPosition.AFTERBEGIN);
@@ -47,7 +49,12 @@ export default class PointPresenter {
     document.addEventListener('keydown', this.#onEscKeyDown);
   };
 
+  // #handleFavoriteClick = () => {
+  //   this.#changeData({...this.#task, isFavorite: !this.#task.isFavorite});
+  // }
+
   #handleFormSubmit = () => {
+    // this.#changeData(task);
     this.#replaceFormToCard();
     document.removeEventListener('keydown',this.#onEscKeyDown);
   }

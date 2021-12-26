@@ -15,7 +15,7 @@ export const createOffersPointTemplate = (POINT) => {
 };
 
 export const createFavotiteTemplate = (POINT) => {
-  if (POINT.isfavorite===true) {
+  if (POINT.isFavorite===true) {
     return 'event__favorite-btn--active';
   }
   return '';

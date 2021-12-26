@@ -99,7 +99,7 @@ export const generatePoint = (numberId) => {
     dateto: '2019-07-11T11:22:13.375Z',
     destination: generateDestination(),
     id: String(numberId),
-    isfavorite: Boolean(getRandomInteger(0, 1)),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
     offers: generateOffer(someType,offers),
     type: someType
   };
