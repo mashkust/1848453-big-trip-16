@@ -1,7 +1,7 @@
 import SortView from '../view/sort-view.js';
 import {render, RenderPosition} from '../render.js';
 import TripPresenter from './trip-presenter.js';
-// import {updateItem} from '../common.js';
+import {updateItem} from '../common.js';
 
 export default class PointPresenter {
   #boardContainer = null;
@@ -20,21 +20,22 @@ export default class PointPresenter {
 
 
   #renderTask= (taskListElement, point)=>{
-    const tripPresenter = new TripPresenter(taskListElement);
+    const tripPresenter = new TripPresenter(taskListElement,this.#handleTaskChange);
     tripPresenter.init(point);
     this.#tripPresenter.set(point.id, tripPresenter);
   };
 
-  // #handleTaskChange = (updatedTask) => {
-  //   this.#points = updateItem(this.#points, updatedTask);
-  //   this.#tripPresenter.get(updatedTask.id).init(updatedTask);
-  // }
+  #handleTaskChange = (updatedTask) => {
+    this.#points = updateItem(this.#points, updatedTask);
+    this.#tripPresenter.get(updatedTask.id).setActive(updatedTask);
+  }
 
   init = (points) => {
+
     this.#points = [...points];
-    for (let i=1; i<this.#points.length ;i++) {
+    this.#points.forEach((el, i) => {
       this.#renderTask(this.#boardContainer,this.#points[i]);
-    }
+    });
     this.#renderSort();
   }
 

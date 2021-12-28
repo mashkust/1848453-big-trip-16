@@ -2,7 +2,7 @@ import AbstractView from './abstract-view.js';
 import {createFavotiteTemplate,createOffersPointTemplate} from '../mock/templates.js';
 
 const createPointTemplate = (POINT) => {
-  const point= `<li class="trip-events__item">
+  const point= `<li class="trip-events__item" id=${POINT.id} >
       <div class="event">
         <time class="event__date" datetime="2019-03-18">MAR 18</time>
         <div class="event__type">
@@ -40,16 +40,16 @@ const createPointTemplate = (POINT) => {
   return point;
 };
 
-export default class PointListView extends AbstractView {
-  #points = null;
+export default class PointView extends AbstractView {
+  #point = null;
 
-  constructor(points) {
+  constructor(point) {
     super();
-    this.#points = points;
+    this.#point = point;
   }
 
   get template() {
-    return createPointTemplate(this.#points);
+    return createPointTemplate(this.#point);
   }
 
   setEditClickHandler = (callback) => {
@@ -57,19 +57,19 @@ export default class PointListView extends AbstractView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
-  // setFavoriteClickHandler = (callback) => {
-  //   this._callback.favoriteClick = callback;
-  //   this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
-  // }
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
+  }
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.editClick();
   }
 
-  // #favoriteClickHandler = (evt) => {
-  //   evt.preventDefault();
-  //   this._callback.favoriteClick();
-  // }
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
 }
 
