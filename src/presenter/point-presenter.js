@@ -20,7 +20,7 @@ export default class PointPresenter {
 
 
   #renderTask= (taskListElement, point)=>{
-    const tripPresenter = new TripPresenter(taskListElement,this.#handleTaskChange);
+    const tripPresenter = new TripPresenter(taskListElement,this.#handleTaskChange, this.#handleModeChange);
     tripPresenter.init(point);
     this.#tripPresenter.set(point.id, tripPresenter);
   };
@@ -42,5 +42,8 @@ export default class PointPresenter {
   #renderSort = () => {
     render(this.#sortContainer, this.#sortComponent, RenderPosition.BEFOREBEGIN);
   }
-}
 
+  #handleModeChange = () => {
+    this.#tripPresenter.forEach((point) => point.resetView());
+  }
+}
