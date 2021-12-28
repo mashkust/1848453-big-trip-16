@@ -1,5 +1,5 @@
 import FormEditView from '../view/form-edit-view.js';
-import PointView from '../view/point-list-view.js';
+import PointView from '../view/point-view.js';
 import {render, RenderPosition, replace, remove} from '../render.js';
 // import { createFavotiteTemplate } from '../mock/templates.js';
 
