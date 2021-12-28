@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+import {SortType} from '../const.js';
 
 const createSortTemplate = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -17,7 +18,7 @@ const createSortTemplate = () => (
       <label class="trip-sort__btn" for="sort-time">Time</label>
     </div>
 
-    <div class="trip-sort__item  trip-sort__item--price">
+    <div class="trip-sort__item  trip-sort__item--${SortType.PRICE}">
       <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price" checked>
       <label class="trip-sort__btn" for="sort-price">Price</label>
     </div>
@@ -33,4 +34,20 @@ export default class SortView extends AbstractView {
   get template() {
     return createSortTemplate();
   }
+
+  setSortTypeChangeHandler = (callback) => {
+    this._callback.sortTypeChange = callback;
+    this.element.addEventListener('click', this.#sortTypeChangeHandler);
+  }
+
+  #sortTypeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'A') {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.sortTypeChange(evt.target.dataset.sortType);
+  }
+
 }
+
