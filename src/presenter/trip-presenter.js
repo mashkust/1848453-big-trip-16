@@ -73,12 +73,14 @@ export default class TripPresenter {
 
   #replaceCardToForm = () => {
     replace(this.#taskEditComponent, this.#taskComponent);
+    document.addEventListener('keydown', this.#onEscKeyDown);
     this.#changeMode();
     this.#mode = Mode.EDITING;
   };
 
   #replaceFormToCard = () => {
     replace(this.#taskComponent, this.#taskEditComponent);
+    document.removeEventListener('keydown', this.#onEscKeyDown);
     this.#mode = Mode.DEFAULT;
   };
 
@@ -86,23 +88,19 @@ export default class TripPresenter {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#replaceFormToCard();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
     }
-  };
+  }
 
   #handleEditClick = () => {
     this.#replaceCardToForm();
-    document.addEventListener('keydown', this.#onEscKeyDown);
   };
 
   #handleFavoriteClick = () => {
-    const prev = {...this.#task, isFavorite: !this.#task.isFavorite};
-    this.#changeData(prev);
+    this.#changeData({...this.#task, isFavorite: !this.#task.isFavorite});
   }
 
-  #handleFormSubmit = (task) => {
-    this.#changeData(task);
+  #handleFormSubmit = () => {
+    // this.#changeData(task);
     this.#replaceFormToCard();
-    document.removeEventListener('keydown',this.#onEscKeyDown);
   }
 }
