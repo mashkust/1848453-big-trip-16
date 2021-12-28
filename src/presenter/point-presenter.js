@@ -2,7 +2,7 @@ import SortView from '../view/sort-view.js';
 import {render, RenderPosition} from '../render.js';
 import TripPresenter from './trip-presenter.js';
 import {updateItem} from '../common.js';
-import {sortTaskUp, sortTaskDown} from '../utils/task.js';
+import {sortTaskUp} from '../task.js';
 import {SortType} from '../const.js';
 
 export default class PointPresenter {
@@ -51,8 +51,8 @@ export default class PointPresenter {
     if (this.#currentSortType === sortType) {
       return;
     }
-
     this.#sortTasks(sortType);
+    this.#clearTaskList();
   }
 
   #renderSort = () => {
@@ -61,23 +61,20 @@ export default class PointPresenter {
   }
 
   #sortTasks = (sortType) => {
-    // 2. Этот исходный массив задач необходим,
-    // потому что для сортировки мы будем мутировать
-    // массив в свойстве _boardTasks
     switch (sortType) {
-      case SortType.DATE_UP:
+      case SortType.PRICE:
         this.#points.sort(sortTaskUp);
         break;
-      case SortType.DATE_DOWN:
-        this.#points.sort(sortTaskDown);
-        break;
       default:
-        // 3. А когда пользователь захочет "вернуть всё, как было",
-        // мы просто запишем в _boardTasks исходный массив
         this.#points = [...this.#sourcedBoardTasks];
     }
 
     this.#currentSortType = sortType;
+  }
+
+  #clearTaskList = () => {
+    this.#tripPresenter.forEach((presenter) => presenter.destroy());
+    this.#tripPresenter.clear();
   }
 
 }
