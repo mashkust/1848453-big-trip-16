@@ -1,7 +1,6 @@
 import FormEditView from '../view/form-edit-view.js';
 import PointView from '../view/point-view.js';
 import {render, RenderPosition, replace, remove} from '../render.js';
-// import { createFavotiteTemplate } from '../mock/templates.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -30,8 +29,11 @@ export default class TripPresenter {
     if (element) {
       const button = element.querySelector('.event__favorite-btn');
       if (button) {
-        button.classList.remove('event__favorite-btn--active');
-        // button.classList.add(createFavotiteTemplate(task));
+        if (task.isFavorite===true) {
+          button.classList.add('event__favorite-btn--active');
+        } else {
+          button.classList.remove('event__favorite-btn--active');
+        }
       }
     }
   }
