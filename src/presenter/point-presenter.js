@@ -2,8 +2,7 @@ import SortView from '../view/sort-view.js';
 import {render, RenderPosition} from '../render.js';
 import TripPresenter from './trip-presenter.js';
 import {updateItem} from '../common.js';
-import {sortTaskUp} from '../task.js';
-import {SortType} from '../const.js';
+import {SortType} from '../mock/arrays.js';
 
 export default class PointPresenter {
   #boardContainer = null;
@@ -63,7 +62,7 @@ export default class PointPresenter {
   #sortTasks = (sortType) => {
     switch (sortType) {
       case SortType.PRICE:
-        this.#points.sort(sortTaskUp);
+        this.#points.sort((a, b) => b.baseprice - a.baseprice);
         break;
       default:
         this.#points = [...this.#sourcedBoardTasks];
@@ -76,5 +75,4 @@ export default class PointPresenter {
     this.#tripPresenter.forEach((presenter) => presenter.destroy());
     this.#tripPresenter.clear();
   }
-
 }

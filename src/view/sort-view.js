@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-// import {SortType} from '../const.js';
+// import {SortType} from '../mock/arrays.js';
 
 const createSortTemplate = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -31,6 +31,13 @@ const createSortTemplate = () => (
 
 
 export default class SortView extends AbstractView {
+  #points = null;
+
+  constructor(points) {
+    super();
+    this.#points = points;
+  }
+
   get template() {
     return createSortTemplate();
   }
@@ -40,14 +47,16 @@ export default class SortView extends AbstractView {
     this.element.querySelector('.trip-sort__item--price').addEventListener('click', this.#sortTypeChangeHandler);
   }
 
+  // #sortTypeChangeHandler = (evt) => {
+  //   // if (evt.target.tagName !== 'A') {
+  //   //   return;
+  //   // }
+  //   evt.preventDefault();
+  //   this._callback.sortTypeChange(evt.target.baseprice);
+  // }
   #sortTypeChangeHandler = (evt) => {
-    if (evt.target.tagName !== 'A') {
-      return;
-    }
-
     evt.preventDefault();
-    this._callback.sortTypeChange(evt.target.sortType);
+    this._callback.sortTypeChange(evt);
   }
-
 }
 

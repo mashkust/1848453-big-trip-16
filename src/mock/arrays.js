@@ -16,6 +16,12 @@ export const cities = [
   'Geneva',
 ];
 
+export const SortType = {
+  // DAY: 'day',
+  // TIME: 'time',
+  PRICE: 'price',
+};
+
 export const offers=[
   {
     type: 'taxi',
