@@ -31,13 +31,6 @@ const createSortTemplate = () => (
 
 
 export default class SortView extends AbstractView {
-  #points = null;
-
-  constructor(points) {
-    super();
-    this.#points = points;
-  }
-
   get template() {
     return createSortTemplate();
   }
@@ -47,16 +40,13 @@ export default class SortView extends AbstractView {
     this.element.querySelector('.trip-sort__item--price').addEventListener('click', this.#sortTypeChangeHandler);
   }
 
-  // #sortTypeChangeHandler = (evt) => {
-  //   // if (evt.target.tagName !== 'A') {
-  //   //   return;
-  //   // }
-  //   evt.preventDefault();
-  //   this._callback.sortTypeChange(evt.target.baseprice);
-  // }
   #sortTypeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'DIV') {
+      return;
+    }
+
     evt.preventDefault();
-    this._callback.sortTypeChange(evt);
+    this._callback.sortTypeChange(evt.target.baseprice);
   }
 }
 

@@ -35,7 +35,7 @@ export default class PointPresenter {
   init = (points) => {
 
     this.#points = [...points];
-    // this.#sourcedBoardTasks = [...points];
+    this.#sourcedBoardTasks = [...points];
     this.#points.forEach((el, i) => {
       this.#renderTask(this.#boardContainer,this.#points[i]);
     });
@@ -55,14 +55,14 @@ export default class PointPresenter {
   }
 
   #renderSort = () => {
-    render(this.#sortContainer, this.#sortComponent, RenderPosition.BEFOREBEGIN);
+    render(this.#sortContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
   #sortTasks = (sortType) => {
     switch (sortType) {
       case SortType.PRICE:
-        this.#points.sort((a, b) => b.baseprice - a.baseprice);
+        this.#points.sort((a, b) => b.baseprice - a.bbaseprice);
         break;
       default:
         this.#points = [...this.#sourcedBoardTasks];
