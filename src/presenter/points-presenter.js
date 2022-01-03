@@ -4,14 +4,14 @@ import TripPresenter from './trip-presenter.js';
 import {updateItem} from '../common.js';
 import {SortType} from '../mock/arrays.js';
 
-export default class PointPresenter {
+export default class PointsPresenter {
   #boardContainer = null;
   #sortContainer = null;
   #sortComponent = new SortView();
   #tripPresenter = new Map();
   #points = [];
 
-  #currentSortType = SortType.DEFAULT;
+  #currentSortType = SortType.DAY;
   #sourcedBoardTasks = [];
 
   constructor(boardContainer,sortContainer) {
@@ -33,11 +33,10 @@ export default class PointPresenter {
   }
 
   init = (points) => {
-
     this.#points = [...points];
     this.#sourcedBoardTasks = [...points];
-    this.#points.forEach((el, i) => {
-      this.#renderTask(this.#boardContainer,this.#points[i]);
+    this.#points.forEach((el) => {
+      this.#renderTask(this.#boardContainer,el);
     });
     this.#renderSort();
   }
@@ -48,10 +47,14 @@ export default class PointPresenter {
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
-      return;
+      return false;
     }
     this.#sortTasks(sortType);
     this.#clearTaskList();
+    this.#points.forEach((el) => {
+      this.#renderTask(this.#boardContainer,el);
+    });
+    this.#renderSort();
   }
 
   #renderSort = () => {
@@ -62,12 +65,11 @@ export default class PointPresenter {
   #sortTasks = (sortType) => {
     switch (sortType) {
       case SortType.PRICE:
-        this.#points.sort((a, b) => b.baseprice - a.bbaseprice);
+        this.#points.sort((a, b) => b.baseprice - a.baseprice);
         break;
       default:
         this.#points = [...this.#sourcedBoardTasks];
     }
-
     this.#currentSortType = sortType;
   }
 

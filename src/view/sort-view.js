@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-// import {SortType} from '../mock/arrays.js';
+import {SortType} from '../mock/arrays.js';
 
 const createSortTemplate = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -14,12 +14,12 @@ const createSortTemplate = () => (
     </div>
 
     <div class="trip-sort__item  trip-sort__item--time">
-      <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
+      <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time" checked>
       <label class="trip-sort__btn" for="sort-time">Time</label>
     </div>
 
     <div class="trip-sort__item  trip-sort__item--price">
-      <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price" checked>
+      <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
       <label class="trip-sort__btn" for="sort-price">Price</label>
     </div>
 
@@ -37,16 +37,20 @@ export default class SortView extends AbstractView {
 
   setSortTypeChangeHandler = (callback) => {
     this._callback.sortTypeChange = callback;
-    this.element.querySelector('.trip-sort__item--price').addEventListener('click', this.#sortTypeChangeHandler);
+    this.element.querySelector('.trip-sort__item--price').addEventListener('click', this.#sortTypeChangePrice);
+    this.element.querySelector('.trip-sort__item--day').addEventListener('click', this.#sortTypeChangeDay);
   }
 
-  #sortTypeChangeHandler = (evt) => {
-    if (evt.target.tagName !== 'DIV') {
-      return;
-    }
-
+  #sortTypeChangePrice = (evt) => {
+    document.getElementById('sort-price').checked = 'true';
     evt.preventDefault();
-    this._callback.sortTypeChange(evt.target.baseprice);
+    this._callback.sortTypeChange(SortType.PRICE);
+  }
+
+  #sortTypeChangeDay = (evt) => {
+    document.getElementById('sort-day').checked = 'true';
+    evt.preventDefault();
+    this._callback.sortTypeChange(SortType.DAY);
   }
 }
 

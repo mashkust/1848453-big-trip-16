@@ -17,8 +17,8 @@ export const cities = [
 ];
 
 export const SortType = {
-  // DAY: 'day',
-  // TIME: 'time',
+  DAY: 'day',
+  TIME: 'time',
   PRICE: 'price',
 };
 
