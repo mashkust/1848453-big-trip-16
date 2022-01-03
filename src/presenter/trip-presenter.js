@@ -101,8 +101,8 @@ export default class TripPresenter {
     this.#changeData({...this.#task, isFavorite: !this.#task.isFavorite});
   }
 
-  #handleFormSubmit = () => {
-    // this.#changeData(task);
+  #handleFormSubmit = (task) => {
+    this.#changeData(task);
     this.#replaceFormToCard();
   }
 }
