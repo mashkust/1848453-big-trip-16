@@ -21,19 +21,19 @@ export const createFavotiteTemplate = (POINT) => {
   return '';
 };
 
-export const createPhotosTemplate = (destination) => {
+export const createPhotosTemplate = (pictures) => {
   const ARRAY = [];
-  if (destination.pictures !== undefined || destination.pictures.length !== 0) {
-    for (let i=0; i<destination.pictures.length ;i++) {
-      const photo= `<img class="event__photo" src=${destination.pictures[i].src} alt="Event photo">`;
+  if (pictures !== undefined || pictures.length !== 0) {
+    for (let i=0; i<pictures.length ;i++) {
+      const photo= `<img class="event__photo" src=${pictures[i].src} alt="Event photo">`;
       ARRAY.push(photo);
     }
   }
   return ARRAY;
 };
 
-export const createCheckedTemplate= (isType,someValue) => {
-  if (isType === String(someValue)) {
+export const createCheckedTemplate= (type,someValue) => {
+  if (type === String(someValue)) {
     return 'checked';
   }
   return '';

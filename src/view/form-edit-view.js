@@ -1,9 +1,10 @@
 import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
+import {generateDestination} from '../mock/task.js';
 import {types} from '../mock/arrays.js';
 
 const editPointTemplate = (POINT)=> {
-  const {type, destination, baseprice, description} = POINT;
+  const {type, destination, baseprice} = POINT;
   return (
     `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -71,7 +72,7 @@ const editPointTemplate = (POINT)=> {
         <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
@@ -111,11 +112,11 @@ const editPointTemplate = (POINT)=> {
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
+        <p class="event__destination-description">${destination.description}</p>
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
-          ${createPhotosTemplate(destination)}
+          ${createPhotosTemplate(destination.pictures)}
           </div>
         </div>
       </section>
@@ -129,8 +130,9 @@ export default class FormEditView extends SmartView  {
   constructor(point) {
     super();
     this._data = FormEditView.parsePointToData(point);
-    this._typeChangeHandler = this._typeChangeHandler.bind(this);
-    this._setInnerHandlers();
+    this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
+    this.#destinationChangeHandler = this.#destinationChangeHandler.bind(this);
+    this.#setInnerHandlers();
   }
 
   get template() {
@@ -143,18 +145,31 @@ export default class FormEditView extends SmartView  {
     );
   }
 
-  _setInnerHandlers() {
-    this.element.querySelector('.event__type-list').addEventListener('change', this._typeChangeHandler);
-    // this.getElement().querySelector('.event__field-group--destination').addEventListener('change', this._destinationChangeHandler);
+  restoreHandlers() {
+    this.#setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
-  _typeChangeHandler(evt) {
+  #setInnerHandlers = () =>{
+    this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+  }
+
+  #typeChangeHandler = (evt) =>{
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
     });
   }
 
+  #destinationChangeHandler =(evt) =>{
+    const newDestination = generateDestination(evt.target.value.name);
+    if (newDestination) {
+      this.updateData({
+        destination: newDestination
+      });
+    }
+  }
 
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
@@ -164,14 +179,12 @@ export default class FormEditView extends SmartView  {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(FormEditView.parseDataToTask(this._data));
+    this._callback.formSubmit(FormEditView.parseDataToPoint(this._data));
   }
 
-  static parsePointToData(point) {
-    return Object.assign({}, point);
-  }
+  static parsePointToData = (point) => Object.assign({}, point)
 
-  static parseDataToPoint(data) {
+  static parseDataToPoint = (data) => {
     data = Object.assign({}, data);
     return data;
   }
