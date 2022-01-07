@@ -21,26 +21,26 @@ export const createFavotiteTemplate = (POINT) => {
   return '';
 };
 
-export const createPhotosTemplate = (POINT) => {
+export const createPhotosTemplate = (destination) => {
   const ARRAY = [];
-  if (POINT.destination.pictures !== undefined || POINT.destination.pictures.length !== 0) {
-    for (let i=0; i<POINT.destination.pictures.length ;i++) {
-      const photo= `<img class="event__photo" src=${POINT.destination.pictures[i].src} alt="Event photo">`;
+  if (destination.pictures !== undefined || destination.pictures.length !== 0) {
+    for (let i=0; i<destination.pictures.length ;i++) {
+      const photo= `<img class="event__photo" src=${destination.pictures[i].src} alt="Event photo">`;
       ARRAY.push(photo);
     }
   }
   return ARRAY;
 };
 
-export const createCheckedTemplate= (POINT,someValue) => {
-  if (POINT.type === String(someValue)) {
+export const createCheckedTemplate= (isType,someValue) => {
+  if (isType === String(someValue)) {
     return 'checked';
   }
   return '';
 };
 
-export const editOffersPointTemplate = (POINT) => {
-  const offerForEdititing = generateOfferForEdititing(POINT.type, offers);
+export const editOffersPointTemplate = (type) => {
+  const offerForEdititing = generateOfferForEdititing(type, offers);
   const ARRAY = [];
   if (offerForEdititing.offers !== undefined || offerForEdititing.offers.length !== 0) {
     for (let i=0; i<offerForEdititing.offers.length ;i++) {
