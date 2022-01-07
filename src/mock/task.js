@@ -66,11 +66,14 @@ const generateCity = () => {
   return cities[randomIndex];
 };
 
-const generateDestination = () => {
+export const generateDestination = (name) => {
   const someDescriptions = getRandomArray(descriptions).join(' ');
+  if (name!== undefined || name !== null) {
+    name = generateCity();
+  }
   const destination ={
     description: someDescriptions,
-    name: generateCity(),
+    name: name,
     pictures: [
       {
         src: `http://picsum.photos/248/152?r=${Math.random()}`,
