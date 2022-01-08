@@ -7,6 +7,7 @@ import SiteMenuView from './view/site-menu-view.js';
 import {render, RenderPosition} from './render.js';
 import {generatePoint} from './mock/task.js';
 import PointsPresenter from './presenter/points-presenter.js';
+import PointsModel from './model/points-model.js';
 
 const LENGTH_POINTS_ARRAY =15;
 
@@ -30,8 +31,11 @@ if (POINTS.length === 0) {
   render(siteEventsElement, new MessageView(), RenderPosition.BEFOREEND);
 }
 
+const pointsModel = new PointsModel();
+pointsModel.points = POINTS;
+
 render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
 render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 
-const pointPresenter = new PointsPresenter(siteEventsListElement,siteEventsListElement);
+const pointPresenter = new PointsPresenter(siteEventsListElement, pointsModel);
 pointPresenter.init(POINTS);
