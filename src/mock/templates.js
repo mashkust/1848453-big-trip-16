@@ -4,12 +4,12 @@ import {offers} from './arrays.js';
 export const createOffersPointTemplate = (POINT) => {
   const ARRAY = [];
   if (POINT.offers.offers !== undefined || POINT.offers.offers.length !== 0) {
-    for (let i=0; i<POINT.offers.offers.length ;i++) {
-      const offersTemplate= `<span class="event__offer-title">${POINT.offers.offers[i].title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${POINT.offers.offers[i].price}</span>`;
+    POINT.offers.offers.forEach((el) => {
+      const offersTemplate= `<span class="event__offer-title">${el.title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${el.price}</span>`;
       ARRAY.push(offersTemplate);
-    }
+    });
   }
   return ARRAY;
 };
@@ -43,17 +43,18 @@ export const editOffersPointTemplate = (type) => {
   const offerForEdititing = generateOfferForEdititing(type, offers);
   const ARRAY = [];
   if (offerForEdititing.offers !== undefined || offerForEdititing.offers.length !== 0) {
-    for (let i=0; i<offerForEdititing.offers.length ;i++) {
+    //console.log('offerForEdititing.offers', offerForEdititing.offers);
+    offerForEdititing.offers.forEach((el) => {
       const template= `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="${offerForEdititing.offers[i].id}" type="checkbox" name="${offerForEdititing.offers[i].id}" >
-      <label class="event__offer-label" for="${offerForEdititing.offers[i].id}">
-        <span class="event__offer-title">${offerForEdititing.offers[i].title}e</span>
+      <input class="event__offer-checkbox  visually-hidden" id="${el.id}" type="checkbox" name="${el.id}" >
+      <label class="event__offer-label" for="${el.id}">
+        <span class="event__offer-title">${el.title}e</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offerForEdititing.offers[i].price}</span>
+        <span class="event__offer-price">${el.price}</span>
       </label>
     </div>`;
       ARRAY.push(template);
-    }
+    });
   }
   return ARRAY;
 };

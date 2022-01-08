@@ -38,4 +38,4 @@ render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
 render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 
 const pointPresenter = new PointsPresenter(siteEventsListElement, pointsModel);
-pointPresenter.init(POINTS);
+pointPresenter.init();

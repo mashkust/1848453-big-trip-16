@@ -44,7 +44,7 @@ export default class PointsPresenter {
   init = () => {
     // this.#points = [...points];
     // this.#sourcedBoardTasks = [...points];
-    this.#tripPresenter.forEach((el) => {
+    this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
     });
     this.#renderSort();
@@ -61,7 +61,7 @@ export default class PointsPresenter {
     // this.#sortTasks(sortType);
     this.#currentSortType = sortType;
     this.#clearTaskList();
-    this.#tripPresenter.forEach((el) => {
+    this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
     });
     this.#renderSort();
