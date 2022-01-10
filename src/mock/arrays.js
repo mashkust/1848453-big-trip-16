@@ -47,15 +47,18 @@ export const offers=[
       {
         id: 1,
         title: 'Upgrade to a business class',
-        price: 120
+        price: 120,
+        isChecked: false,
       }, {
         id: 2,
         title: 'Choose the radio station',
-        price: 60
+        price: 60,
+        isChecked: false,
       }, {
         id: 3,
         title: 'Order Ubern',
-        price: 20
+        price: 20,
+        isChecked: false,
       },
     ]
   },
@@ -65,15 +68,15 @@ export const offers=[
       {
         id: 4,
         title: 'Add luggage',
-        price: 50
+        price: 50,
       }, {
         id: 5,
         title: 'Switch to comfort',
-        price: 100
+        price: 100,
       }, {
         id: 6,
         title: 'Add meal',
-        price: 15
+        price: 15,
       }, {
         id: 7,
         title: 'Choose seats',

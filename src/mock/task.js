@@ -103,7 +103,9 @@ export const generatePoint = (numberId) => {
     destination: generateDestination(),
     id: String(numberId),
     isFavorite: Boolean(getRandomInteger(0, 1)),
-    offers: generateOffer(someType,offers),
+    offers: {
+      offers:[]
+    },
     type: someType
   };
 };

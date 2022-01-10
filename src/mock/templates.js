@@ -10,8 +10,9 @@ export const createOffersPointTemplate = (POINT) => {
       <span class="event__offer-price">${el.price}</span>`;
       ARRAY.push(offersTemplate);
     });
+    return ARRAY.join(',');
   }
-  return ARRAY;
+  return '';
 };
 
 export const createFavotiteTemplate = (POINT) => {
@@ -39,16 +40,16 @@ export const createCheckedTemplate= (type,someValue) => {
   return '';
 };
 
-export const editOffersPointTemplate = (type, pointId) => {
+export const editOffersPointTemplate = (type, pointId, checkedOffers) => {
   const offerForEdititing = generateOfferForEdititing(type, offers);
   const ARRAY = [];
   if (offerForEdititing.offers !== undefined || offerForEdititing.offers.length !== 0) {
-    //console.log('offerForEdititing.offers', offerForEdititing.offers);
     offerForEdititing.offers.forEach((el) => {
+      const foundCheckedOffer = checkedOffers.offers.find((elem) => elem.title === el.title);
       const template= `<div class="event__offer-selector">
-      <input onchange="console.log('click input')"  class="event__offer-checkbox  visually-hidden" id="${`${el.id}${pointId}`}" type="checkbox" name="${`${el.id}${pointId}`}" >
-      <label  onchange="console.log('click label')"  class="event__offer-label" for="${`${el.id}${pointId}`}">
-        <span class="event__offer-title">${el.title}e</span>
+      <input ${foundCheckedOffer && 'checked'} class="event__offer-checkbox  visually-hidden" id="${`${el.id}${pointId}`}" type="checkbox" name="${`${el.id}${pointId}`}" >
+      <label class="event__offer-label" for="${`${el.id}${pointId}`}">
+        <span class="event__offer-title">${el.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${el.price}</span>
       </label>

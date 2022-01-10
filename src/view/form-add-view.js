@@ -132,7 +132,7 @@ export default class FormAddView extends AbstractView {
     this._point = point;
     this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
     this.#destinationChangeHandler = this.#destinationChangeHandler.bind(this);
-    this.#setInnerHandlers();
+    // this.#setInnerHandlers();
   }
 
   // addPointHandler = () => {

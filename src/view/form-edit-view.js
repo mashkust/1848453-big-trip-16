@@ -1,10 +1,12 @@
 import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {generateDestination} from '../mock/task.js';
-import {types} from '../mock/arrays.js';
+import {types, offers} from '../mock/arrays.js';
+
 
 const editPointTemplate = (POINT)=> {
-  const {type, destination, baseprice, id} = POINT;
+  const {type, destination, baseprice, id, } = POINT;
+
   return (
     `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -106,7 +108,7 @@ const editPointTemplate = (POINT)=> {
       <section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-        ${editOffersPointTemplate(type, id)}
+        ${editOffersPointTemplate(type, id, POINT.offers)}
         </div>
       </section>
 
@@ -163,7 +165,7 @@ export default class FormEditView extends SmartView  {
   }
 
   #destinationChangeHandler =(evt) =>{
-    const newDestination = generateDestination(evt);
+    const newDestination = generateDestination(evt.target.value.name);
     if (newDestination) {
       this.updateData({
         destination: newDestination
@@ -177,15 +179,51 @@ export default class FormEditView extends SmartView  {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
+
+  // eventCheckboxHandler = (callback) => {
+  //   this._callback.hadnleCheckboxChange = callback;
+  //   this.element.querySelector('.event__offer-label').addEventListener('click', (evt) => {
+  //      console.log('event checkbox', evt);
+  //   });
+  // }
+
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(FormEditView.parseDataToPoint(this._data));
+    const inputs = this.element.querySelectorAll('.event__offer-checkbox');
+    const checkedLabels = [];
+    if (inputs.length > 0) {
+      const checkedInputs = [];
+      inputs.forEach((el) => {
+        if (el.checked) {
+          checkedInputs.push(el.id);
+        }
+      });
+      const allLabels = this.element.querySelectorAll('.event__offer-label');
+      allLabels.forEach((label) => {
+        if (checkedInputs.includes(label.htmlFor) ) {
+          const text = label.querySelector('.event__offer-title').textContent;
+          if (text) {
+            checkedLabels.push(text);
+          }
+        }
+      });
+    }
+    this._callback.formSubmit(FormEditView.parseDataToPoint(this._data, checkedLabels));
   }
 
   static parsePointToData = (point) => Object.assign({}, point)
 
-  static parseDataToPoint = (data) => {
+  static parseDataToPoint = (data, checkedInputs) => {
     data = Object.assign({}, data);
+    if (checkedInputs) {
+      const offerOfType = offers.find((offer) =>  offer.type === data.type );
+      if (offerOfType) {
+        const checkedOffers =  offerOfType.offers.slice(0).filter((el) =>   checkedInputs.includes(el.title));
+        if (checkedOffers.length > 0) {
+          data.offers.offers = checkedOffers;
+        }
+      }
+    }
     return data;
   }
 }
