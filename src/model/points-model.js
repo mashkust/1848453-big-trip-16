@@ -12,7 +12,7 @@ export default class PointsModel extends AbstractObservable {
   }
 
   updateTask = (updateType, update) => {
-    const index = this.#points.findIndex((task) => task.id === update.id);
+    const index = this.#points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t update unexisting task');

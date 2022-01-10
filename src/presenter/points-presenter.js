@@ -87,6 +87,7 @@ export default class PointsPresenter {
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });
+        this.#renderSort();
         // - обновить список (например, когда задача ушла в архив)
         break;
       case UpdateType.MAJOR:
@@ -94,6 +95,7 @@ export default class PointsPresenter {
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });
+        this.#renderSort();
         // - обновить всю доску (например, при переключении фильтра)
         break;
     }

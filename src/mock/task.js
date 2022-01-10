@@ -1,4 +1,4 @@
-import {types,offers,cities,descriptions} from './arrays.js';
+import {types,cities,descriptions} from './arrays.js';
 // Функция из интернета по генерации случайного числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
 const getRandomInteger = (a = 0, b = 1) => {
@@ -25,23 +25,23 @@ const getRandomArray = (some) => {
   return ARRAY;
 };
 
-const generateOffer = (someType, offersArray) => {
-  const someoffer = offersArray.find((el) => el.type === someType);
-  if (someoffer) {
-    const offer ={
-      type: someType,
-      offers: getRandomArray(someoffer.offers)
-    };
-    return offer;
-  }
-  else {
-    const offer ={
-      type: someType,
-      offers: [],
-    };
-    return offer;
-  }
-};
+// const generateOffer = (someType, offersArray) => {
+//   const someoffer = offersArray.find((el) => el.type === someType);
+//   if (someoffer) {
+//     const offer ={
+//       type: someType,
+//       offers: getRandomArray(someoffer.offers)
+//     };
+//     return offer;
+//   }
+//   else {
+//     const offer ={
+//       type: someType,
+//       offers: [],
+//     };
+//     return offer;
+//   }
+// };
 
 export const generateOfferForEdititing = (someType, offersArray) => {
   const someoffer = offersArray.find((el) => el.type === someType);
@@ -116,10 +116,12 @@ export const defaultPoint = () => {
     baseprice: 0,
     datefrom: '0',
     dateto: '0',
-    destination: generateDestination(),
+    destination: generateDestination('Amsterdam'),
     id: 0,
     isFavorite: false,
-    offers: generateOffer(someType,offers),
+    offers: {
+      offers:[]
+    },
     type: someType
   };
 };

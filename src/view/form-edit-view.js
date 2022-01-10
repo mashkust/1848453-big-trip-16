@@ -138,7 +138,7 @@ export default class FormEditView extends SmartView  {
   }
 
   get template() {
-    return editPointTemplate(this._data,this._data.type);
+    return editPointTemplate(this._data);
   }
 
   reset(point) {

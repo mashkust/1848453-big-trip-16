@@ -1,7 +1,7 @@
 import AbstractView from './abstract-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {generateDestination} from '../mock/task.js';
-import {types} from '../mock/arrays.js';
+import {types,offers} from '../mock/arrays.js';
 
 const addPointTemplate = (POINT)=> {
   const {type, destination, baseprice, id} = POINT;
@@ -97,7 +97,7 @@ const addPointTemplate = (POINT)=> {
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
+      <button class="event__reset-btn" type="reset">Cancel</button>
       <button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
     </button>
@@ -106,7 +106,7 @@ const addPointTemplate = (POINT)=> {
       <section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-        ${editOffersPointTemplate(type, id)}
+        ${editOffersPointTemplate(type, id, POINT.offers)}
         </div>
       </section>
 
@@ -132,19 +132,33 @@ export default class FormAddView extends AbstractView {
     this._point = point;
     this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
     this.#destinationChangeHandler = this.#destinationChangeHandler.bind(this);
-    // this.#setInnerHandlers();
+    this.#setInnerHandlers();
   }
 
-  // addPointHandler = () => {
-
-  // }
   get template() {
     return addPointTemplate(this._point);
+  }
+
+  reset(point) {
+    this.updateData(
+      FormAddView.parsePointToData(point)
+    );
+  }
+
+  restoreHandlers() {
+    this.#setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   #setInnerHandlers = () =>{
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+  }
+
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
   #typeChangeHandler = (evt) =>{
@@ -155,11 +169,51 @@ export default class FormAddView extends AbstractView {
   }
 
   #destinationChangeHandler =(evt) =>{
-    const newDestination = generateDestination(evt);
+    const newDestination = generateDestination(evt.target.value.name);
     if (newDestination) {
       this.updateData({
         destination: newDestination
       });
     }
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    const inputs = this.element.querySelectorAll('.event__offer-checkbox');
+    const checkedLabels = [];
+    if (inputs.length > 0) {
+      const checkedInputs = [];
+      inputs.forEach((el) => {
+        if (el.checked) {
+          checkedInputs.push(el.id);
+        }
+      });
+      const allLabels = this.element.querySelectorAll('.event__offer-label');
+      allLabels.forEach((label) => {
+        if (checkedInputs.includes(label.htmlFor) ) {
+          const text = label.querySelector('.event__offer-title').textContent;
+          if (text) {
+            checkedLabels.push(text);
+          }
+        }
+      });
+    }
+    this._callback.formSubmit(FormAddView.parseDataToPoint(this._data, checkedLabels));
+  }
+
+  static parsePointToData = (point) => Object.assign({}, point)
+
+  static parseDataToPoint = (data, checkedInputs) => {
+    data = Object.assign({}, data);
+    if (checkedInputs) {
+      const offerOfType = offers.find((offer) =>  offer.type === data.type );
+      if (offerOfType) {
+        const checkedOffers =  offerOfType.offers.slice(0).filter((el) =>   checkedInputs.includes(el.title));
+        if (checkedOffers.length > 0) {
+          data.offers.offers = checkedOffers;
+        }
+      }
+    }
+    return data;
   }
 }

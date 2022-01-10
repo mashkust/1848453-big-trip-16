@@ -44,5 +44,5 @@ pointsPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
-  pointsPresenter.createTask(defaultPoint);
+  pointsPresenter.createTask(defaultPoint());
 });

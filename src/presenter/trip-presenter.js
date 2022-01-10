@@ -107,13 +107,12 @@ export default class TripPresenter {
     );
   }
 
-  #handleFormSubmit = (task) => {
-    this.#changeData(task);
+  #handleFormSubmit = (update) => {
     this.#replaceFormToCard();
     this.#changeData(
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
-      task,
+      update,
     );
   }
 }
