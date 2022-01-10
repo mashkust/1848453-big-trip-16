@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view.js';
+import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {generateDestination} from '../mock/task.js';
 import {types,offers} from '../mock/arrays.js';
@@ -98,7 +98,6 @@ const addPointTemplate = (POINT)=> {
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
       <button class="event__reset-btn" type="reset">Cancel</button>
-      <button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
     </button>
     </header>
@@ -126,39 +125,33 @@ const addPointTemplate = (POINT)=> {
   );
 };
 
-export default class FormAddView extends AbstractView {
+export default class FormAddView extends SmartView  {
   constructor(point) {
     super();
-    this._point = point;
+    this._data = FormAddView.parsePointToData(point);
     this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
     this.#destinationChangeHandler = this.#destinationChangeHandler.bind(this);
     this.#setInnerHandlers();
   }
 
   get template() {
-    return addPointTemplate(this._point);
+    return addPointTemplate(this._data);
   }
 
-  reset(point) {
+  reset = (point) => {
     this.updateData(
       FormAddView.parsePointToData(point)
     );
   }
 
-  restoreHandlers() {
+  restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
-  #setInnerHandlers = () =>{
+  #setInnerHandlers = () => {
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
-  }
-
-  setFormSubmitHandler = (callback) => {
-    this._callback.formSubmit = callback;
-    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
   #typeChangeHandler = (evt) =>{
@@ -176,6 +169,20 @@ export default class FormAddView extends AbstractView {
       });
     }
   }
+
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+    // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
+  }
+
+
+  // eventCheckboxHandler = (callback) => {
+  //   this._callback.hadnleCheckboxChange = callback;
+  //   this.element.querySelector('.event__offer-label').addEventListener('click', (evt) => {
+  //      console.log('event checkbox', evt);
+  //   });
+  // }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
@@ -217,3 +224,4 @@ export default class FormAddView extends AbstractView {
     return data;
   }
 }
+

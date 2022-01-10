@@ -48,6 +48,7 @@ export default class TripPresenter {
     this.#taskComponent.setEditClickHandler(this.#handleEditClick);
     this.#taskComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#taskEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
+    this.#taskEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
     if (prevTaskComponent === null || prevTaskEditComponent === null) {
       render(this.#taskListContainer, this.#taskComponent, RenderPosition.BEFOREEND);
@@ -113,6 +114,14 @@ export default class TripPresenter {
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
       update,
+    );
+  }
+
+  #handleDeleteClick = (task) => {
+    this.#changeData(
+      UserAction.DELETE_TASK,
+      UpdateType.MINOR,
+      task,
     );
   }
 }

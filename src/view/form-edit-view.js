@@ -141,15 +141,16 @@ export default class FormEditView extends SmartView  {
     return editPointTemplate(this._data);
   }
 
-  reset(point) {
+  reset = (point) => {
     this.updateData(
       FormEditView.parsePointToData(point)
     );
   }
 
-  restoreHandlers() {
+  restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   #setInnerHandlers = () =>{
@@ -179,13 +180,15 @@ export default class FormEditView extends SmartView  {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+  }
 
-  // eventCheckboxHandler = (callback) => {
-  //   this._callback.hadnleCheckboxChange = callback;
-  //   this.element.querySelector('.event__offer-label').addEventListener('click', (evt) => {
-  //      console.log('event checkbox', evt);
-  //   });
-  // }
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteClick(FormEditView.parseDataToTask(this._data));
+  }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
