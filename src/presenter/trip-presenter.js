@@ -1,6 +1,7 @@
 import FormEditView from '../view/form-edit-view.js';
 import PointView from '../view/point-view.js';
 import {render, RenderPosition, replace, remove} from '../render.js';
+import {UserAction, UpdateType} from '../mock/arrays.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -99,10 +100,20 @@ export default class TripPresenter {
 
   #handleFavoriteClick = () => {
     this.#changeData({...this.#task, isFavorite: !this.#task.isFavorite});
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      {...this.#task, isFavorite: !this.#task.isFavorite},
+    );
   }
 
   #handleFormSubmit = (task) => {
     this.#changeData(task);
     this.#replaceFormToCard();
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      task,
+    );
   }
 }

@@ -5,7 +5,7 @@ import MessageView from './view/message-view.js';
 import SiteMenuView from './view/site-menu-view.js';
 // import SortView from './view/sort-view.js';
 import {render, RenderPosition} from './render.js';
-import {generatePoint} from './mock/task.js';
+import {generatePoint,defaultPoint} from './mock/task.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 
@@ -34,8 +34,15 @@ if (POINTS.length === 0) {
 const pointsModel = new PointsModel();
 pointsModel.points = POINTS;
 
+// const filterModel = new FilterModel();
+
 render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
 render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 
-const pointPresenter = new PointsPresenter(siteEventsListElement, pointsModel);
-pointPresenter.init();
+const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel);
+pointsPresenter.init();
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  pointsPresenter.createTask(defaultPoint);
+});

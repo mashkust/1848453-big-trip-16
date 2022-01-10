@@ -1,9 +1,9 @@
-import SmartView from './smart-view.js';
+import AbstractView from './abstract-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {generateDestination} from '../mock/task.js';
 import {types} from '../mock/arrays.js';
 
-const editPointTemplate = (POINT)=> {
+const addPointTemplate = (POINT)=> {
   const {type, destination, baseprice, id} = POINT;
   return (
     `<li class="trip-events__item">
@@ -126,28 +126,20 @@ const editPointTemplate = (POINT)=> {
   );
 };
 
-export default class FormEditView extends SmartView  {
+export default class FormAddView extends AbstractView {
   constructor(point) {
     super();
-    this._data = FormEditView.parsePointToData(point);
+    this._point = point;
     this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
     this.#destinationChangeHandler = this.#destinationChangeHandler.bind(this);
     this.#setInnerHandlers();
   }
 
+  // addPointHandler = () => {
+
+  // }
   get template() {
-    return editPointTemplate(this._data,this._data.type);
-  }
-
-  reset(point) {
-    this.updateData(
-      FormEditView.parsePointToData(point)
-    );
-  }
-
-  restoreHandlers() {
-    this.#setInnerHandlers();
-    this.setFormSubmitHandler(this._callback.formSubmit);
+    return addPointTemplate(this._point);
   }
 
   #setInnerHandlers = () =>{
@@ -169,23 +161,5 @@ export default class FormEditView extends SmartView  {
         destination: newDestination
       });
     }
-  }
-
-  setFormSubmitHandler = (callback) => {
-    this._callback.formSubmit = callback;
-    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
-  }
-
-  #formSubmitHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.formSubmit(FormEditView.parseDataToPoint(this._data));
-  }
-
-  static parsePointToData = (point) => Object.assign({}, point)
-
-  static parseDataToPoint = (data) => {
-    data = Object.assign({}, data);
-    return data;
   }
 }

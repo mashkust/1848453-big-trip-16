@@ -107,3 +107,17 @@ export const generatePoint = (numberId) => {
     type: someType
   };
 };
+
+export const defaultPoint = () => {
+  const someType = 'train';
+  return {
+    baseprice: 0,
+    datefrom: '0',
+    dateto: '0',
+    destination: generateDestination(),
+    id: 0,
+    isFavorite: false,
+    offers: generateOffer(someType,offers),
+    type: someType
+  };
+};

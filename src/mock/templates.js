@@ -39,15 +39,15 @@ export const createCheckedTemplate= (type,someValue) => {
   return '';
 };
 
-export const editOffersPointTemplate = (type) => {
+export const editOffersPointTemplate = (type, pointId) => {
   const offerForEdititing = generateOfferForEdititing(type, offers);
   const ARRAY = [];
   if (offerForEdititing.offers !== undefined || offerForEdititing.offers.length !== 0) {
     //console.log('offerForEdititing.offers', offerForEdititing.offers);
     offerForEdititing.offers.forEach((el) => {
       const template= `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="${el.id}" type="checkbox" name="${el.id}" >
-      <label class="event__offer-label" for="${el.id}">
+      <input onchange="console.log('click input')"  class="event__offer-checkbox  visually-hidden" id="${`${el.id}${pointId}`}" type="checkbox" name="${`${el.id}${pointId}`}" >
+      <label  onchange="console.log('click label')"  class="event__offer-label" for="${`${el.id}${pointId}`}">
         <span class="event__offer-title">${el.title}e</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${el.price}</span>
@@ -56,5 +56,5 @@ export const editOffersPointTemplate = (type) => {
       ARRAY.push(template);
     });
   }
-  return ARRAY;
+  return ARRAY.join('');
 };
