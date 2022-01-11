@@ -151,6 +151,7 @@ export default class FormAddView extends SmartView  {
 
   #setInnerHandlers = () => {
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
   }
 
@@ -158,6 +159,13 @@ export default class FormAddView extends SmartView  {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
+    });
+  }
+
+  #priceChangeHandler = (evt) =>{
+    evt.preventDefault();
+    this.updateData({
+      baseprice: evt.target.value,
     });
   }
 

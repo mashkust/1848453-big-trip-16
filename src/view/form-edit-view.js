@@ -133,6 +133,7 @@ export default class FormEditView extends SmartView  {
     super();
     this._data = FormEditView.parsePointToData(point);
     this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
+    this.#priceChangeHandler = this.#priceChangeHandler.bind(this);
     this.#destinationChangeHandler = this.#destinationChangeHandler.bind(this);
     this.#setInnerHandlers();
   }
@@ -155,6 +156,7 @@ export default class FormEditView extends SmartView  {
 
   #setInnerHandlers = () =>{
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
   }
 
@@ -162,6 +164,13 @@ export default class FormEditView extends SmartView  {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
+    });
+  }
+
+  #priceChangeHandler = (evt) =>{
+    evt.preventDefault();
+    this.updateData({
+      baseprice: evt.target.value,
     });
   }
 
@@ -185,9 +194,9 @@ export default class FormEditView extends SmartView  {
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
   }
 
-  #formDeleteClickHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.deleteClick(FormEditView.parseDataToTask(this._data));
+  #formDeleteClickHandler = () => {
+    this._callback.deleteClick(FormEditView.parseDataToPoint(this._data));
+    this.removeElement();
   }
 
   #formSubmitHandler = (evt) => {
@@ -221,7 +230,7 @@ export default class FormEditView extends SmartView  {
     if (checkedInputs) {
       const offerOfType = offers.find((offer) =>  offer.type === data.type );
       if (offerOfType) {
-        const checkedOffers =  offerOfType.offers.slice(0).filter((el) =>   checkedInputs.includes(el.title));
+        const checkedOffers =  offerOfType.offers.slice(0).filter((el) => checkedInputs.includes(el.title));
         if (checkedOffers.length > 0) {
           data.offers.offers = checkedOffers;
         }
