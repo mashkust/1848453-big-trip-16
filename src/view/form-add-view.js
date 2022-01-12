@@ -1,12 +1,10 @@
 import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {generateDestination} from '../mock/task.js';
-import {types, offers} from '../mock/arrays.js';
+import {types,offers} from '../mock/arrays.js';
 
-
-const editPointTemplate = (POINT)=> {
-  const {type, destination, baseprice, id, } = POINT;
-
+const addPointTemplate = (POINT)=> {
+  const {type, destination, baseprice, id} = POINT;
   return (
     `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -99,8 +97,7 @@ const editPointTemplate = (POINT)=> {
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
-      <button class="event__rollup-btn" type="button">
+      <button class="event__reset-btn" type="reset">Cancel</button>
       <span class="visually-hidden">Open event</span>
     </button>
     </header>
@@ -128,33 +125,31 @@ const editPointTemplate = (POINT)=> {
   );
 };
 
-export default class FormEditView extends SmartView  {
+export default class FormAddView extends SmartView  {
   constructor(point) {
     super();
-    this._data = FormEditView.parsePointToData(point);
+    this._data = FormAddView.parsePointToData(point);
     this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
-    this.#priceChangeHandler = this.#priceChangeHandler.bind(this);
     this.#destinationChangeHandler = this.#destinationChangeHandler.bind(this);
     this.#setInnerHandlers();
   }
 
   get template() {
-    return editPointTemplate(this._data);
+    return addPointTemplate(this._data);
   }
 
   reset = (point) => {
     this.updateData(
-      FormEditView.parsePointToData(point)
+      FormAddView.parsePointToData(point)
     );
   }
 
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
-    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
-  #setInnerHandlers = () =>{
+  #setInnerHandlers = () => {
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
@@ -186,18 +181,16 @@ export default class FormEditView extends SmartView  {
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
+    // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
-  setDeleteClickHandler = (callback) => {
-    this._callback.deleteClick = callback;
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
-  }
 
-  #formDeleteClickHandler = () => {
-    this._callback.deleteClick(FormEditView.parseDataToPoint(this._data));
-    this.removeElement();
-  }
+  // eventCheckboxHandler = (callback) => {
+  //   this._callback.hadnleCheckboxChange = callback;
+  //   this.element.querySelector('.event__offer-label').addEventListener('click', (evt) => {
+  //      console.log('event checkbox', evt);
+  //   });
+  // }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
@@ -220,7 +213,7 @@ export default class FormEditView extends SmartView  {
         }
       });
     }
-    this._callback.formSubmit(FormEditView.parseDataToPoint(this._data, checkedLabels));
+    this._callback.formSubmit(FormAddView.parseDataToPoint(this._data, checkedLabels));
   }
 
   static parsePointToData = (point) => Object.assign({}, point)
@@ -230,7 +223,7 @@ export default class FormEditView extends SmartView  {
     if (checkedInputs) {
       const offerOfType = offers.find((offer) =>  offer.type === data.type );
       if (offerOfType) {
-        const checkedOffers =  offerOfType.offers.slice(0).filter((el) => checkedInputs.includes(el.title));
+        const checkedOffers =  offerOfType.offers.slice(0).filter((el) =>   checkedInputs.includes(el.title));
         if (checkedOffers.length > 0) {
           data.offers.offers = checkedOffers;
         }
@@ -239,3 +232,4 @@ export default class FormEditView extends SmartView  {
     return data;
   }
 }
+

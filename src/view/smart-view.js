@@ -9,7 +9,6 @@ export default class SmartView extends AbstractView {
     }
 
     this._data = {...this._data, ...update};
-
     if (justDataUpdating) {
       return;
     }
