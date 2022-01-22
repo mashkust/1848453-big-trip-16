@@ -2,7 +2,10 @@ import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {generateDestination} from '../mock/task.js';
 import {types, offers} from '../mock/arrays.js';
+import flatpickr from "flatpickr";
+import dayjs from "dayjs";
 
+import './../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPointTemplate = (POINT)=> {
   const {type, destination, baseprice, id, } = POINT;
@@ -84,10 +87,10 @@ const editPointTemplate = (POINT)=> {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="19/03/19 00:00">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${POINT.dateEnd.format('DD/MM/YY HH:mm')}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="19/03/19 00:00">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${POINT.dateStart.format('DD/MM/YY HH:mm')}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
