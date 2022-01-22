@@ -135,10 +135,17 @@ export default class FormEditView extends SmartView  {
   constructor(point) {
     super();
     this._data = FormEditView.parsePointToData(point);
+    this.#datepickerFrom = null;
+    this.#datepickerTo = null;
+
+    this._dueFromDateChangeHandler = this.#dueFromDateChangeHandler.bind(this);
+    this._dueToDateChangeHandler = this.#dueToDateChangeHandler.bind(this);
     this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
     this.#priceChangeHandler = this.#priceChangeHandler.bind(this);
     this.#destinationChangeHandler = this.#destinationChangeHandler.bind(this);
     this.#setInnerHandlers();
+    this.#setFromDatepicker();
+    this.#setToDatepicker();
   }
 
   get template() {
@@ -153,6 +160,8 @@ export default class FormEditView extends SmartView  {
 
   restoreHandlers = () => {
     this.#setInnerHandlers();
+    this.#setFromDatepicker();
+    this.#setToDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setDeleteClickHandler(this._callback.deleteClick);
   }
@@ -240,5 +249,58 @@ export default class FormEditView extends SmartView  {
       }
     }
     return data;
+  }
+
+  #setFromDatepicker = () => {
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+
+    if (this._data.dateFrom) {
+      this.#datepickerFrom = flatpickr(
+          this.getElement().querySelectorAll('#event-start-time-1'),
+          {
+            "dateFormat": `d/m/y H:i`,
+            "defaultDate": this._data.dateFrom,
+            "enableTime": true,
+            "time_24hr": true,
+            "onChange": this.#dueFromDateChangeHandler
+          }
+      );
+    }
+  }
+
+  #setToDatepicker = () => {
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
+
+    if (this._data.dateTo) {
+      this.#datepickerTo = flatpickr(
+          this.getElement().querySelectorAll('#event-end-time-1'),
+          {
+            "dateFormat": `d/m/y H:i`,
+            "defaultDate": this._data.dateTo,
+            "minDate": this._data.dateFrom,
+            "enableTime": true,
+            "time_24hr": true,
+            "onChange": this.#dueToDateChangeHandler
+          }
+      );
+    }
+  }
+
+  #dueFromDateChangeHandler = ([userDateFrom]) => {
+    this.updateData({
+      dateFrom:userDateFrom
+    });
+  }
+
+  #dueToDateChangeHandler = ([userDateTo]) => {
+    this.updateData({
+      dateTo:userDateTo
+    });
   }
 }
