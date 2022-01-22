@@ -1,21 +1,22 @@
 import AbstractView from './abstract-view.js';
-import {createFavotiteTemplate,createOffersPointTemplate} from '../mock/templates.js';
+import {createFavotiteTemplate,createOffersPointTemplate, createDuration} from '../mock/templates.js';
+import dayjs from 'dayjs';
 
 const createPointTemplate = (POINT) => {
   const point= `<li class="trip-events__item" id=${POINT.id} >
       <div class="event">
-        <time class="event__date" datetime="2019-03-18">MAR 18</time>
+        <time class="event__date" datetime="${dayjs(POINT.dateFrom).format('YYYY-MM-DD')}">${dayjs(POINT.dateFrom).format('MMM D')}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${POINT.type}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${POINT.type} ${POINT.destination.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T14:30">14:30</time>
+            <time class="event__start-time" datetime="${dayjs(POINT.dateFrom).format('YYYY-MM-DDTHH:mm')}">${dayjs(POINT.dateFrom).format('H:mm')}</time>
             &mdash;
-            <time class="event__end-time" datetime="2019-03-18T16:05">16:05</time>
+            <time class="event__end-time" datetime="${dayjs(POINT.dateTo).format('YYYY-MM-DDTHH:mm')}">${dayjs(POINT.dateTo).format('H:mm')}</time>
           </p>
-          <p class="event__duration">01H 35M</p>
+          <p class="event__duration">${createDuration(POINT.dateTo, POINT.dateFrom)}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${POINT.baseprice}</span>
