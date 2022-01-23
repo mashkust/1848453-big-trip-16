@@ -1,5 +1,7 @@
 import {generateOfferForEdititing} from './task.js';
 import {offers} from './arrays.js';
+import dayjs from 'dayjs';
+const MINUTES = 60;
 
 export const createOffersPointTemplate = (POINT) => {
   const ARRAY = [];
@@ -38,6 +40,20 @@ export const createCheckedTemplate= (type,someValue) => {
     return 'checked';
   }
   return '';
+};
+
+export const createDuration = (to, from) => {
+  let difference = dayjs(to).diff(from, 'minutes');
+
+  if (difference > MINUTES) {
+    difference = `${Math.floor(difference / MINUTES)}H ${difference % MINUTES}M`;
+  } else if (difference % MINUTES === 0) {
+    difference = `${Math.floor(difference / MINUTES)}H`;
+  } else {
+    difference = `${difference} + M`;
+  }
+
+  return difference;
 };
 
 export const editOffersPointTemplate = (type, pointId, checkedOffers) => {

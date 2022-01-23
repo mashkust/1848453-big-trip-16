@@ -98,8 +98,8 @@ export const generatePoint = (numberId) => {
   const someType = generateType();
   return {
     baseprice: generatePrice (),
-    datefrom: '2019-07-10T22:55:56.845Z',
-    dateto: '2019-07-11T11:22:13.375Z',
+    dateFrom: new Date(),
+    dateTo: new Date(),
     destination: generateDestination(),
     id: String(numberId),
     isFavorite: Boolean(getRandomInteger(0, 1)),
@@ -114,8 +114,8 @@ export const defaultPoint = () => {
   const someType = 'train';
   return {
     baseprice: 0,
-    datefrom: '0',
-    dateto: '0',
+    dateFrom: new Date(),
+    dateTo: new Date(),
     destination: generateDestination('Amsterdam'),
     id: 0,
     isFavorite: false,
