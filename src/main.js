@@ -73,8 +73,8 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.STATS:
       pointsPresenter.destroy();
       statsComponent = new StatsView(pointsModel.points);
-      console.log(statsComponent);
-      // render(siteEventsElement.firstChild, statsComponent, RenderPosition.AFTEREND);
+      console.log(statsComponent.element)
+      render(siteEventsListElement, statsComponent.element, RenderPosition.AFTERBEGIN);
       siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.TABLE}"]`).classList.remove('trip-tabs__btn--active');
       siteMenuComponent.setMenuItem(MenuItem.STATS);
       break;

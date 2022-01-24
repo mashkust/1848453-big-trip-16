@@ -76,17 +76,14 @@ const renderChart = (someCtx, title, label) => {
 };
 
 const createStatsTemplate = () => (
-  ` <section class="statistics">
+  `<section class="statistics">
   <h2>Trip statistics</h2>
-
   <div class="statistics__item ">
     <canvas class="statistics__chart statistics__chart--money" id="money" width="900"></canvas>
   </div>
-
   <div class="statistics__item">
     <canvas class="statistics__chart statistics__chart--type" id= "type" width="900"></canvas>
   </div>
-
   <div class="statistics__item">
     <canvas class="statistics__chart statistics__chart--time" id= "time" width="900"></canvas>
   </div>
@@ -126,11 +123,12 @@ export default class StatsView extends SmartView {
       this._timeChart = null;
     }
 
-    const moneyCtx = this.element.getElementById('money');
+    console.log(this.element)
+    // const moneyCtx = this.element.getElementById('money');
   //   const typeCtx = this.element.querySelector('.statistics__chart--type');
   //   // const timeCtx = this.element.querySelector('#time');
 
-    this._moneyChart = renderChart(moneyCtx, 'MONEY', '€');
+    // this._moneyChart = renderChart(moneyCtx, 'MONEY', '€');
   //   this._typeChart = renderChart(typeCtx, 'TYPE', 'x');
   //   // this._timeChart = renderChart(timeCtx);
   // }
