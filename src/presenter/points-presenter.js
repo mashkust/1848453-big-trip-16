@@ -48,6 +48,15 @@ export default class PointsPresenter {
     this.#pointNewPresenter.init(point);
   }
 
+  destroy = () => {
+    this.#clearBoard({resetRenderedTaskCount: true, resetSortType: true});
+
+    // remove(this.#boardContainer);
+
+    // this.#pointsModel.removeObserver(this.#handleModelEvent);
+    // this.#filterModel.removeObserver(this.#handleModelEvent);
+  }
+
   #renderTask= (taskListElement, point)=>{
     const tripPresenter = new TripPresenter(taskListElement,this.#handleViewAction, this.#handleModeChange);
     tripPresenter.init(point);

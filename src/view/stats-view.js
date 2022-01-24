@@ -2,24 +2,18 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart-view.js';
 
-const moneyCtx = document.querySelector('#money');
-const typeCtx = document.querySelector('#type');
-const timeCtx = document.querySelector('#time');
-
 const BAR_HEIGHT = 55;
 
-const renderChart = (typeCtx, timeCtx, moneyCtx) => {
-  moneyCtx.height = BAR_HEIGHT * 5;
-  typeCtx.height = BAR_HEIGHT * 5;
-  timeCtx.height = BAR_HEIGHT * 5;
+const renderChart = (someCtx, title, label) => {
+  someCtx.height = BAR_HEIGHT * 5;
 
-  const moneyChart = new Chart(moneyCtx, {
+  const someChart = new Chart(someCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'FLIGHT', 'DRIVE'],
+      labels: '',
       datasets: [{
-        data: [400, 300, 200, 160, 150, 100],
+        data:'',
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -37,12 +31,12 @@ const renderChart = (typeCtx, timeCtx, moneyCtx) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          formatter: (val) => `${val}x`,
+          formatter: (val) => `${val}${label}`,
         },
       },
       title: {
         display: true,
-        text: 'MONEY',
+        text: title,
         fontColor: '#000000',
         fontSize: 23,
         position: 'left',
@@ -78,28 +72,67 @@ const renderChart = (typeCtx, timeCtx, moneyCtx) => {
       },
     },
   });
-  return moneyChart;
+  return someChart;
 };
 
 const createStatsTemplate = () => (
   ` <section class="statistics">
-  <h2 class="visually-hidden">Trip statistics</h2>
+  <h2>Trip statistics</h2>
 
-  <div class="statistics__item">
-    <canvas class="statistics__chart" id="money" width="900"></canvas>
+  <div class="statistics__item ">
+    <canvas class="statistics__chart statistics__chart--money" id="money" width="900"></canvas>
   </div>
 
   <div class="statistics__item">
-    <canvas class="statistics__chart" id="type" width="900"></canvas>
+    <canvas class="statistics__chart statistics__chart--type" id= "type" width="900"></canvas>
   </div>
 
   <div class="statistics__item">
-    <canvas class="statistics__chart" id="time" width="900"></canvas>
+    <canvas class="statistics__chart statistics__chart--time" id= "time" width="900"></canvas>
   </div>
 </section>`);
 
-export default class SortsView extends SmartView {
+export default class StatsView extends SmartView {
+  constructor(point) {
+    super();
+
+    this._data = point;
+
+    this._moneyChart = null;
+    this._typeChart = null;
+    this._timeChart = null;
+
+    this.#setCharts();
+  }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
+      this._moneyChart = null;
+      this._typeChart = null;
+      this._timeChart = null;
+    }
+  }
+
   get template() {
     return createStatsTemplate();
+  }
+
+  #setCharts = () => {
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
+      this._moneyChart = null;
+      this._typeChart = null;
+      this._timeChart = null;
+    }
+
+    const moneyCtx = this.element.getElementById('money');
+  //   const typeCtx = this.element.querySelector('.statistics__chart--type');
+  //   // const timeCtx = this.element.querySelector('#time');
+
+    this._moneyChart = renderChart(moneyCtx, 'MONEY', '€');
+  //   this._typeChart = renderChart(typeCtx, 'TYPE', 'x');
+  //   // this._timeChart = renderChart(timeCtx);
+  // }
   }
 }

@@ -13,6 +13,6 @@ export default class MessageView extends AbstractView {
   }
 
   get template() {
-    return createMessageTemplate(this.#points);
+    return createMessageTemplate();
   }
 }
