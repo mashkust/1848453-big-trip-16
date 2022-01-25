@@ -14,13 +14,14 @@ export default class PointNewPresenter {
     this.#changeData = changeData;
   }
 
-  init = (point) => {
+  init = (point, callback) => {
+    this._destroyCallback = callback;
     if (this.#taskAddComponent !== null) {
       return;
     }
     this.#taskAddComponent = new FormAddView(point);
     this.#taskAddComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    // this.#taskAddComponent.setDeleteClickHandler(this.#handleCancelClick);
+    this.#taskAddComponent.setDeleteClickHandler(this.#handleCancelClick);
 
     render(this.#taskListContainer, this.#taskAddComponent, RenderPosition.AFTERBEGIN);
 
@@ -28,6 +29,10 @@ export default class PointNewPresenter {
   }
 
   destroy = () => {
+    if (this._destroyCallback !== null) {
+      this._destroyCallback();
+    }
+
     if (this.#taskAddComponent === null) {
       return;
     }
@@ -47,9 +52,9 @@ export default class PointNewPresenter {
     this.destroy();
   }
 
-  // #handleCancelClick = () => {
-  //   this.destroy();
-  // }
+  #handleCancelClick = () => {
+    this.destroy();
+  }
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {

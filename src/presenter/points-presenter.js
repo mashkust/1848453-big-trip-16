@@ -42,10 +42,10 @@ export default class PointsPresenter {
     this.#renderSort();
   }
 
-  createTask = (point) => {
-    this.#currentSortType = SortType.DEFAULT;
+  createPoint(point, callback) {
     // this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
-    this.#pointNewPresenter.init(point);
+    this.#currentSortType = SortType.DAY;
+    this.#pointNewPresenter.init(point, callback);
   }
 
   destroy = () => {
@@ -171,7 +171,7 @@ export default class PointsPresenter {
     // }
 
     if (resetSortType) {
-      this.#currentSortType = SortType.DEFAULT;
+      this.#currentSortType = SortType.DAY;
     }
   }
 }

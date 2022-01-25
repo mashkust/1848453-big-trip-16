@@ -1,19 +1,20 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart-view.js';
+import {createPriceStats,createTypeStats,createTimeStats} from '../mock/utils.js';
 
-const BAR_HEIGHT = 55;
+const BAR_HEIGHT = 90;
 
-const renderChart = (someCtx, title, label) => {
+const renderChart = (points, someCtx, title, label) => {
   someCtx.height = BAR_HEIGHT * 5;
 
   const someChart = new Chart(someCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: '',
+      labels: [...points.keys()].map((type) => type),
       datasets: [{
-        data:'',
+        data:[...points.values()],
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -77,7 +78,7 @@ const renderChart = (someCtx, title, label) => {
 
 const createStatsTemplate = () => (
   `<section class="statistics">
-  <h2>Trip statistics</h2>
+  <h2 class="visually-hidden">Trip statistics</h2>
   <div class="statistics__item ">
     <canvas class="statistics__chart statistics__chart--money" id="money" width="900"></canvas>
   </div>
@@ -123,14 +124,16 @@ export default class StatsView extends SmartView {
       this._timeChart = null;
     }
 
-    console.log(this.element)
-    // const moneyCtx = this.element.getElementById('money');
-  //   const typeCtx = this.element.querySelector('.statistics__chart--type');
-  //   // const timeCtx = this.element.querySelector('#time');
+    const moneyCtx = this.element.querySelector('.statistics__chart--money');
+    const typeCtx = this.element.querySelector('.statistics__chart--type');
+    const timeCtx = this.element.querySelector('.statistics__chart--time');
 
-    // this._moneyChart = renderChart(moneyCtx, 'MONEY', '€');
-  //   this._typeChart = renderChart(typeCtx, 'TYPE', 'x');
-  //   // this._timeChart = renderChart(timeCtx);
-  // }
+    const money = new Map(createPriceStats(this._data));
+    const type = new Map(createTypeStats(this._data));
+    const time = new Map(createTimeStats(this._data));
+
+    this._moneyChart = renderChart(money, moneyCtx, 'MONEY', '€');
+    this._typeChart = renderChart(type, typeCtx, 'TYPE', 'x');
+    this._timeChart = renderChart(time, timeCtx, 'TIME', 'H');
   }
 }

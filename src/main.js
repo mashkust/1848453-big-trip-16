@@ -41,56 +41,42 @@ render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
 const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel);
 pointsPresenter.init();
 
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
-  evt.preventDefault();
-  pointsPresenter.createTask(defaultPoint());
-});
-
 const siteMenuComponent = new SiteMenuView();
 render(siteNavigationElement, siteMenuComponent.element, RenderPosition.BEFOREEND);
 
-// const newPointAdd = document.querySelector('.trip-main__event-add-btn');
+const addPointComponent = document.querySelector('.trip-main__event-add-btn');
 
-// const handlePointNewFormClose = () => {
-//   newPointAdd.disabled = false;
-// };
+const handlePointNew = () => {
+  addPointComponent.disabled = false;
+};
 
 let statsComponent = null;
+
+addPointComponent.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  pointsPresenter.createPoint(defaultPoint(), handlePointNew);
+  addPointComponent.disabled = true;
+});
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
+      addPointComponent.disabled = false;
       pointsPresenter.destroy();
       pointsPresenter.init();
       remove(statsComponent);
       siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.STATS}"]`).classList.remove('trip-tabs__btn--active');
       siteMenuComponent.setMenuItem(MenuItem.TABLE);
-      document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
-        evt.preventDefault();
-        pointsPresenter.createTask(defaultPoint());
-      });
       break;
     case MenuItem.STATS:
+      addPointComponent.disabled = true;
       pointsPresenter.destroy();
       statsComponent = new StatsView(pointsModel.points);
-      console.log(statsComponent.element)
       render(siteEventsListElement, statsComponent.element, RenderPosition.AFTERBEGIN);
       siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.TABLE}"]`).classList.remove('trip-tabs__btn--active');
       siteMenuComponent.setMenuItem(MenuItem.STATS);
       break;
   }
 };
-
-// newPointAdd.addEventListener('click', (evt) => {
-//   evt.preventDefault();
-//   remove(statsComponent);
-//   pointsPresenter.destroy();
-//   // filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-//   pointsPresenter.init();
-//   pointsPresenter.createPoint(handlePointNewFormClose);
-//   siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.STATS}"]`).classList.remove('trip-tabs__btn--active');
-//   siteMenuComponent.setMenuItem(MenuItem.TABLE);
-//   newPointAdd.disabled = true;
-// });
 
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);

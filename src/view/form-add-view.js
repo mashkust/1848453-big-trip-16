@@ -195,6 +195,10 @@ export default class FormAddView extends SmartView  {
     // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
+  }
 
   // eventCheckboxHandler = (callback) => {
   //   this._callback.hadnleCheckboxChange = callback;
@@ -202,6 +206,10 @@ export default class FormAddView extends SmartView  {
   //      console.log('event checkbox', evt);
   //   });
   // }
+
+  #deleteClickHandler = () => {
+    this._callback.deleteClick(FormAddView.parseDataToPoint(this._data));
+  }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
