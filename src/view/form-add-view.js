@@ -158,6 +158,7 @@ export default class FormAddView extends SmartView  {
     this.#setDateFromDatepicker();
     this.#setDateToDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   #setInnerHandlers = () => {
@@ -192,7 +193,6 @@ export default class FormAddView extends SmartView  {
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
   setDeleteClickHandler(callback) {

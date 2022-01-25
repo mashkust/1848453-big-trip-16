@@ -36,6 +36,7 @@ export default class PointsPresenter {
   init = () => {
     // this.#points = [...points];
     // this.#sourcedBoardTasks = [...points];
+    this.#pointsModel.addObserver(this.#handleModelEvent);
     this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
     });
@@ -50,10 +51,9 @@ export default class PointsPresenter {
 
   destroy = () => {
     this.#clearBoard({resetRenderedTaskCount: true, resetSortType: true});
-
     // remove(this.#boardContainer);
 
-    // this.#pointsModel.removeObserver(this.#handleModelEvent);
+    this.#pointsModel.removeObserver(this.#handleModelEvent);
     // this.#filterModel.removeObserver(this.#handleModelEvent);
   }
 
@@ -111,7 +111,7 @@ export default class PointsPresenter {
   }
 
   #handleModeChange = () => {
-    // this.#pointNewPresenter.destroy();
+    this.#pointNewPresenter.destroy();
     this.#tripPresenter.forEach((point) => point.resetView());
   }
 
@@ -153,7 +153,6 @@ export default class PointsPresenter {
 
   #clearBoard = ({resetSortType = false} = {}) => {
     // const taskCount = this.tasks.length;
-    // this.#pointNewPresenter.destroy();
     this.#tripPresenter.forEach((presenter) => presenter.destroy());
     this.#tripPresenter.clear();
 
