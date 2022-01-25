@@ -36,16 +36,25 @@ export default class PointsPresenter {
   init = () => {
     // this.#points = [...points];
     // this.#sourcedBoardTasks = [...points];
+    this.#pointsModel.addObserver(this.#handleModelEvent);
     this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
     });
     this.#renderSort();
   }
 
-  createTask = (point) => {
-    this.#currentSortType = SortType.DEFAULT;
+  createPoint(point, callback) {
     // this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
-    this.#pointNewPresenter.init(point);
+    this.#currentSortType = SortType.DAY;
+    this.#pointNewPresenter.init(point, callback);
+  }
+
+  destroy = () => {
+    this.#clearBoard({resetRenderedTaskCount: true, resetSortType: true});
+    // remove(this.#boardContainer);
+
+    this.#pointsModel.removeObserver(this.#handleModelEvent);
+    // this.#filterModel.removeObserver(this.#handleModelEvent);
   }
 
   #renderTask= (taskListElement, point)=>{
@@ -102,7 +111,7 @@ export default class PointsPresenter {
   }
 
   #handleModeChange = () => {
-    // this.#pointNewPresenter.destroy();
+    this.#pointNewPresenter.destroy();
     this.#tripPresenter.forEach((point) => point.resetView());
   }
 
@@ -144,7 +153,6 @@ export default class PointsPresenter {
 
   #clearBoard = ({resetSortType = false} = {}) => {
     // const taskCount = this.tasks.length;
-    // this.#pointNewPresenter.destroy();
     this.#tripPresenter.forEach((presenter) => presenter.destroy());
     this.#tripPresenter.clear();
 
@@ -162,7 +170,7 @@ export default class PointsPresenter {
     // }
 
     if (resetSortType) {
-      this.#currentSortType = SortType.DEFAULT;
+      this.#currentSortType = SortType.DAY;
     }
   }
 }

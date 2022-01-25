@@ -33,7 +33,7 @@ export const render = (container, element, place) => {
 export const createElement = (template) => {
   const newElement = document.createElement('ul');
   newElement.classList.add('trip-events__list');
-  newElement.innerHTML = template;
+  newElement.innerHTML = template.trim();
 
   return newElement.firstChild;
 };

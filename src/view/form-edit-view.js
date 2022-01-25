@@ -185,7 +185,7 @@ export default class FormEditView extends SmartView  {
     });
   }
 
-  #destinationChangeHandler =(evt) =>{
+  #destinationChangeHandler = (evt) =>{
     const newDestination = generateDestination(evt.target.value.name);
     if (newDestination) {
       this.updateData({

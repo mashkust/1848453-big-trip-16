@@ -158,6 +158,7 @@ export default class FormAddView extends SmartView  {
     this.#setDateFromDatepicker();
     this.#setDateToDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   #setInnerHandlers = () => {
@@ -192,9 +193,12 @@ export default class FormAddView extends SmartView  {
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
+  }
 
   // eventCheckboxHandler = (callback) => {
   //   this._callback.hadnleCheckboxChange = callback;
@@ -202,6 +206,10 @@ export default class FormAddView extends SmartView  {
   //      console.log('event checkbox', evt);
   //   });
   // }
+
+  #deleteClickHandler = () => {
+    this._callback.deleteClick(FormAddView.parseDataToPoint(this._data));
+  }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();

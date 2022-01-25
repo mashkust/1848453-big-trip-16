@@ -1,11 +1,10 @@
-// import FormEditView from './view/form-edit-view.js';
 import FilterView from './view/filter-view.js';
 import MessageView from './view/message-view.js';
-// import PointListView from './view/point-list-view.js';
 import SiteMenuView from './view/site-menu-view.js';
-// import SortView from './view/sort-view.js';
-import {render, RenderPosition} from './render.js';
+import StatsView from './view/stats-view';
+import {render, RenderPosition,remove} from './render.js';
 import {generatePoint,defaultPoint} from './mock/task.js';
+import {MenuItem} from './mock/arrays.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 
@@ -37,12 +36,47 @@ pointsModel.points = POINTS;
 // const filterModel = new FilterModel();
 
 render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
-render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
+// render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 
 const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel);
 pointsPresenter.init();
 
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+const siteMenuComponent = new SiteMenuView();
+render(siteNavigationElement, siteMenuComponent.element, RenderPosition.BEFOREEND);
+
+const addPointComponent = document.querySelector('.trip-main__event-add-btn');
+
+const handlePointNew = () => {
+  addPointComponent.disabled = false;
+};
+
+let statsComponent = null;
+
+addPointComponent.addEventListener('click', (evt) => {
   evt.preventDefault();
-  pointsPresenter.createTask(defaultPoint());
+  pointsPresenter.createPoint(defaultPoint(), handlePointNew);
+  addPointComponent.disabled = true;
 });
+
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.TABLE:
+      addPointComponent.disabled = false;
+      pointsPresenter.destroy();
+      pointsPresenter.init();
+      remove(statsComponent);
+      siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.STATS}"]`).classList.remove('trip-tabs__btn--active');
+      siteMenuComponent.setMenuItem(MenuItem.TABLE);
+      break;
+    case MenuItem.STATS:
+      addPointComponent.disabled = true;
+      pointsPresenter.destroy();
+      statsComponent = new StatsView(pointsModel.points);
+      render(siteEventsListElement, statsComponent.element, RenderPosition.AFTERBEGIN);
+      siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.TABLE}"]`).classList.remove('trip-tabs__btn--active');
+      siteMenuComponent.setMenuItem(MenuItem.STATS);
+      break;
+  }
+};
+
+siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
