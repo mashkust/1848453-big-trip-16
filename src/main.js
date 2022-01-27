@@ -7,8 +7,11 @@ import {generatePoint,defaultPoint} from './mock/task.js';
 import {MenuItem} from './mock/arrays.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
+import ApiService from './api-service.js';
 
 const LENGTH_POINTS_ARRAY =15;
+const AUTHORIZATION = 'Basic hS2sfS44wcuih2j';
+const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 
 const createPoints = () => {
   const POINTS_ARRAY = [];
@@ -30,8 +33,8 @@ if (POINTS.length === 0) {
   render(siteEventsElement, new MessageView(), RenderPosition.BEFOREEND);
 }
 
-const pointsModel = new PointsModel();
-pointsModel.points = POINTS;
+const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
+// pointsModel.points = POINTS;
 
 // const filterModel = new FilterModel();
 
@@ -39,10 +42,8 @@ render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
 // render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 
 const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel);
-pointsPresenter.init();
 
 const siteMenuComponent = new SiteMenuView();
-render(siteNavigationElement, siteMenuComponent.element, RenderPosition.BEFOREEND);
 
 const addPointComponent = document.querySelector('.trip-main__event-add-btn');
 
@@ -79,4 +80,10 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+pointsPresenter.init();
+// pointsModel.init();
+
+pointsModel.init().finally(() => {
+  render(siteNavigationElement, siteMenuComponent, RenderPosition.BEFOREEND);
+  siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+});
