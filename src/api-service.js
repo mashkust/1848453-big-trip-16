@@ -1,3 +1,5 @@
+import {parseServerPoints} from './mock/utils.js';
+
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
@@ -14,7 +16,8 @@ export default class ApiService {
 
   get points() {
     return this.#load({url: 'points'})
-      .then(ApiService.parseResponse);
+      .then(ApiService.parseResponse)
+      .then((res) => parseServerPoints(res));
   }
 
   updateTask = async (point) => {
@@ -33,7 +36,6 @@ export default class ApiService {
   #adaptToServer = (point) => {
     const adaptedTask = {...point,
       // 'due_date': task.dueDate instanceof Date ? task.dueDate.toISOString() : null, // На сервере дата хранится в ISO формате
-      'is_favorite': point.isFavorite,
     };
 
     // Ненужные ключи мы удаляем

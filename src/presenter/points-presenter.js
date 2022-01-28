@@ -37,6 +37,7 @@ export default class PointsPresenter {
     // this.#points = [...points];
     // this.#sourcedBoardTasks = [...points];
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    console.log(this.#pointsModel.points)
     this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
     });

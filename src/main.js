@@ -34,14 +34,18 @@ if (POINTS.length === 0) {
 }
 
 const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
+
 // pointsModel.points = POINTS;
 
 // const filterModel = new FilterModel();
 
 render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
 // render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
-
 const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel);
+
+// setTimeout(() => {
+//   pointsPresenter.init();
+// }, 5000);
 
 const siteMenuComponent = new SiteMenuView();
 
@@ -80,10 +84,8 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-pointsPresenter.init();
-// pointsModel.init();
-
 pointsModel.init().finally(() => {
+  pointsPresenter.init();
   render(siteNavigationElement, siteMenuComponent, RenderPosition.BEFOREEND);
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 });

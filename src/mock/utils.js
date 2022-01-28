@@ -21,3 +21,21 @@ const createTimeStats = (points) => [...new Set(points.map((point) => point.type
   .sort(([,a],[, b]) => b - a);
 
 export {createPriceStats, createTypeStats, createTimeStats};
+
+export const parseServerPoints = (serverPoints) =>
+  serverPoints.map((el) => ({
+    baseprice: el['base_price'],
+    dateFrom: new Date(el['date_from']),
+    dateTo: new Date(el['date_to']),
+    isFavorite: el['is_favorite'],
+    offers: {
+      offers: el.offers.map((elem) => ({
+        type: el.type,
+        offers: elem,
+      }))
+    },
+    id: Number(el.id),
+    type: el.type,
+    destination:el.destination,
+  }));
+
