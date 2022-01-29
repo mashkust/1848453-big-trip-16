@@ -16,6 +16,7 @@ export default class PointNewPresenter {
 
   init = (point, callback) => {
     this._destroyCallback = callback;
+
     if (this.#taskAddComponent !== null) {
       return;
     }

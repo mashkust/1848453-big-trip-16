@@ -1,4 +1,4 @@
-import {parseServerPoints} from './mock/utils.js';
+import {parseServerPoints, parseServerDestinations, parseServerOffers} from './mock/utils.js';
 
 const Method = {
   GET: 'GET',
@@ -14,15 +14,43 @@ export default class ApiService {
     this.#authorization = authorization;
   }
 
+  get data() {
+    return Promise.all([
+      this.points,
+      this.offers,
+      this.destinations
+    ])
+      .then((response) => {
+        const [points, offers, destinations] = response;
+        return {
+          points,
+          offers,
+          destinations
+        };
+      });
+  }
+
   get points() {
     return this.#load({url: 'points'})
       .then(ApiService.parseResponse)
       .then((res) => parseServerPoints(res));
   }
 
+  get offers() {
+    return this.#load({url: 'offers'})
+      .then(ApiService.parseResponse)
+      .then((res) => parseServerOffers(res));
+  }
+
+  get destinations() {
+    return this.#load({url: 'destinations'})
+      .then(ApiService.parseResponse)
+      .then((res) => parseServerDestinations(res));
+  }
+
   updateTask = async (point) => {
     const response = await this.#load({
-      url: `tasks/${point.id}`,
+      url: `points/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(this.#adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),

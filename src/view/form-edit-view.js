@@ -2,9 +2,12 @@ import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
 import {generateDestination} from '../mock/task.js';
 import {types, offers} from '../mock/arrays.js';
+import OffersModel from '../model/offers-model.js';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
-
+import ApiService from '../api-service.js';
+const AUTHORIZATION = 'Basic hS2sfS44wcuih2j';
+const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 import './../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPointTemplate = (POINT)=> {
@@ -132,11 +135,13 @@ const editPointTemplate = (POINT)=> {
 };
 
 export default class FormEditView extends SmartView  {
+  #offersModel = null;
   constructor(point) {
     super();
     this._data = FormEditView.parsePointToData(point);
     this._datepickers = {};
-
+    this.#offersModel = null;
+    this.#offersModel = new OffersModel(new ApiService(END_POINT, AUTHORIZATION));
     this.#dateFromChangeHandler = this.#dateFromChangeHandler.bind(this);
     this.#dateToChangeHandler = this.#dateToChangeHandler.bind(this);
     this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
@@ -239,7 +244,7 @@ export default class FormEditView extends SmartView  {
   static parseDataToPoint = (data, checkedInputs) => {
     data = Object.assign({}, data);
     if (checkedInputs) {
-      const offerOfType = offers.find((offer) =>  offer.type === data.type );
+      const offerOfType = offers.find((offer) => offer.type === data.type);
       if (offerOfType) {
         const checkedOffers =  offerOfType.offers.slice(0).filter((el) => checkedInputs.includes(el.title));
         if (checkedOffers.length > 0) {

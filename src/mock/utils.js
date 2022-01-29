@@ -39,3 +39,15 @@ export const parseServerPoints = (serverPoints) =>
     destination:el.destination,
   }));
 
+export const parseServerOffers = (serverOffers) =>
+  serverOffers.map((el) => ({
+    offers: el.map((elem) => ({
+      type: el.type,
+      offers: elem,
+    }))
+  }));
+
+export const parseServerDestinations = (serverDestination) =>
+  serverDestination.map((destination) => ({
+    destination: destination,
+  }));

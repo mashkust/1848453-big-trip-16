@@ -7,9 +7,9 @@ export const createOffersPointTemplate = (POINT) => {
   const ARRAY = [];
   if (POINT.offers.offers !== undefined || POINT.offers.offers.length !== 0) {
     POINT.offers.offers.forEach((el) => {
-      const offersTemplate= `<span class="event__offer-title">${el.title}</span>
+      const offersTemplate= `<span class="event__offer-title">${el.offers.title}</span>
       &plus;&euro;&nbsp;
-      <span class="event__offer-price">${el.price}</span>`;
+      <span class="event__offer-price">${el.offers.price}</span>`;
       ARRAY.push(offersTemplate);
     });
     return ARRAY.join(',');

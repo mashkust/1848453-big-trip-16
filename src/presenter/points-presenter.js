@@ -108,6 +108,14 @@ export default class PointsPresenter {
         this.#renderSort();
         // - обновить всю доску (например, при переключении фильтра)
         break;
+      case UpdateType.INIT:
+        // this._isLoading = false;
+        // remove(this._loadingComponent);
+        this.#clearBoard();
+        this.points.forEach((el) => {
+          this.#renderTask(this.#boardContainer,el);
+        });
+        break;
     }
   }
 
