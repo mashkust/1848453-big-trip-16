@@ -4,6 +4,9 @@ import PointNewPresenter from './point-new-presenter.js';
 // import {updateItem} from '../common.js';
 import {render, RenderPosition,remove} from '../render.js';
 import {SortType, UpdateType, UserAction} from '../mock/arrays.js';
+import dayjs from 'dayjs';
+
+const getTime = (startDate, endDate) => dayjs(endDate).diff(startDate);
 
 export default class PointsPresenter {
   #boardContainer = null;
@@ -29,8 +32,10 @@ export default class PointsPresenter {
     switch (this.#currentSortType) {
       case SortType.PRICE:
         return [...this.#pointsModel.points].sort((a, b) => b.baseprice - a.baseprice);
+      case SortType.TIME:
+        return [...this.#pointsModel.points].sort((a, b) => getTime(b.dateFrom, b.dateTo) - getTime(a.dateFrom, a.dateTo));
     }
-    return this.#pointsModel.points;
+    return [...this.#pointsModel.points].sort((a, b) => dayjs(a.dateFrom).valueOf() - dayjs(b.dateFrom).valueOf());
   }
 
   init = () => {
@@ -111,11 +116,11 @@ export default class PointsPresenter {
       case UpdateType.INIT:
         // this._isLoading = false;
         // remove(this._loadingComponent);
-        this.#clearBoard();
-        this.points.forEach((el) => {
-          this.#renderTask(this.#boardContainer,el);
-        });
-        break;
+        // this.#clearBoard();
+        // this.points.forEach((el) => {
+        //   this.#renderTask(this.#boardContainer,el);
+        // });
+        // break;
     }
   }
 

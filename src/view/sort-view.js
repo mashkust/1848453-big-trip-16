@@ -4,7 +4,7 @@ import {SortType} from '../mock/arrays.js';
 const createSortTemplate = (currentSortType) => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     <div class="trip-sort__item  trip-sort__item--day">
-      <input id="sort-day" class="trip-sort__input  visually-hidden ${currentSortType === SortType.DAY}" type="radio" name="trip-sort" value="sort-day">
+      <input id="sort-day" class="trip-sort__input  visually-hidden " type="radio" name="trip-sort" value="sort-day" ${currentSortType === SortType.DAY ? 'checked' : ''}>
       <label class="trip-sort__btn" for="sort-day">Day</label>
     </div>
 
@@ -14,12 +14,12 @@ const createSortTemplate = (currentSortType) => (
     </div>
 
     <div class="trip-sort__item  trip-sort__item--time">
-      <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time" checked>
+      <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time" ${currentSortType === SortType.TIME ? 'checked' : ''} >
       <label class="trip-sort__btn" for="sort-time">Time</label>
     </div>
 
     <div class="trip-sort__item  trip-sort__item--price">
-      <input id="sort-price" class="trip-sort__input  visually-hidden ${currentSortType === SortType.PRICE}" type="radio" name="trip-sort" value="sort-price">
+      <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price" ${currentSortType === SortType.PRICE ? 'checked' : ''}>
       <label class="trip-sort__btn" for="sort-price">Price</label>
     </div>
 
@@ -47,12 +47,19 @@ export default class SortView extends AbstractView {
     this._callback.sortTypeChange = callback;
     this.element.querySelector('.trip-sort__item--price').addEventListener('click', this.#sortTypeChangePrice);
     this.element.querySelector('.trip-sort__item--day').addEventListener('click', this.#sortTypeChangeDay);
+    this.element.querySelector('.trip-sort__item--time').addEventListener('click', this.#sortTypeChangeTime);
   }
 
   #sortTypeChangePrice = (evt) => {
     document.getElementById('sort-price').checked = 'true';
     evt.preventDefault();
     this._callback.sortTypeChange(SortType.PRICE);
+  }
+
+  #sortTypeChangeTime = (evt) => {
+    document.getElementById('sort-time').checked = 'true';
+    evt.preventDefault();
+    this._callback.sortTypeChange(SortType.TIME);
   }
 
   #sortTypeChangeDay = (evt) => {

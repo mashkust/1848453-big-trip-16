@@ -17,7 +17,7 @@ export default class OffersModel extends AbstractObservable {
   init = async () => {
     try {
       this._offers = await this.#apiService.offers;
-      console.log('init',this._offers )
+      console.log('init',this._offers)
     } catch(err) {
       this._offers = [];
     }

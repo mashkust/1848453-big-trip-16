@@ -4,10 +4,10 @@ import SiteMenuView from './view/site-menu-view.js';
 import StatsView from './view/stats-view';
 import {render, RenderPosition,remove} from './render.js';
 import {generatePoint,defaultPoint} from './mock/task.js';
-import {MenuItem,UpdateType} from './mock/arrays.js';
+import {MenuItem} from './mock/arrays.js';
 import PointsPresenter from './presenter/points-presenter.js';
-import DestinationsModel from './model/destinations-model.js';
-import OffersModel from './model/offers-model.js';
+// import DestinationsModel from './model/destinations-model.js';
+// import OffersModel from './model/offers-model.js';
 import PointsModel from './model/points-model.js';
 import ApiService from './api-service.js';
 
@@ -37,9 +37,9 @@ if (POINTS.length === 0) {
 
 const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
 // const offersModel = new OffersModel(new ApiService(END_POINT, AUTHORIZATION));
-const destinationsModel = new DestinationsModel(new ApiService(END_POINT, AUTHORIZATION));
+// const destinationsModel = new DestinationsModel(new ApiService(END_POINT, AUTHORIZATION));
 // pointsModel.points = POINTS;
-destinationsModel.init();
+// destinationsModel.init();
 
 // offersModel.init();
 
@@ -97,18 +97,3 @@ pointsModel.init().finally(() => {
   render(siteNavigationElement, siteMenuComponent, RenderPosition.BEFOREEND);
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 });
-
-// ApiService.points()
-//   .then((points) => {
-//     pointsModel.setPoints(UpdateType.INIT, points);
-//   })
-//   .catch(() => {
-//     pointsModel.setPoints(UpdateType.INIT, []);
-//   })
-//   .finally(() => {
-//     // routeComponent = new Route(dataModel);
-//     // render(tripMainElem, routeComponent, RenderPosition.AFTERBEGIN);
-//     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-//     render(siteNavigationElement, siteMenuComponent.element, RenderPosition.AFTEREND);
-//   });
-

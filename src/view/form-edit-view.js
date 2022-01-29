@@ -243,6 +243,7 @@ export default class FormEditView extends SmartView  {
 
   static parseDataToPoint = (data, checkedInputs) => {
     data = Object.assign({}, data);
+    console.log('тут')
     if (checkedInputs) {
       const offerOfType = offers.find((offer) => offer.type === data.type);
       if (offerOfType) {

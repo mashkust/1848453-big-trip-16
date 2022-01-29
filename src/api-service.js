@@ -14,21 +14,21 @@ export default class ApiService {
     this.#authorization = authorization;
   }
 
-  get data() {
-    return Promise.all([
-      this.points,
-      this.offers,
-      this.destinations
-    ])
-      .then((response) => {
-        const [points, offers, destinations] = response;
-        return {
-          points,
-          offers,
-          destinations
-        };
-      });
-  }
+  // get data() {
+  //   return Promise.all([
+  //     this.points,
+  //     this.offers,
+  //     this.destinations
+  //   ])
+  //     .then((response) => {
+  //       const [points, offers, destinations] = response;
+  //       return {
+  //         points,
+  //         offers,
+  //         destinations
+  //       };
+  //     });
+  // }
 
   get points() {
     return this.#load({url: 'points'})
