@@ -1,9 +1,10 @@
 import SortView from '../view/sort-view.js';
 import TripPresenter from './trip-presenter.js';
 import PointNewPresenter from './point-new-presenter.js';
+// import {filter} from '../mock/utils.js';
 // import {updateItem} from '../common.js';
 import {render, RenderPosition,remove} from '../render.js';
-import {SortType, UpdateType, UserAction} from '../mock/arrays.js';
+import {FilterType, SortType, UpdateType, UserAction} from '../mock/arrays.js';
 import dayjs from 'dayjs';
 
 const getTime = (startDate, endDate) => dayjs(endDate).diff(startDate);
@@ -19,29 +20,37 @@ export default class PointsPresenter {
   #currentSortType = SortType.DAY;
   // #sourcedBoardTasks = [];
 
-  constructor(boardContainer,pointsModel) {
+  constructor(boardContainer,pointsModel, filterModel) {
     this.#boardContainer = boardContainer;
     this.#sortContainer = boardContainer;
     this.#pointsModel = pointsModel;
+    this._filterModel = filterModel;
 
     this.#pointNewPresenter = new PointNewPresenter(this.#boardContainer, this.#handleViewAction);
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this._filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+    const filterType = this._filterModel._activeFilter;
+    let filtredPoints = this.#pointsModel.points.slice();
+    if (filterType !== FilterType.EVERYTHING) {
+      filtredPoints=filtredPoints.filter((point) => filterType === FilterType.FUTURE ? new Date(point.dateTo) > new Date() : new Date(point.dateTo) < new Date());
+    }
     switch (this.#currentSortType) {
       case SortType.PRICE:
-        return [...this.#pointsModel.points].sort((a, b) => b.baseprice - a.baseprice);
+        return filtredPoints.sort((a, b) => b.baseprice - a.baseprice);
       case SortType.TIME:
-        return [...this.#pointsModel.points].sort((a, b) => getTime(b.dateFrom, b.dateTo) - getTime(a.dateFrom, a.dateTo));
+        return filtredPoints.sort((a, b) => getTime(b.dateFrom, b.dateTo) - getTime(a.dateFrom, a.dateTo));
     }
-    return [...this.#pointsModel.points].sort((a, b) => dayjs(a.dateFrom).valueOf() - dayjs(b.dateFrom).valueOf());
+    return filtredPoints.sort((a, b) => dayjs(a.dateFrom).valueOf() - dayjs(b.dateFrom).valueOf());
   }
 
   init = () => {
     // this.#points = [...points];
     // this.#sourcedBoardTasks = [...points];
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    // this._filterModel.addObserver(this.#handleModelEvent);
     console.log(this.#pointsModel.points)
     this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
@@ -50,7 +59,7 @@ export default class PointsPresenter {
   }
 
   createPoint(point, callback) {
-    // this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#currentSortType = SortType.DAY;
     this.#pointNewPresenter.init(point, callback);
   }

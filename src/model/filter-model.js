@@ -2,14 +2,18 @@ import AbstractObservable from '../abstract-observable.js';
 import {FilterType} from '../mock/arrays.js';
 
 export default class FilterModel extends AbstractObservable {
-  #filter = FilterType.ALL;
-
-  get filter() {
-    return this.#filter;
+  constructor() {
+    super();
+    this._activeFilter = FilterType.EVERYTHING;
   }
 
-  setFilter = (updateType, filter) => {
-    this.#filter = filter;
+  setFilter(updateType, filter) {
+    console.log('filter',filter)
+    this._activeFilter = filter;
     this._notify(updateType, filter);
+  }
+
+  get filter() {
+    return this._activeFilter;
   }
 }

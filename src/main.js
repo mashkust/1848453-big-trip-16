@@ -1,4 +1,6 @@
-import FilterView from './view/filter-view.js';
+import FilterModel from './model/filter-model.js';
+import FilterPresenter from './presenter/filter-presenter.js';
+// import FilterView from './view/filter-view.js';
 import MessageView from './view/message-view.js';
 import SiteMenuView from './view/site-menu-view.js';
 import StatsView from './view/stats-view';
@@ -11,19 +13,18 @@ import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 import ApiService from './api-service.js';
 
-const LENGTH_POINTS_ARRAY =15;
 const AUTHORIZATION = 'Basic hS2sfS44wcuih2j';
 const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 
-const createPoints = () => {
-  const POINTS_ARRAY = [];
-  for(let index = 0; index <= LENGTH_POINTS_ARRAY-1; index++) {
-    POINTS_ARRAY[index] = generatePoint(index);
-  }
-  return POINTS_ARRAY;
-};
+// const createPoints = () => {
+//   const POINTS_ARRAY = [];
+//   for(let index = 0; index <= LENGTH_POINTS_ARRAY-1; index++) {
+//     POINTS_ARRAY[index] = generatePoint(index);
+//   }
+//   return POINTS_ARRAY;
+// };
 
-export const POINTS = createPoints();
+// export const POINTS = createPoints();
 
 const siteBodyElement = document.querySelector('.page-body');
 const siteNavigationElement = siteBodyElement.querySelector('.trip-controls__navigation');
@@ -31,11 +32,12 @@ const siteFiltersElement = siteBodyElement.querySelector('.trip-controls__filter
 const siteEventsElement = siteBodyElement.querySelector('.trip-events');
 const siteEventsListElement = siteEventsElement .querySelector('.trip-events__list');
 
-if (POINTS.length === 0) {
-  render(siteEventsElement, new MessageView(), RenderPosition.BEFOREEND);
-}
+// if (POINTS.length === 0) {
+//   render(siteEventsElement, new MessageView(), RenderPosition.BEFOREEND);
+// }
 
 const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
+const filterModel = new FilterModel();
 // const offersModel = new OffersModel(new ApiService(END_POINT, AUTHORIZATION));
 // const destinationsModel = new DestinationsModel(new ApiService(END_POINT, AUTHORIZATION));
 // pointsModel.points = POINTS;
@@ -45,9 +47,10 @@ const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
 
 // const filterModel = new FilterModel();
 
-render(siteFiltersElement, new FilterView(), RenderPosition.BEFOREEND);
+const filterPresenter = new FilterPresenter(siteFiltersElement, filterModel, pointsModel);
+filterPresenter.init();
 // render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
-const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel);
+const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel, filterModel);
 
 // setTimeout(() => {
 //   pointsPresenter.init();
