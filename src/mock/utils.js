@@ -14,9 +14,10 @@ const createTypeStats = (points) => [...new Set(points.map((point) => point.type
 
 const createTimeStats = (points) => [...new Set(points.map((point) => point.type))]
   .map((type) => {
+    let sum = 0;
     const filterType = points.filter((point) => point.type === type);
-    const sum = filterType.reduce((acc, val) => (acc + dayjs(val.dateTo).diff(val.dateFrom)), 0);
-    return [type, sum];
+    sum = filterType.reduce((acc, val) => (dayjs(val.dateTo).diff(val.dateFrom)),0) ;
+    return [type, dayjs(sum).hour()];
   })
   .sort(([,a],[, b]) => b - a);
 
