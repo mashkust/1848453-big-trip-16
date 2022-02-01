@@ -3,62 +3,67 @@ import {render, RenderPosition, remove, replace} from '../render.js';
 import {FilterType, UpdateType} from '../mock/arrays.js';
 
 export default class FilterPresenter {
+  #filterContainer = null;
+  #filterModel = null;
+  #pointsModel = null;
+  #currentFilter = null;
+  #filterComponent = null;
+
   constructor(filterContainer, filterModel, pointsModel) {
-    this._filterContainer = filterContainer;
-    this._filterModel = filterModel;
-    this._pointsModel = pointsModel;
-    this._currentFilter = null;
+    this.#filterContainer = filterContainer;
+    this.#filterModel = filterModel;
+    this.#pointsModel = pointsModel;
+    this.#currentFilter = null;
 
-    this._filterComponent = null;
+    this.#filterComponent = null;
 
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this.#handleModelEvent = this.#handleModelEvent.bind(this);
+    this.#handleFilterTypeChange = this.#handleFilterTypeChange.bind(this);
 
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
-  init() {
-    this._currentFilter = this._filterModel.filter;
+  init = (truefalse) =>{
+    this.#currentFilter = this.#filterModel.filter;
 
-    const filters = this._getFilters();
-    const prevFilterView = this._filterComponent;
+    const filters = this.#getFilters();
+    const prevFilterView = this.#filterComponent;
 
-    this._filterComponent = new FilterView(filters, this._currentFilter);
-    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
-
+    this.#filterComponent = new FilterView(filters, this.#currentFilter);
+    this.#filterComponent.setFilterTypeChangeHandler(this.#handleFilterTypeChange);
+    if (truefalse === false) {
+      this.#filterComponent.deleteFilterTypeChangeHandler(this.#handleFilterTypeChange);
+    }
     if (prevFilterView === null) {
-      render(this._filterContainer, this._filterComponent, RenderPosition.AFTEREND);
+      render(this.#filterContainer, this.#filterComponent, RenderPosition.AFTEREND);
       return;
     }
 
-    replace(this._filterComponent, prevFilterView);
+    replace(this.#filterComponent, prevFilterView);
     remove(prevFilterView);
   }
 
-  _handleModelEvent() {
+  #handleModelEvent = () => {
     this.init();
   }
 
-  _handleFilterTypeChange(filterType) {
-    console.log('фильтр тайп',filterType)
-    if (this._currentFilter === filterType) {
+  #handleFilterTypeChange = (filterType) => {
+    if (this.#currentFilter === filterType) {
       return;
     }
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
-  _getFilters() {
-    return [
-      {
-        type: FilterType.EVERYTHING,
-      },
-      {
-        type: FilterType.FUTURE,
-      },
-      {
-        type: FilterType.PAST,
-      }
-    ];
-  }
+  #getFilters = () => [
+    {
+      type: FilterType.EVERYTHING,
+    },
+    {
+      type: FilterType.FUTURE,
+    },
+    {
+      type: FilterType.PAST,
+    }
+  ]
 }

@@ -8,7 +8,6 @@ export default class FilterModel extends AbstractObservable {
   }
 
   setFilter(updateType, filter) {
-    console.log('filter',filter)
     this._activeFilter = filter;
     this._notify(updateType, filter);
   }

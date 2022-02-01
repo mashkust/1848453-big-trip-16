@@ -11,17 +11,16 @@ export default class OffersModel extends AbstractObservable {
   }
 
   get offers() {
-    return this._offers;
+    return this.#offers;
   }
 
   init = async () => {
     try {
-      this._offers = await this.#apiService.offers;
-      console.log('init',this._offers)
+      this.#offers = await this.#apiService.offers;
     } catch(err) {
-      this._offers = [];
+      this.#offers = [];
     }
-
+  console.log('this.#offers',this.#offers)
     this._notify(UpdateType.INIT);
   }
 

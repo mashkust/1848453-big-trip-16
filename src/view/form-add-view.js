@@ -1,11 +1,11 @@
 import SmartView from './smart-view.js';
-import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate} from '../mock/templates.js';
+import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate, createDestinationsName} from '../mock/templates.js';
 import {generateDestination} from '../mock/task.js';
-import {types,offers} from '../mock/arrays.js';
+import {types} from '../mock/arrays.js';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
 
-const addPointTemplate = (POINT)=> {
+const addPointTemplate = (POINT, destinations ,offers)=> {
   const {type, destination, baseprice, id, dateFrom, dateTo} = POINT;
   return (
     `<li class="trip-events__item">
@@ -76,9 +76,7 @@ const addPointTemplate = (POINT)=> {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
         <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
+        ${createDestinationsName(destinations)}
         </datalist>
       </div>
 
@@ -107,7 +105,7 @@ const addPointTemplate = (POINT)=> {
       <section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-        ${editOffersPointTemplate(type, id, POINT.offers)}
+        ${editOffersPointTemplate(type, id, POINT.offers, offers)}
         </div>
       </section>
 
@@ -128,11 +126,17 @@ const addPointTemplate = (POINT)=> {
 };
 
 export default class FormAddView extends SmartView  {
-  constructor(point) {
+
+  constructor(point, destinationsModel, offersModel) {
     super();
-    this._data = FormAddView.parsePointToData(point);
+    this._data = this.parsePointToData(point);
     this._datepickerFrom = null;
     this._datepickers = {};
+    this._destinations = destinationsModel.destinations;
+    this._data.destination = this._destinations[0].destination;
+    this._offers = offersModel.offers;
+    this._data.offers.offers = this._offers.find((el)=> el.offers.type === this._data.type).offers;
+    console.log('this._offers',this._offers)
 
     this.#dateFromChangeHandler = this.#dateFromChangeHandler.bind(this);
     this.#dateToChangeHandler = this.#dateToChangeHandler.bind(this);
@@ -141,15 +145,16 @@ export default class FormAddView extends SmartView  {
     this.#setInnerHandlers();
     this.#setDateFromDatepicker();
     this.#setDateToDatepicker();
+    this.parseDataToPoint= this.parseDataToPoint.bind(this);
   }
 
   get template() {
-    return addPointTemplate(this._data);
+    return addPointTemplate(this._data,this._destinations , this._offers);
   }
 
   reset = (point) => {
     this.updateData(
-      FormAddView.parsePointToData(point)
+      this.parsePointToData(point)
     );
   }
 
@@ -182,10 +187,11 @@ export default class FormAddView extends SmartView  {
   }
 
   #destinationChangeHandler =(evt) =>{
-    const newDestination = generateDestination(evt.target.value.name);
+    const newDestination = generateDestination(evt.target.value, this._destinations);
+    console.log('newDestination', newDestination);
     if (newDestination) {
       this.updateData({
-        destination: newDestination
+        destination: newDestination.destination
       });
     }
   }
@@ -232,22 +238,26 @@ export default class FormAddView extends SmartView  {
         }
       });
     }
-    this._callback.formSubmit(FormAddView.parseDataToPoint(this._data, checkedLabels));
+    console.log('this.offers',this._offers)
+    this._callback.formSubmit(this.parseDataToPoint(this._data, checkedLabels));
   }
 
-  static parsePointToData = (point) => Object.assign({}, point)
+  parsePointToData = (point) => Object.assign({}, point)
 
-  static parseDataToPoint = (data, checkedInputs) => {
+  parseDataToPoint = (data, checkedInputs) => {
     data = Object.assign({}, data);
+    console.log('checkedInputs',checkedInputs)
     if (checkedInputs) {
-      const offerOfType = offers.find((offer) =>  offer.type === data.type );
+      const offerOfType = this._offers.find((el) => el.offers.type === data.type);
       if (offerOfType) {
-        const checkedOffers =  offerOfType.offers.slice(0).filter((el) =>   checkedInputs.includes(el.title));
+        const checkedOffers =  offerOfType.offers.offers.slice(0).filter((el) => checkedInputs.includes(el.title));
         if (checkedOffers.length > 0) {
+          console.log('offerOfType', data)
           data.offers.offers = checkedOffers;
         }
       }
     }
+    data.offers.offers = [];
     return data;
   }
 

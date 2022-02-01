@@ -14,14 +14,18 @@ export default class TripPresenter {
   #changeMode = null;
   #taskComponent = null;
   #taskEditComponent = null;
+  #destinationsModel = null;
+  #offersModel = null;
 
   #task = null;
   #mode = Mode.DEFAULT
 
-  constructor(taskListContainer, changeData, changeMode) {
+  constructor(taskListContainer, changeData, changeMode, destinationsModel, offersModel) {
     this.#taskListContainer = taskListContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
   }
 
   setActive = (task) => {
@@ -44,7 +48,7 @@ export default class TripPresenter {
     const prevTaskComponent = this.#taskComponent;
     const prevTaskEditComponent = this.#taskEditComponent;
     this.#taskComponent = new PointView(task);
-    this.#taskEditComponent = new FormEditView(task);
+    this.#taskEditComponent = new FormEditView(task, this.#destinationsModel, this.#offersModel);
     this.#taskComponent.setEditClickHandler(this.#handleEditClick);
     this.#taskComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#taskEditComponent.setFormSubmitHandler(this.#handleFormSubmit);

@@ -28,6 +28,19 @@ const createTimeStats = (points) => [...new Set(points.map((point) => point.type
   })
   .sort(([,a],[, b]) => b - a);
 
+// const createTimeStats = (points) => [...new Set(points.map((point) => point.type))]
+//   .map((type) => {
+//     const arr = [];
+//     let sum = 0;
+//     points.forEach((point) => {
+//       if (point.type === type) {
+//         sum += (dayjs(point.dateTo).diff(point.dateFrom));
+//       }
+//     });
+//     arr.push(Math.round(sum));
+//     return [type, dayjs(sum).hour()];
+//   });
+
 export {createPriceStats, createTypeStats, createTimeStats};
 
 export const parseServerPoints = (serverPoints) =>
@@ -47,15 +60,32 @@ export const parseServerPoints = (serverPoints) =>
     destination:el.destination,
   }));
 
-export const parseServerOffers = (serverOffers) =>
-  serverOffers.map((el) => ({
-    offers: el.map((elem) => ({
-      type: el.type,
-      offers: elem,
-    }))
-  }));
+export const parseServerOffers = (serverOffers) => serverOffers.map((el) => ({offers: el}));
 
 export const parseServerDestinations = (serverDestination) =>
   serverDestination.map((destination) => ({
     destination: destination,
   }));
+
+export const prepareLocalPoint = (point) =>
+  ({
+    base_price: Number(point.baseprice),
+    date_from: String(point.dateFrom),
+    date_to: String(point.dateTo),
+    is_favorite: point.isFavorite,
+    offers: point.offers.offers,
+    type: point.type,
+    destination: point.destination,
+  });
+
+export const preparePoint = (point) =>
+  ({
+    base_price: Number(point.baseprice),
+    date_from: String(point.dateFrom),
+    date_to: String(point.dateTo),
+    is_favorite: point.isFavorite,
+    offers: point.offers.offers,
+    id: String(point.id),
+    type: point.type,
+    destination: point.destination,
+  });

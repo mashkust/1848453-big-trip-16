@@ -1,4 +1,4 @@
-import {types,cities,descriptions} from './arrays.js';
+import {cities,descriptions} from './arrays.js';
 // Функция из интернета по генерации случайного числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
 const getRandomInteger = (a = 0, b = 1) => {
@@ -44,11 +44,12 @@ const getRandomArray = (some) => {
 // };
 
 export const generateOfferForEdititing = (someType, offersArray) => {
-  const someoffer = offersArray.find((el) => el.type === someType);
+  const someoffer = offersArray.find((el) => el.offers.type === someType);
+  // console.log('offersArray',someoffer.offers.offers)
   if (someoffer) {
     const offer ={
       type: someType,
-      offers: someoffer.offers,
+      offers: someoffer.offers.offers,
     };
     return offer;
   }
@@ -66,48 +67,9 @@ const generateCity = () => {
   return cities[randomIndex];
 };
 
-export const generateDestination = (name) => {
-  const someDescriptions = getRandomArray(descriptions).join(' ');
-  if (name!== undefined || name !== null) {
-    name = generateCity();
-  }
-  const destination ={
-    description: someDescriptions,
-    name: name,
-    pictures: [
-      {
-        src: `http://picsum.photos/248/152?r=${Math.random()}`,
-        description: someDescriptions,
-      }
-    ]
-  };
-  return destination;
-};
-
-const generateType = () => {
-  const randomIndex = getRandomInteger(0, types.length - 1);
-  return types[randomIndex];
-};
-
-const generatePrice = () => {
-  const randomPrice = getRandomInteger(0, 2000);
-  return randomPrice;
-};
-
-export const generatePoint = (numberId) => {
-  const someType = generateType();
-  return {
-    baseprice: generatePrice (),
-    dateFrom: new Date(),
-    dateTo: new Date(),
-    destination: generateDestination(),
-    id: String(numberId),
-    isFavorite: Boolean(getRandomInteger(0, 1)),
-    offers: {
-      offers:[]
-    },
-    type: someType
-  };
+export const generateDestination = (name, destinations) => {
+  const someDestination = destinations.find((destination) => destination.destination.name === name);
+  return someDestination;
 };
 
 export const defaultPoint = () => {
@@ -116,7 +78,7 @@ export const defaultPoint = () => {
     baseprice: 0,
     dateFrom: new Date(),
     dateTo: new Date(),
-    destination: generateDestination('Amsterdam'),
+    destination: null,
     id: 0,
     isFavorite: false,
     offers: {

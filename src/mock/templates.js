@@ -1,11 +1,10 @@
 import {generateOfferForEdititing} from './task.js';
-import {offers} from './arrays.js';
 import dayjs from 'dayjs';
 const MINUTES = 60;
 
 export const createOffersPointTemplate = (POINT) => {
   const ARRAY = [];
-  if (POINT.offers.offers !== undefined || POINT.offers.offers.length !== 0) {
+  if (POINT.offers.offers !== undefined && POINT.offers.offers.length !== 0) {
     POINT.offers.offers.forEach((el) => {
       const offersTemplate= `<span class="event__offer-title">${el.offers.title}</span>
       &plus;&euro;&nbsp;
@@ -17,6 +16,15 @@ export const createOffersPointTemplate = (POINT) => {
   return '';
 };
 
+export const createDestinationsName = (destinations) => {
+  const ARRAY = [];
+  destinations.forEach((el) => {
+    const offersTemplate= `<option value="${el.destination.name}">${el.destination.name}</option>`;
+    ARRAY.push(offersTemplate);
+  });
+  return ARRAY.join(' ');
+};
+
 export const createFavotiteTemplate = (POINT) => {
   if (POINT.isFavorite===true) {
     return 'event__favorite-btn--active';
@@ -26,7 +34,7 @@ export const createFavotiteTemplate = (POINT) => {
 
 export const createPhotosTemplate = (pictures) => {
   const ARRAY = [];
-  if (pictures !== undefined || pictures.length !== 0) {
+  if (pictures !== undefined && pictures.length !== 0) {
     for (let i=0; i<pictures.length ;i++) {
       const photo= `<img class="event__photo" src=${pictures[i].src} alt="Event photo">`;
       ARRAY.push(photo);
@@ -56,12 +64,15 @@ export const createDuration = (to, from) => {
   return difference;
 };
 
-export const editOffersPointTemplate = (type, pointId, checkedOffers) => {
+export const editOffersPointTemplate = (type, pointId, checkedOffers, offers) => {
   const offerForEdititing = generateOfferForEdititing(type, offers);
   const ARRAY = [];
-  if (offerForEdititing.offers !== undefined || offerForEdititing.offers.length !== 0) {
+  if (offerForEdititing.offers !== undefined ) {
     offerForEdititing.offers.forEach((el) => {
-      const foundCheckedOffer = checkedOffers.offers.find((elem) => elem.title === el.title);
+      let foundCheckedOffer = false;
+      if (checkedOffers.offers.length > 0) {
+        foundCheckedOffer = checkedOffers.offers.find((elem) => elem.offers.title === el.title);
+      }
       const template= `<div class="event__offer-selector">
       <input ${foundCheckedOffer && 'checked'} class="event__offer-checkbox  visually-hidden" id="${`${el.id}${pointId}`}" type="checkbox" name="${`${el.id}${pointId}`}" >
       <label class="event__offer-label" for="${`${el.id}${pointId}`}">
@@ -69,7 +80,7 @@ export const editOffersPointTemplate = (type, pointId, checkedOffers) => {
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${el.price}</span>
       </label>
-    </div>`;
+      </div>`;
       ARRAY.push(template);
     });
   }

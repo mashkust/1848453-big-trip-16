@@ -8,19 +8,25 @@ export default class PointNewPresenter {
   #taskListContainer = null;
   #changeData = null;
   #taskAddComponent = null;
+  #destinationsModel = null;
+  #offersModel = null;
 
-  constructor(taskListContainer, changeData) {
+  constructor(taskListContainer, changeData ,destinationsModel, offersModel) {
     this.#taskListContainer = taskListContainer;
     this.#changeData = changeData;
+    console.log('destinationsModel',destinationsModel);
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
   }
 
   init = (point, callback) => {
+
     this._destroyCallback = callback;
 
     if (this.#taskAddComponent !== null) {
       return;
     }
-    this.#taskAddComponent = new FormAddView(point);
+    this.#taskAddComponent = new FormAddView(point, this.#destinationsModel, this.#offersModel);
     this.#taskAddComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#taskAddComponent.setDeleteClickHandler(this.#handleCancelClick);
 
@@ -29,8 +35,11 @@ export default class PointNewPresenter {
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  // #getDestinations = () => this.#destinationsModel.destinations
+
   destroy = () => {
     if (this._destroyCallback !== null) {
+      console.log('this._destroyCallback',this._destroyCallback);
       this._destroyCallback();
     }
 
@@ -48,7 +57,7 @@ export default class PointNewPresenter {
     this.#changeData(
       UserAction.ADD_TASK,
       UpdateType.MINOR,
-      {id: nanoid(), ...task},
+      task,
     );
     this.destroy();
   }

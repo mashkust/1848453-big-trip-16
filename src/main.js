@@ -8,8 +8,8 @@ import {render, RenderPosition,remove} from './render.js';
 import {generatePoint,defaultPoint} from './mock/task.js';
 import {MenuItem} from './mock/arrays.js';
 import PointsPresenter from './presenter/points-presenter.js';
-// import DestinationsModel from './model/destinations-model.js';
-// import OffersModel from './model/offers-model.js';
+import DestinationsModel from './model/destinations-model.js';
+import OffersModel from './model/offers-model.js';
 import PointsModel from './model/points-model.js';
 import ApiService from './api-service.js';
 
@@ -38,25 +38,14 @@ const siteEventsListElement = siteEventsElement .querySelector('.trip-events__li
 
 const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
 const filterModel = new FilterModel();
-// const offersModel = new OffersModel(new ApiService(END_POINT, AUTHORIZATION));
-// const destinationsModel = new DestinationsModel(new ApiService(END_POINT, AUTHORIZATION));
-// pointsModel.points = POINTS;
-// destinationsModel.init();
-
-// offersModel.init();
-
-// const filterModel = new FilterModel();
-
-const filterPresenter = new FilterPresenter(siteFiltersElement, filterModel, pointsModel);
-filterPresenter.init();
-// render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
-const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel, filterModel);
-
-// setTimeout(() => {
-//   pointsPresenter.init();
-// }, 5000);
-
+const offersModel = new OffersModel(new ApiService(END_POINT, AUTHORIZATION));
+const destinationsModel = new DestinationsModel(new ApiService(END_POINT, AUTHORIZATION));
+destinationsModel.init();
+offersModel.init();
 const siteMenuComponent = new SiteMenuView();
+// render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
+const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel, filterModel, destinationsModel, offersModel);
+const filterPresenter = new FilterPresenter(siteFiltersElement, filterModel, pointsModel);
 
 const addPointComponent = document.querySelector('.trip-main__event-add-btn');
 
@@ -78,6 +67,7 @@ const handleSiteMenuClick = (menuItem) => {
       addPointComponent.disabled = false;
       pointsPresenter.destroy();
       pointsPresenter.init();
+      filterPresenter.init(true);
       remove(statsComponent);
       siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.STATS}"]`).classList.remove('trip-tabs__btn--active');
       siteMenuComponent.setMenuItem(MenuItem.TABLE);
@@ -85,6 +75,7 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.STATS:
       addPointComponent.disabled = true;
       pointsPresenter.destroy();
+      filterPresenter.init(false);
       statsComponent = new StatsView(pointsModel.points);
       render(siteEventsListElement, statsComponent.element, RenderPosition.AFTERBEGIN);
       siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.TABLE}"]`).classList.remove('trip-tabs__btn--active');
@@ -93,10 +84,10 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-// offersModel.init();
-
 pointsModel.init().finally(() => {
   pointsPresenter.init();
   render(siteNavigationElement, siteMenuComponent, RenderPosition.BEFOREEND);
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 });
+
+filterPresenter.init(true);

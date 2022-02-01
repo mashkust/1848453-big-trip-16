@@ -1,4 +1,5 @@
 import SortView from '../view/sort-view.js';
+import LoadingView from '../view/loading-view.js';
 import TripPresenter from './trip-presenter.js';
 import PointNewPresenter from './point-new-presenter.js';
 // import {filter} from '../mock/utils.js';
@@ -13,26 +14,33 @@ export default class PointsPresenter {
   #boardContainer = null;
   #sortContainer = null;
   #pointsModel = null;
+  #filterModel = null;
   #sortComponent = null;
   #tripPresenter = new Map();
   #pointNewPresenter = null;
+  #destinationsModel = null;
+  #offersModel = null;
+  #isLoading = true;
 
   #currentSortType = SortType.DAY;
+  #loadingComponent = new LoadingView();
   // #sourcedBoardTasks = [];
 
-  constructor(boardContainer,pointsModel, filterModel) {
+  constructor(boardContainer,pointsModel, filterModel, destinationsModel, offersModel ) {
     this.#boardContainer = boardContainer;
     this.#sortContainer = boardContainer;
     this.#pointsModel = pointsModel;
-    this._filterModel = filterModel;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
+    this.#filterModel = filterModel;
 
-    this.#pointNewPresenter = new PointNewPresenter(this.#boardContainer, this.#handleViewAction);
+    this.#pointNewPresenter = new PointNewPresenter(this.#boardContainer, this.#handleViewAction, this.#destinationsModel, this.#offersModel);
     this.#pointsModel.addObserver(this.#handleModelEvent);
-    this._filterModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
-    const filterType = this._filterModel._activeFilter;
+    const filterType = this.#filterModel._activeFilter;
     let filtredPoints = this.#pointsModel.points.slice();
     if (filterType !== FilterType.EVERYTHING) {
       filtredPoints=filtredPoints.filter((point) => filterType === FilterType.FUTURE ? new Date(point.dateTo) > new Date() : new Date(point.dateTo) < new Date());
@@ -46,12 +54,12 @@ export default class PointsPresenter {
     return filtredPoints.sort((a, b) => dayjs(a.dateFrom).valueOf() - dayjs(b.dateFrom).valueOf());
   }
 
+
   init = () => {
     // this.#points = [...points];
     // this.#sourcedBoardTasks = [...points];
     this.#pointsModel.addObserver(this.#handleModelEvent);
-    // this._filterModel.addObserver(this.#handleModelEvent);
-    console.log(this.#pointsModel.points)
+    // this.#filterModel.addObserver(this.#handleModelEvent);
     this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
     });
@@ -59,7 +67,7 @@ export default class PointsPresenter {
   }
 
   createPoint(point, callback) {
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#currentSortType = SortType.DAY;
     this.#pointNewPresenter.init(point, callback);
   }
@@ -73,7 +81,7 @@ export default class PointsPresenter {
   }
 
   #renderTask= (taskListElement, point)=>{
-    const tripPresenter = new TripPresenter(taskListElement,this.#handleViewAction, this.#handleModeChange);
+    const tripPresenter = new TripPresenter(taskListElement,this.#handleViewAction, this.#handleModeChange, this.#destinationsModel, this.#offersModel);
     tripPresenter.init(point);
     this.#tripPresenter.set(point.id, tripPresenter);
   };
@@ -108,6 +116,10 @@ export default class PointsPresenter {
         break;
       case UpdateType.MINOR:
         this.#clearBoard();
+        // if (this.#isLoading) {
+        //   this.#renderLoading();
+        //   return;
+        // }
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });
@@ -116,6 +128,10 @@ export default class PointsPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearBoard({resetRenderedTaskCount: true, resetSortType: true});
+        // if (this.#isLoading) {
+        //   this.#renderLoading();
+        //   return;
+        // }
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });
@@ -123,14 +139,18 @@ export default class PointsPresenter {
         // - обновить всю доску (например, при переключении фильтра)
         break;
       case UpdateType.INIT:
-        // this._isLoading = false;
-        // remove(this._loadingComponent);
+        // this.#isLoading = false;
+        // remove(this.#loadingComponent);
         // this.#clearBoard();
         // this.points.forEach((el) => {
         //   this.#renderTask(this.#boardContainer,el);
         // });
         // break;
     }
+  }
+
+  #renderLoading = () => {
+    render(this.#boardContainer, this.#loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   #handleModeChange = () => {
@@ -155,7 +175,7 @@ export default class PointsPresenter {
   #renderSort = () => {
     this.#sortComponent = new SortView(this.#currentSortType);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
-    render(this.#sortContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
+    render(this.#sortContainer, this.#sortComponent, RenderPosition.BEFOREBEGIN);
   }
 
   // #sortTasks = (sortType) => {
@@ -178,7 +198,7 @@ export default class PointsPresenter {
     // const taskCount = this.tasks.length;
     this.#tripPresenter.forEach((presenter) => presenter.destroy());
     this.#tripPresenter.clear();
-
+    remove(this.#loadingComponent);
     remove(this.#sortComponent);
     // remove(this.#noTaskComponent);
     // remove(this.#loadMoreButtonComponent);

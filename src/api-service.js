@@ -1,8 +1,10 @@
-import {parseServerPoints, parseServerDestinations, parseServerOffers} from './mock/utils.js';
+import {parseServerPoints, parseServerDestinations, parseServerOffers, prepareLocalPoint, preparePoint} from './mock/utils.js';
 
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 export default class ApiService {
@@ -39,7 +41,8 @@ export default class ApiService {
   get offers() {
     return this.#load({url: 'offers'})
       .then(ApiService.parseResponse)
-      .then((res) => parseServerOffers(res));
+      .then((res) => { console.log('res',res)
+      return parseServerOffers(res)});
   }
 
   get destinations() {
@@ -52,7 +55,7 @@ export default class ApiService {
     const response = await this.#load({
       url: `points/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(this.#adaptToServer(point)),
+      body: JSON.stringify(preparePoint(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
@@ -61,18 +64,27 @@ export default class ApiService {
     return parsedResponse;
   }
 
-  #adaptToServer = (point) => {
-    const adaptedTask = {...point,
-      // 'due_date': task.dueDate instanceof Date ? task.dueDate.toISOString() : null, // На сервере дата хранится в ISO формате
-    };
+  addTask = async (point) => {
+    console.log('точка',prepareLocalPoint(point))
+    const response = await this.#load({
+      url: 'points',
+      method: Method.POST,
+      body: JSON.stringify(prepareLocalPoint(point)),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    });
 
-    // Ненужные ключи мы удаляем
-    // delete adaptedTask.dueDate;
-    // delete adaptedTask.isArchive;
-    delete adaptedTask.isFavorite;
-    // delete adaptedTask.repeating;
+    const parsedResponse = await ApiService.parseResponse(response);
 
-    return adaptedTask;
+    return parsedResponse;
+  }
+
+  deleteTask = async (point) => {
+    const response = await this.#load({
+      url: `points/${point.id}`,
+      method: Method.DELETE,
+    });
+
+    return response;
   }
 
   #load = async ({

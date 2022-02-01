@@ -11,19 +11,18 @@ export default class DestinationsModel extends AbstractObservable {
   }
 
   get destinations() {
-    return this._destinations;
+    return this.#destinations;
   }
 
   init = async () => {
     try {
       // this.#points = await this.#apiService.points;
-      this._destinations = await this.#apiService.destinations;
+      this.#destinations = await this.#apiService.destinations;
       // this.#offers = await this.#apiService.offers;
-      console.log('init',this._destinations)
     } catch(err) {
-      this._destinations= [];
+      this.#destinations= [];
     }
-
     this._notify(UpdateType.INIT);
+    console.log('init',this.#destinations)
   }
 }
