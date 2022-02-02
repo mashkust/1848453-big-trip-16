@@ -214,7 +214,7 @@ export default class FormAddView extends SmartView  {
   // }
 
   #deleteClickHandler = () => {
-    this._callback.deleteClick(FormAddView.parseDataToPoint(this._data));
+    this._callback.deleteClick(this.parseDataToPoint(this._data));
   }
 
   #formSubmitHandler = (evt) => {
@@ -248,6 +248,7 @@ export default class FormAddView extends SmartView  {
     data = Object.assign({}, data);
     console.log('checkedInputs',checkedInputs)
     if (checkedInputs) {
+      data.offers.offers = [];
       const offerOfType = this._offers.find((el) => el.offers.type === data.type);
       if (offerOfType) {
         const checkedOffers =  offerOfType.offers.offers.slice(0).filter((el) => checkedInputs.includes(el.title));
@@ -257,7 +258,6 @@ export default class FormAddView extends SmartView  {
         }
       }
     }
-    data.offers.offers = [];
     return data;
   }
 

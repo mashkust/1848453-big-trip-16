@@ -213,7 +213,7 @@ export default class FormEditView extends SmartView  {
   }
 
   #formDeleteClickHandler = () => {
-    this._callback.deleteClick(FormEditView.parseDataToPoint(this._data));
+    this._callback.deleteClick(this.parseDataToPoint(this._data));
     this.removeElement();
   }
 

@@ -14,7 +14,7 @@ export default class PointNewPresenter {
   constructor(taskListContainer, changeData ,destinationsModel, offersModel) {
     this.#taskListContainer = taskListContainer;
     this.#changeData = changeData;
-    console.log('destinationsModel',destinationsModel);
+    console.log('destinationsModel', destinationsModel);
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
   }
@@ -38,10 +38,10 @@ export default class PointNewPresenter {
   // #getDestinations = () => this.#destinationsModel.destinations
 
   destroy = () => {
-    if (this._destroyCallback !== null) {
-      console.log('this._destroyCallback',this._destroyCallback);
-      this._destroyCallback();
-    }
+    // if (this._destroyCallback !== null) {
+    //   console.log('this._destroyCallback',this._destroyCallback);
+    //   this._destroyCallback();
+    // }
 
     if (this.#taskAddComponent === null) {
       return;
