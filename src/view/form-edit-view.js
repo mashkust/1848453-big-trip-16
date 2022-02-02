@@ -2,17 +2,12 @@ import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate, createDestinationsName} from '../mock/templates.js';
 import {generateDestination} from '../mock/task.js';
 import {types} from '../mock/arrays.js';
-import OffersModel from '../model/offers-model.js';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
-import ApiService from '../api-service.js';
-const AUTHORIZATION = 'Basic hS2sfS44wcuih2j';
-const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 import './../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPointTemplate = (POINT, destinations , offers)=> {
   const {type, destination, baseprice, id, dateFrom, dateTo} = POINT;
-
   return (
     `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -133,7 +128,6 @@ const editPointTemplate = (POINT, destinations , offers)=> {
 };
 
 export default class FormEditView extends SmartView  {
-  #offersModel = null;
   constructor(point, destinationsModel, offersModel) {
     super();
     this._data = this.parsePointToData(point);
@@ -141,8 +135,6 @@ export default class FormEditView extends SmartView  {
     this._destinations = destinationsModel.destinations;
     this._offers = offersModel.offers;
 
-    this.#offersModel = null;
-    this.#offersModel = new OffersModel(new ApiService(END_POINT, AUTHORIZATION));
     this.#dateFromChangeHandler = this.#dateFromChangeHandler.bind(this);
     this.#dateToChangeHandler = this.#dateToChangeHandler.bind(this);
     this.#typeChangeHandler = this.#typeChangeHandler.bind(this);
@@ -155,6 +147,7 @@ export default class FormEditView extends SmartView  {
   }
 
   get template() {
+
     return editPointTemplate(this._data, this._destinations, this._offers);
   }
 
@@ -170,6 +163,7 @@ export default class FormEditView extends SmartView  {
     this.#setDateToDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setEditCloseClickHandler(this._callback.editCloseClick);
   }
 
   #setInnerHandlers = () =>{
@@ -204,7 +198,16 @@ export default class FormEditView extends SmartView  {
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
+  }
+
+  #editCloseClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editCloseClick();
+  }
+
+  setEditCloseClickHandler = (callback) => {
+    this._callback.editCloseClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editCloseClickHandler);
   }
 
   setDeleteClickHandler = (callback) => {
@@ -245,14 +248,14 @@ export default class FormEditView extends SmartView  {
 
   parseDataToPoint = (data, checkedInputs) => {
     data = Object.assign({}, data);
-    console.log('checkedInputs',checkedInputs)
     if (checkedInputs) {
       const offerOfType = this._offers.find((el) => el.offers.type === data.type);
       if (offerOfType) {
         const checkedOffers =  offerOfType.offers.offers.slice(0).filter((el) => checkedInputs.includes(el.title));
         if (checkedOffers.length > 0) {
-          console.log('offerOfType', data)
           data.offers.offers = checkedOffers;
+        } else {
+          data.offers.offers = [];
         }
       }
     }

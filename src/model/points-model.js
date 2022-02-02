@@ -1,6 +1,5 @@
 import AbstractObservable from '../abstract-observable.js';
 import {UpdateType} from '../mock/arrays.js';
-import { preparePoint } from '../mock/utils.js';
 
 
 export default class PointsModel extends AbstractObservable {
@@ -13,16 +12,12 @@ export default class PointsModel extends AbstractObservable {
   }
 
   get points() {
-    console.log('get',this.#points)
     return this.#points;
   }
 
   init = async () => {
     try {
       this.#points = await this.#apiService.points;
-      // this.#destinations = await this.#apiService.destinations;
-      // this.#offers = await this.#apiService.offers;
-      console.log('init',this.#points)
     } catch(err) {
       this.#points = [];
     }
@@ -37,20 +32,34 @@ export default class PointsModel extends AbstractObservable {
       throw new Error('Can\'t update unexisting task');
     }
 
-    try {
-      console.log('update',update);
-      const response = await this.#apiService.updateTask(update);
-      const updatedTask = preparePoint(response);
-      this.#points = [
-        ...this.#points.slice(0, index),
-        updatedTask,
-        ...this.#points.slice(index + 1),
-      ];
-      this._notify(updateType, updatedTask);
-    } catch(err) {
+    const response = await this.#apiService.updateTask(update).catch((Error) => {
       throw new Error('Can\'t update task');
-    }
+    });
+
+    const updatedTask = {
+      baseprice: response['base_price'],
+      dateFrom: new Date(response['date_from']),
+      dateTo: new Date(response['date_to']),
+      isFavorite: response['is_favorite'],
+      offers: {
+        offers: response.offers.map((elem) => ({
+          type: response.type,
+          offers: elem,
+        }))
+      },
+      id: Number(response.id),
+      type: response.type,
+      destination:response.destination,
+    };
+    this.#points =  this.#points.map((el) => {
+      if (el.id === updatedTask.id) {
+        return updatedTask;
+      }
+      return el;
+    });
+    this._notify(updateType, updatedTask);
   }
+
 
   addTask = async (updateType, update) => {
     const newPoint = await this.#apiService.addTask(update);
@@ -58,23 +67,15 @@ export default class PointsModel extends AbstractObservable {
       newPoint,
       ...this.#points,
     ];
-    console.log('add')
 
     this._notify(updateType, newPoint);
   }
 
-  deleteTask = (updateType, update) => {
-    const index = this.#points.findIndex((point) => point.id === update.id);
-
-    if (index === -1) {
-      throw new Error('Can\'t delete unexisting task');
-    }
-
+  deleteTask = async (updateType, update) => {
+    await this.#apiService.deleteTask(update);
     this.#points = [
-      ...this.#points.slice(0, index),
-      ...this.#points.slice(index + 1),
+      ...this.#points
     ];
-
     this._notify(updateType);
   }
 }

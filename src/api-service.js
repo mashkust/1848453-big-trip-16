@@ -16,22 +16,6 @@ export default class ApiService {
     this.#authorization = authorization;
   }
 
-  // get data() {
-  //   return Promise.all([
-  //     this.points,
-  //     this.offers,
-  //     this.destinations
-  //   ])
-  //     .then((response) => {
-  //       const [points, offers, destinations] = response;
-  //       return {
-  //         points,
-  //         offers,
-  //         destinations
-  //       };
-  //     });
-  // }
-
   get points() {
     return this.#load({url: 'points'})
       .then(ApiService.parseResponse)
@@ -41,8 +25,7 @@ export default class ApiService {
   get offers() {
     return this.#load({url: 'offers'})
       .then(ApiService.parseResponse)
-      .then((res) => { console.log('res',res)
-      return parseServerOffers(res)});
+      .then((res) => parseServerOffers(res));
   }
 
   get destinations() {
@@ -65,7 +48,6 @@ export default class ApiService {
   }
 
   addTask = async (point) => {
-    console.log('точка',prepareLocalPoint(point))
     const response = await this.#load({
       url: 'points',
       method: Method.POST,

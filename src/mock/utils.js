@@ -69,23 +69,33 @@ export const parseServerDestinations = (serverDestination) =>
 
 export const prepareLocalPoint = (point) =>
   ({
+    // eslint-disable-next-line camelcase
     base_price: Number(point.baseprice),
+    // eslint-disable-next-line camelcase
     date_from: String(point.dateFrom),
+    // eslint-disable-next-line camelcase
     date_to: String(point.dateTo),
+    // eslint-disable-next-line camelcase
     is_favorite: point.isFavorite,
     offers: point.offers.offers,
     type: point.type,
     destination: point.destination,
   });
 
-export const preparePoint = (point) =>
-  ({
-    base_price: Number(point.baseprice),
-    date_from: String(point.dateFrom),
-    date_to: String(point.dateTo),
-    is_favorite: point.isFavorite,
-    offers: point.offers.offers,
-    id: String(point.id),
-    type: point.type,
-    destination: point.destination,
-  });
+export const preparePoint = (point) => ({
+  // eslint-disable-next-line camelcase
+  base_price: Number(point.baseprice),
+  // eslint-disable-next-line camelcase
+  date_from: String(point.dateFrom),
+  // eslint-disable-next-line camelcase
+  date_to: String(point.dateTo),
+  // eslint-disable-next-line camelcase
+  is_favorite: point.isFavorite,
+  offers: point.offers.offers.length > 0 ?  point.offers.offers.map((el) => ({
+    ...el
+  })) : [],
+  id: String(point.id),
+  type: point.type,
+  destination: point.destination,
+});
+

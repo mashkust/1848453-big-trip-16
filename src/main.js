@@ -1,11 +1,10 @@
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
-// import FilterView from './view/filter-view.js';
-import MessageView from './view/message-view.js';
 import SiteMenuView from './view/site-menu-view.js';
 import StatsView from './view/stats-view';
+import MessageView from './view/message-view';
 import {render, RenderPosition,remove} from './render.js';
-import {generatePoint,defaultPoint} from './mock/task.js';
+import {defaultPoint} from './mock/task.js';
 import {MenuItem} from './mock/arrays.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import DestinationsModel from './model/destinations-model.js';
@@ -16,25 +15,11 @@ import ApiService from './api-service.js';
 const AUTHORIZATION = 'Basic hS2sfS44wcuih2j';
 const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 
-// const createPoints = () => {
-//   const POINTS_ARRAY = [];
-//   for(let index = 0; index <= LENGTH_POINTS_ARRAY-1; index++) {
-//     POINTS_ARRAY[index] = generatePoint(index);
-//   }
-//   return POINTS_ARRAY;
-// };
-
-// export const POINTS = createPoints();
-
 const siteBodyElement = document.querySelector('.page-body');
 const siteNavigationElement = siteBodyElement.querySelector('.trip-controls__navigation');
 const siteFiltersElement = siteBodyElement.querySelector('.trip-controls__filters');
 const siteEventsElement = siteBodyElement.querySelector('.trip-events');
 const siteEventsListElement = siteEventsElement .querySelector('.trip-events__list');
-
-// if (POINTS.length === 0) {
-//   render(siteEventsElement, new MessageView(), RenderPosition.BEFOREEND);
-// }
 
 const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
 const filterModel = new FilterModel();
@@ -43,7 +28,6 @@ const destinationsModel = new DestinationsModel(new ApiService(END_POINT, AUTHOR
 destinationsModel.init();
 offersModel.init();
 const siteMenuComponent = new SiteMenuView();
-// render(siteNavigationElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel, filterModel, destinationsModel, offersModel);
 const filterPresenter = new FilterPresenter(siteFiltersElement, filterModel, pointsModel);
 
@@ -54,6 +38,10 @@ const handlePointNew = () => {
 };
 
 let statsComponent = null;
+
+if (pointsModel.length === 0) {
+  render(siteEventsElement, new MessageView(), RenderPosition.BEFOREEND);
+}
 
 addPointComponent.addEventListener('click', (evt) => {
   evt.preventDefault();

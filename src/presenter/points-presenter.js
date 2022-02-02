@@ -2,8 +2,6 @@ import SortView from '../view/sort-view.js';
 import LoadingView from '../view/loading-view.js';
 import TripPresenter from './trip-presenter.js';
 import PointNewPresenter from './point-new-presenter.js';
-// import {filter} from '../mock/utils.js';
-// import {updateItem} from '../common.js';
 import {render, RenderPosition,remove} from '../render.js';
 import {FilterType, SortType, UpdateType, UserAction} from '../mock/arrays.js';
 import dayjs from 'dayjs';
@@ -56,10 +54,7 @@ export default class PointsPresenter {
 
 
   init = () => {
-    // this.#points = [...points];
-    // this.#sourcedBoardTasks = [...points];
     this.#pointsModel.addObserver(this.#handleModelEvent);
-    // this.#filterModel.addObserver(this.#handleModelEvent);
     this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
     });
@@ -74,10 +69,7 @@ export default class PointsPresenter {
 
   destroy = () => {
     this.#clearBoard({resetRenderedTaskCount: true, resetSortType: true});
-    // remove(this.#boardContainer);
-
     this.#pointsModel.removeObserver(this.#handleModelEvent);
-    // this.#filterModel.removeObserver(this.#handleModelEvent);
   }
 
   #renderTask= (taskListElement, point)=>{
@@ -86,14 +78,7 @@ export default class PointsPresenter {
     this.#tripPresenter.set(point.id, tripPresenter);
   };
 
-  // #handleTaskChange = (updatedTask) => {
-  //   // this.#points = updateItem(this.#points, updatedTask);
-  //   // this.#sourcedBoardTasks = updateItem(this.#sourcedBoardTasks, updatedTask);
-  //   this.#tripPresenter.get(updatedTask.id).setActive(updatedTask);
-  // }
-
   #handleViewAction = (actionType, updateType, update) => {
-    console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_TASK:
         this.#pointsModel.updateTask(updateType, update);
@@ -108,44 +93,27 @@ export default class PointsPresenter {
   }
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this.#pointsModel.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
         this.#clearBoard();
-        // if (this.#isLoading) {
-        //   this.#renderLoading();
-        //   return;
-        // }
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });
         this.#renderSort();
-        // - обновить список (например, когда задача ушла в архив)
         break;
       case UpdateType.MAJOR:
         this.#clearBoard({resetRenderedTaskCount: true, resetSortType: true});
-        // if (this.#isLoading) {
-        //   this.#renderLoading();
-        //   return;
-        // }
+
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });
         this.#renderSort();
-        // - обновить всю доску (например, при переключении фильтра)
         break;
       case UpdateType.INIT:
-        // this.#isLoading = false;
-        // remove(this.#loadingComponent);
-        // this.#clearBoard();
-        // this.points.forEach((el) => {
-        //   this.#renderTask(this.#boardContainer,el);
-        // });
-        // break;
+        break;
     }
   }
 
@@ -162,9 +130,7 @@ export default class PointsPresenter {
     if (this.#currentSortType === sortType) {
       return false;
     }
-    // this.#sortTasks(sortType);
     this.#currentSortType = sortType;
-    // this.#clearTaskList();
     this.#clearBoard({resetRenderedTaskCount: true});
     this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
@@ -178,39 +144,11 @@ export default class PointsPresenter {
     render(this.#sortContainer, this.#sortComponent, RenderPosition.BEFOREBEGIN);
   }
 
-  // #sortTasks = (sortType) => {
-  //   switch (sortType) {
-  //     case SortType.PRICE:
-  //       this.#points.sort((a, b) => b.baseprice - a.baseprice);
-  //       break;
-  //     default:
-  //       this.#points = [...this.#sourcedBoardTasks];
-  //   }
-  //   this.#currentSortType = sortType;
-  // }
-
-  // #clearTaskList = () => {
-  //   this.#tripPresenter.forEach((presenter) => presenter.destroy());
-  //   this.#tripPresenter.clear();
-  // }
-
   #clearBoard = ({resetSortType = false} = {}) => {
-    // const taskCount = this.tasks.length;
     this.#tripPresenter.forEach((presenter) => presenter.destroy());
     this.#tripPresenter.clear();
     remove(this.#loadingComponent);
     remove(this.#sortComponent);
-    // remove(this.#noTaskComponent);
-    // remove(this.#loadMoreButtonComponent);
-
-    // if (resetRenderedTaskCount) {
-    //   this.#renderedTaskCount = TASK_COUNT_PER_STEP;
-    // } else {
-    //   // На случай, если перерисовка доски вызвана
-    //   // уменьшением количества задач (например, удаление или перенос в архив)
-    //   // нужно скорректировать число показанных задач
-    //   this.#renderedTaskCount = Math.min(taskCount, this.#renderedTaskCount);
-    // }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;

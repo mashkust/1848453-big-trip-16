@@ -1,6 +1,5 @@
 // import FormEditView from '../view/form-edit-view.js';
 import FormAddView from '../view/form-add-view.js';
-import {nanoid} from 'nanoid';
 import {remove, render, RenderPosition} from '../render.js';
 import {UserAction, UpdateType} from '../mock/arrays.js';
 
@@ -14,7 +13,6 @@ export default class PointNewPresenter {
   constructor(taskListContainer, changeData ,destinationsModel, offersModel) {
     this.#taskListContainer = taskListContainer;
     this.#changeData = changeData;
-    console.log('destinationsModel', destinationsModel);
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
   }
@@ -35,13 +33,11 @@ export default class PointNewPresenter {
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
-  // #getDestinations = () => this.#destinationsModel.destinations
 
   destroy = () => {
-    // if (this._destroyCallback !== null) {
-    //   console.log('this._destroyCallback',this._destroyCallback);
-    //   this._destroyCallback();
-    // }
+    if (this._destroyCallback !== null) {
+      this._destroyCallback();
+    }
 
     if (this.#taskAddComponent === null) {
       return;

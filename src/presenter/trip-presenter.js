@@ -48,11 +48,12 @@ export default class TripPresenter {
     const prevTaskComponent = this.#taskComponent;
     const prevTaskEditComponent = this.#taskEditComponent;
     this.#taskComponent = new PointView(task);
-    this.#taskEditComponent = new FormEditView(task, this.#destinationsModel, this.#offersModel);
+    this.#taskEditComponent = new FormEditView(task, this.#destinationsModel, this.#offersModel, this.#taskComponent);
     this.#taskComponent.setEditClickHandler(this.#handleEditClick);
     this.#taskComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#taskEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#taskEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
+    this.#taskEditComponent.setEditCloseClickHandler(this.#handleCloseEditClick);
 
     if (prevTaskComponent === null || prevTaskEditComponent === null) {
       render(this.#taskListContainer, this.#taskComponent, RenderPosition.BEFOREEND);
@@ -103,6 +104,12 @@ export default class TripPresenter {
     this.#replaceCardToForm();
   };
 
+  #handleCloseEditClick = () => {
+    // this._formEditComponent.reset(this._waypoint);
+    this.#replaceFormToCard();
+  }
+
+
   #handleFavoriteClick = () => {
     this.#changeData({...this.#task, isFavorite: !this.#task.isFavorite});
     this.#changeData(
@@ -124,7 +131,7 @@ export default class TripPresenter {
   #handleDeleteClick = (task) => {
     this.#changeData(
       UserAction.DELETE_TASK,
-      UpdateType.MINOR,
+      UpdateType.MAJOR,
       task,
     );
   }
