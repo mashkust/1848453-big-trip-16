@@ -1,6 +1,6 @@
 import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate, createDestinationsName} from '../mock/templates.js';
-import {generateDestination} from '../mock/task.js';
+import {generateDestination} from '../mock/utils.js';
 import {types} from '../mock/arrays.js';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
@@ -149,12 +149,6 @@ export default class FormEditView extends SmartView  {
   get template() {
 
     return editPointTemplate(this._data, this._destinations, this._offers);
-  }
-
-  reset = (point) => {
-    this.updateData(
-      this.parsePointToData(point)
-    );
   }
 
   restoreHandlers = () => {

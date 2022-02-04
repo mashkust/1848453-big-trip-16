@@ -50,10 +50,9 @@ export const parseServerPoints = (serverPoints) =>
     baseprice: el['base_price'],
     dateFrom: new Date(el['date_from']),
     dateTo: new Date(el['date_to']),
-    isFavorite: el['is_favorite'],
+    isFavorite: Boolean(el['is_favorite']),
     offers: {
       offers: el.offers.map((elem) => ({
-        type: el.type,
         offers: elem,
       }))
     },
@@ -71,13 +70,9 @@ export const parseServerDestinations = (serverDestination) =>
 
 export const prepareLocalPoint = (point) =>
   ({
-    // eslint-disable-next-line camelcase
     base_price: Number(point.baseprice),
-    // eslint-disable-next-line camelcase
     date_from: String(point.dateFrom),
-    // eslint-disable-next-line camelcase
     date_to: String(point.dateTo),
-    // eslint-disable-next-line camelcase
     is_favorite: point.isFavorite,
     offers: point.offers.offers.length > 0 ?  point.offers.offers.map((el) => ({
       ...el
@@ -87,14 +82,10 @@ export const prepareLocalPoint = (point) =>
   });
 
 export const preparePoint = (point) => ({
-  // eslint-disable-next-line camelcase
   base_price: Number(point.baseprice),
-  // eslint-disable-next-line camelcase
   date_from: String(point.dateFrom),
-  // eslint-disable-next-line camelcase
   date_to: String(point.dateTo),
-  // eslint-disable-next-line camelcase
-  is_favorite: point.isFavorite,
+  is_favorite: Boolean(point.isFavorite),
   offers: point.offers.offers.length > 0 ?  point.offers.offers.map((el) => ({
     ...el
   })) : [],
@@ -103,3 +94,45 @@ export const preparePoint = (point) => ({
   destination: point.destination,
 });
 
+export const generateOfferForEdititing = (someType, offersArray) => {
+  const someoffer = offersArray.find((el) => el.offers.type === someType);
+  let offer ={
+    type: someType,
+    offers: [],
+  };
+  if (someoffer) {
+    offer ={
+      type: someType,
+      offers: someoffer.offers.offers,
+    };
+  }
+  return offer;
+};
+
+export const generateDestination = (name, destinations) => {
+  const someDestination = destinations.find((destination) => destination.destination.name === name);
+  return someDestination;
+};
+
+export const defaultPoint = () => {
+  const someType = 'drive';
+  return {
+    baseprice: 0,
+    dateFrom: new Date(),
+    dateTo: new Date(),
+    destination: null,
+    isFavorite: false,
+    offers: {
+      offers:{
+        offers:
+        {
+          id: Number,
+          title: String,
+          price:Number
+        },
+        type:someType,
+      },
+    },
+    type: someType,
+  };
+};

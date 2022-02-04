@@ -1,7 +1,6 @@
 import AbstractObservable from '../abstract-observable.js';
 import {UpdateType} from '../mock/arrays.js';
 
-
 export default class PointsModel extends AbstractObservable {
   #apiService = null;
   #points = [];
@@ -35,7 +34,7 @@ export default class PointsModel extends AbstractObservable {
     const response = await this.#apiService.updateTask(update).catch((Error) => {
       throw new Error('Can\'t update task');
     });
-
+    console.log(update)
     const updatedTask = {
       baseprice: response['base_price'],
       dateFrom: new Date(response['date_from']),
@@ -55,7 +54,6 @@ export default class PointsModel extends AbstractObservable {
       if (el.id === updatedTask.id) {
         return updatedTask;
       }
-      // console.log(update)
       return el;
     });
     this._notify(updateType, updatedTask);
@@ -63,11 +61,26 @@ export default class PointsModel extends AbstractObservable {
 
   addTask = async (updateType, update) => {
     const newPoint = await this.#apiService.addTask(update);
+    const updatedTask = {
+      baseprice: newPoint['base_price'],
+      dateFrom: new Date(newPoint['date_from']),
+      dateTo: new Date(newPoint['date_to']),
+      isFavorite: newPoint['is_favorite'],
+      offers: {
+        offers: newPoint.offers.map((elem) => ({
+          type: newPoint.type,
+          offers: elem,
+        }))
+      },
+      id: Number(newPoint.id),
+      type: newPoint.type,
+      destination:newPoint.destination,
+    };
+
     this.#points = [
-      newPoint,
+      updatedTask,
       ...this.#points,
     ];
-    console.log(newPoint)
     this._notify(updateType, newPoint);
   }
 

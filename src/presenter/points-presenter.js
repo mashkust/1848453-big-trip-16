@@ -54,6 +54,7 @@ export default class PointsPresenter {
 
   init = () => {
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    console.log(this.points)
     this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
     });

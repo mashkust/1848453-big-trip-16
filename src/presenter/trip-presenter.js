@@ -28,21 +28,6 @@ export default class TripPresenter {
     this.#offersModel = offersModel;
   }
 
-  setActive = (task) => {
-    this.#task.isFavorite = task.isFavorite;
-    const element = document.getElementById(task.id);
-    if (element) {
-      const button = element.querySelector('.event__favorite-btn');
-      if (button) {
-        if (task.isFavorite===true) {
-          button.classList.add('event__favorite-btn--active');
-        } else {
-          button.classList.remove('event__favorite-btn--active');
-        }
-      }
-    }
-  }
-
   init = (task) => {
     this.#task = task;
     const prevTaskComponent = this.#taskComponent;
@@ -110,16 +95,8 @@ export default class TripPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#task, isFavorite: !this.#task.isFavorite});
-    this.#changeData(
-      UserAction.UPDATE_TASK,
-      UpdateType.MINOR,
-      {...this.#task, isFavorite: !this.#task.isFavorite},
-    );
-  }
-
-  #handleFormSubmit = (update) => {
-    this.#replaceFormToCard();
+    this.#task.offers.offers = this.#task.offers.offers.map((el) => el.offers);
+    const update = {...this.#task, isFavorite: !this.#task.isFavorite}
     this.#changeData(
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
@@ -127,11 +104,21 @@ export default class TripPresenter {
     );
   }
 
-  #handleDeleteClick = (task) => {
+  #handleFormSubmit = (update) => {
+    this.#replaceFormToCard();
+    console.log('!',update)
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      update,
+    );
+  }
+
+  #handleDeleteClick = (update) => {
     this.#changeData(
       UserAction.DELETE_TASK,
       UpdateType.MAJOR,
-      task,
+      update,
     );
   }
 }

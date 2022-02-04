@@ -4,7 +4,7 @@ import SiteMenuView from './view/site-menu-view.js';
 import StatsView from './view/stats-view';
 import MessageView from './view/message-view';
 import {render, RenderPosition,remove} from './render.js';
-import {defaultPoint} from './mock/task.js';
+import {defaultPoint} from './mock/utils.js';
 import {MenuItem} from './mock/arrays.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import DestinationsModel from './model/destinations-model.js';

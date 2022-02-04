@@ -1,6 +1,6 @@
 import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate, createDestinationsName} from '../mock/templates.js';
-import {generateDestination} from '../mock/task.js';
+import {generateDestination} from '../mock/utils.js';
 import {types} from '../mock/arrays.js';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
@@ -135,7 +135,6 @@ export default class FormAddView extends SmartView  {
     this._destinations = destinationsModel.destinations;
     this._data.destination = this._destinations[0].destination;
     this._offers = offersModel.offers;
-    // this._data.offers.offers = this._offers.find((el)=> el.offers.type === this._data.type).offers;
 
     this.#dateFromChangeHandler = this.#dateFromChangeHandler.bind(this);
     this.#dateToChangeHandler = this.#dateToChangeHandler.bind(this);
@@ -149,12 +148,6 @@ export default class FormAddView extends SmartView  {
 
   get template() {
     return addPointTemplate(this._data,this._destinations , this._offers);
-  }
-
-  reset = (point) => {
-    this.updateData(
-      this.parsePointToData(point)
-    );
   }
 
   restoreHandlers = () => {
