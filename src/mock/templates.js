@@ -86,3 +86,26 @@ export const editOffersPointTemplate = (type, pointId, checkedOffers, offers) =>
   }
   return ARRAY.join('');
 };
+
+export const editOffers1PointTemplate = (type, pointId, checkedOffers, offers) => {
+  const offerForEdititing = generateOfferForEdititing(type, offers);
+  const ARRAY = [];
+  if (offerForEdititing.offers !== undefined ) {
+    offerForEdititing.offers.forEach((el) => {
+      let foundCheckedOffer = false;
+      if (checkedOffers.offers.length > 0) {
+        foundCheckedOffer = checkedOffers.offers.find((elem) => '' === el.title);
+      }
+      const template= `<div class="event__offer-selector">
+      <input ${foundCheckedOffer && 'checked'} class="event__offer-checkbox  visually-hidden" id="${`${el.id}${pointId}`}" type="checkbox" name="${`${el.id}${pointId}`}" >
+      <label class="event__offer-label" for="${`${el.id}${pointId}`}">
+        <span class="event__offer-title">${el.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${el.price}</span>
+      </label>
+      </div>`;
+      ARRAY.push(template);
+    });
+  }
+  return ARRAY.join('');
+};

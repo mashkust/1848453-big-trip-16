@@ -28,19 +28,21 @@ const createTimeStats = (points) => [...new Set(points.map((point) => point.type
   })
   .sort(([,a],[, b]) => b - a);
 
-// const createTimeStats = (points) => [...new Set(points.map((point) => point.type))]
-//   .map((type) => {
-//     const arr = [];
-//     let sum = 0;
-//     points.forEach((point) => {
-//       if (point.type === type) {
-//         sum += (dayjs(point.dateTo).diff(point.dateFrom));
-//       }
-//     });
-//     arr.push(Math.round(sum));
-//     return [type, dayjs(sum).hour()];
-//   });
 
+// const createTimeStats = (points, types) => {
+//     const itemsTimes = [];
+//     let time = 0;
+//     types.forEach((type) => {
+//       points.forEach((point) => {
+//         if (point.type === type) {
+//           time += (dayjs(point.dateTo).diff(dayjs(point.dateFrom)));
+//         }
+//       });
+//       itemsTimes.push(Math.round(time));
+//       time = 0;
+//     });
+//     return itemsTimes;
+// };
 export {createPriceStats, createTypeStats, createTimeStats};
 
 export const parseServerPoints = (serverPoints) =>
@@ -77,7 +79,9 @@ export const prepareLocalPoint = (point) =>
     date_to: String(point.dateTo),
     // eslint-disable-next-line camelcase
     is_favorite: point.isFavorite,
-    offers: point.offers.offers,
+    offers: point.offers.offers.length > 0 ?  point.offers.offers.map((el) => ({
+      ...el
+    })) : [],
     type: point.type,
     destination: point.destination,
   });

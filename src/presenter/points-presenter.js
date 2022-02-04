@@ -22,7 +22,6 @@ export default class PointsPresenter {
 
   #currentSortType = SortType.DAY;
   #loadingComponent = new LoadingView();
-  // #sourcedBoardTasks = [];
 
   constructor(boardContainer,pointsModel, filterModel, destinationsModel, offersModel ) {
     this.#boardContainer = boardContainer;
@@ -61,7 +60,7 @@ export default class PointsPresenter {
     this.#renderSort();
   }
 
-  createPoint(point, callback) {
+  createPoint(point,callback) {
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#currentSortType = SortType.DAY;
     this.#pointNewPresenter.init(point, callback);
@@ -88,6 +87,10 @@ export default class PointsPresenter {
         break;
       case UserAction.DELETE_TASK:
         this.#pointsModel.deleteTask(updateType, update);
+        this.#clearBoard();
+        this.points.forEach((el) => {
+          this.#renderTask(this.#boardContainer,el);
+        });
         break;
     }
   }
@@ -106,7 +109,6 @@ export default class PointsPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearBoard({resetRenderedTaskCount: true, resetSortType: true});
-
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });

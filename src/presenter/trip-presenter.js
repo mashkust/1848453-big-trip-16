@@ -109,7 +109,6 @@ export default class TripPresenter {
     this.#replaceFormToCard();
   }
 
-
   #handleFavoriteClick = () => {
     this.#changeData({...this.#task, isFavorite: !this.#task.isFavorite});
     this.#changeData(

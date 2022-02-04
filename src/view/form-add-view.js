@@ -135,7 +135,7 @@ export default class FormAddView extends SmartView  {
     this._destinations = destinationsModel.destinations;
     this._data.destination = this._destinations[0].destination;
     this._offers = offersModel.offers;
-    this._data.offers.offers = this._offers.find((el)=> el.offers.type === this._data.type).offers;
+    // this._data.offers.offers = this._offers.find((el)=> el.offers.type === this._data.type).offers;
 
     this.#dateFromChangeHandler = this.#dateFromChangeHandler.bind(this);
     this.#dateToChangeHandler = this.#dateToChangeHandler.bind(this);
@@ -237,12 +237,13 @@ export default class FormAddView extends SmartView  {
   parseDataToPoint = (data, checkedInputs) => {
     data = Object.assign({}, data);
     if (checkedInputs) {
-      data.offers.offers = [];
       const offerOfType = this._offers.find((el) => el.offers.type === data.type);
       if (offerOfType) {
         const checkedOffers =  offerOfType.offers.offers.slice(0).filter((el) => checkedInputs.includes(el.title));
         if (checkedOffers.length > 0) {
           data.offers.offers = checkedOffers;
+        } else {
+          data.offers.offers = [];
         }
       }
     }

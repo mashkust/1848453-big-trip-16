@@ -55,11 +55,11 @@ export default class PointsModel extends AbstractObservable {
       if (el.id === updatedTask.id) {
         return updatedTask;
       }
+      // console.log(update)
       return el;
     });
     this._notify(updateType, updatedTask);
   }
-
 
   addTask = async (updateType, update) => {
     const newPoint = await this.#apiService.addTask(update);
@@ -67,15 +67,26 @@ export default class PointsModel extends AbstractObservable {
       newPoint,
       ...this.#points,
     ];
-
+    console.log(newPoint)
     this._notify(updateType, newPoint);
   }
 
   deleteTask = async (updateType, update) => {
-    await this.#apiService.deleteTask(update);
-    this.#points = [
-      ...this.#points
-    ];
-    this._notify(updateType);
+    const index = this.#points.findIndex((point) => point.id === update.id);
+
+    if (index === -1) {
+      throw new Error('Can\'t delete unexisting point');
+    }
+
+    try {
+      await this.#apiService.deleteTask(update);
+      this.#points = [
+        ...this.#points.slice(0, index),
+        ...this.#points.slice(index + 1),
+      ];
+      this._notify(updateType);
+    } catch(err) {
+      throw new Error('Can\'t delete point');
+    }
   }
 }

@@ -35,9 +35,9 @@ export default class PointNewPresenter {
 
 
   destroy = () => {
-    if (this._destroyCallback !== null) {
-      this._destroyCallback();
-    }
+    // if (this._destroyCallback !== null) {
+    //   this._destroyCallback();
+    // }
 
     if (this.#taskAddComponent === null) {
       return;
