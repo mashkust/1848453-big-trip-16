@@ -1,5 +1,5 @@
 import AbstractObservable from '../abstract-observable.js';
-import {UpdateType} from '../mock/arrays.js';
+import {UpdateType} from '../utils/arrays.js';
 
 export default class PointsModel extends AbstractObservable {
   #apiService = null;
@@ -34,7 +34,7 @@ export default class PointsModel extends AbstractObservable {
     const response = await this.#apiService.updateTask(update).catch((Error) => {
       throw new Error('Can\'t update task');
     });
-    console.log(update)
+
     const updatedTask = {
       baseprice: response['base_price'],
       dateFrom: new Date(response['date_from']),
@@ -76,7 +76,6 @@ export default class PointsModel extends AbstractObservable {
       type: newPoint.type,
       destination:newPoint.destination,
     };
-
     this.#points = [
       updatedTask,
       ...this.#points,

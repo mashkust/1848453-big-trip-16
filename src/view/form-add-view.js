@@ -1,7 +1,7 @@
 import SmartView from './smart-view.js';
-import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate, createDestinationsName} from '../mock/templates.js';
-import {generateDestination} from '../mock/utils.js';
-import {types} from '../mock/arrays.js';
+import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate, createDestinationsName} from '../utils/templates.js';
+import {generateDestination} from '../utils/utils.js';
+import {types} from '../utils/arrays.js';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
 

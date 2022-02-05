@@ -1,5 +1,5 @@
 import AbstractObservable from '../abstract-observable.js';
-import {UpdateType} from '../mock/arrays.js';
+import {UpdateType} from '../utils/arrays.js';
 
 export default class OffersModel extends AbstractObservable {
   #apiService = null;

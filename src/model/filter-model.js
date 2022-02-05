@@ -1,5 +1,5 @@
 import AbstractObservable from '../abstract-observable.js';
-import {FilterType} from '../mock/arrays.js';
+import {FilterType} from '../utils/arrays.js';
 
 export default class FilterModel extends AbstractObservable {
   constructor() {

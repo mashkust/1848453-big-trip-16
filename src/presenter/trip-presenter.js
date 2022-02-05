@@ -1,7 +1,7 @@
 import FormEditView from '../view/form-edit-view.js';
 import PointView from '../view/point-view.js';
 import {render, RenderPosition, replace, remove} from '../render.js';
-import {UserAction, UpdateType} from '../mock/arrays.js';
+import {UserAction, UpdateType} from '../utils/arrays.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',

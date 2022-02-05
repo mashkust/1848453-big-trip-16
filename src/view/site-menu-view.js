@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import {MenuItem} from '../mock/arrays.js';
+import {MenuItem} from '../utils/arrays.js';
 
 const createSiteMenuTemplate = () => (
   `<nav class="trip-controls__trip-tabs  trip-tabs">

@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import {createFavotiteTemplate,createOffersPointTemplate, createDuration} from '../mock/templates.js';
+import {createFavotiteTemplate,createOffersPointTemplate, createDuration} from '../utils/templates.js';
 import dayjs from 'dayjs';
 
 const createPointTemplate = (POINT) => {
@@ -41,8 +41,12 @@ const createPointTemplate = (POINT) => {
   return point;
 };
 
+// const createMessageTemplate = ()=> (
+//   '<p class="trip-events__msg">Click New Event to create your first point</p>'
+// );
+
 export default class PointView extends AbstractView {
-  #point = null;
+  #point = false;
 
   constructor(point) {
     super();

@@ -2,8 +2,9 @@ import SortView from '../view/sort-view.js';
 import LoadingView from '../view/loading-view.js';
 import TripPresenter from './trip-presenter.js';
 import PointNewPresenter from './point-new-presenter.js';
+import MessageView from '../view/message-view';
 import {render, RenderPosition,remove} from '../render.js';
-import {FilterType, SortType, UpdateType, UserAction} from '../mock/arrays.js';
+import {FilterType, SortType, UpdateType, UserAction} from '../utils/arrays.js';
 import dayjs from 'dayjs';
 
 const getTime = (startDate, endDate) => dayjs(endDate).diff(startDate);
@@ -14,6 +15,7 @@ export default class PointsPresenter {
   #pointsModel = null;
   #filterModel = null;
   #sortComponent = null;
+  #messageComponent = null;
   #tripPresenter = new Map();
   #pointNewPresenter = null;
   #destinationsModel = null;
@@ -58,6 +60,9 @@ export default class PointsPresenter {
       this.#renderTask(this.#boardContainer,el);
     });
     this.#renderSort();
+    if (this.points.length === 0) {
+      this.#renderMessage();
+    }
   }
 
   createPoint(point,callback) {
@@ -67,7 +72,7 @@ export default class PointsPresenter {
   }
 
   destroy = () => {
-    this.#clearBoard({resetRenderedTaskCount: true, resetSortType: true});
+    this.#clearBoard({resetSortType: true});
     this.#pointsModel.removeObserver(this.#handleModelEvent);
   }
 
@@ -88,6 +93,9 @@ export default class PointsPresenter {
       case UserAction.DELETE_TASK:
         this.#pointsModel.deleteTask(updateType, update);
         this.#clearBoard();
+        if ( this.points.length === 1) {
+          this.#renderMessage();
+        }
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });
@@ -108,7 +116,7 @@ export default class PointsPresenter {
         this.#renderSort();
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard({resetRenderedTaskCount: true, resetSortType: true});
+        this.#clearBoard({resetSortType: true});
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });
@@ -133,7 +141,7 @@ export default class PointsPresenter {
       return false;
     }
     this.#currentSortType = sortType;
-    this.#clearBoard({resetRenderedTaskCount: true});
+    this.#clearBoard();
     this.points.forEach((el) => {
       this.#renderTask(this.#boardContainer,el);
     });
@@ -146,12 +154,17 @@ export default class PointsPresenter {
     render(this.#sortContainer, this.#sortComponent, RenderPosition.BEFOREBEGIN);
   }
 
+  #renderMessage = () => {
+    this.#messageComponent = new MessageView();
+    render(this.#boardContainer, this.#messageComponent, RenderPosition.BEFOREBEGIN);
+  }
+
   #clearBoard = ({resetSortType = false} = {}) => {
     this.#tripPresenter.forEach((presenter) => presenter.destroy());
     this.#tripPresenter.clear();
     remove(this.#loadingComponent);
     remove(this.#sortComponent);
-
+    remove(this.#messageComponent);
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }

@@ -1,4 +1,4 @@
-import {parseServerPoints, parseServerDestinations, parseServerOffers, prepareLocalPoint, preparePoint} from './mock/utils.js';
+import {parseServerPoints, parseServerDestinations, parseServerOffers, prepareLocalPoint, preparePoint} from './utils/utils.js';
 
 const Method = {
   GET: 'GET',

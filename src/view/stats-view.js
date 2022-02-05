@@ -1,7 +1,7 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart-view.js';
-import {createPriceStats,createTypeStats,createTimeStats} from '../mock/utils.js';
+import {createPriceStats,createTypeStats,createTimeStats} from '../utils/utils.js';
 
 const BAR_HEIGHT = 90;
 

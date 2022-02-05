@@ -1,7 +1,7 @@
 // import FormEditView from '../view/form-edit-view.js';
 import FormAddView from '../view/form-add-view.js';
 import {remove, render, RenderPosition} from '../render.js';
-import {UserAction, UpdateType} from '../mock/arrays.js';
+import {UserAction, UpdateType} from '../utils/arrays.js';
 
 export default class PointNewPresenter {
   #taskListContainer = null;

@@ -2,10 +2,9 @@ import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import SiteMenuView from './view/site-menu-view.js';
 import StatsView from './view/stats-view';
-import MessageView from './view/message-view';
 import {render, RenderPosition,remove} from './render.js';
-import {defaultPoint} from './mock/utils.js';
-import {MenuItem} from './mock/arrays.js';
+import {defaultPoint} from './utils/utils.js';
+import {MenuItem} from './utils/arrays.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
@@ -36,11 +35,7 @@ const handlePointNew = () => {
 };
 
 let statsComponent = null;
-
-if (pointsModel.length === 0) {
-  render(siteEventsElement, new MessageView(), RenderPosition.BEFOREEND);
-}
-
+// console.log('pointsModel',pointsModel.points)
 addPointComponent.addEventListener('click', (evt) => {
   evt.preventDefault();
   pointsPresenter.createPoint(defaultPoint(), handlePointNew);
