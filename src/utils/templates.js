@@ -64,7 +64,7 @@ export const createDuration = (to, from) => {
   return difference;
 };
 
-export const editOffersPointTemplate = (type, pointId, checkedOffers, offers) => {
+export const editOffersPointTemplate = (type, pointId, checkedOffers, offers, isDisabled) => {
   const offerForEdititing = generateOfferForEdititing(type, offers);
   const someArray = [];
   if (offerForEdititing.offers !== undefined ) {
@@ -74,7 +74,7 @@ export const editOffersPointTemplate = (type, pointId, checkedOffers, offers) =>
         foundCheckedOffer = checkedOffers.offers.find((elem) => elem.offers.title === el.title);
       }
       const template= `<div class="event__offer-selector">
-      <input ${foundCheckedOffer && 'checked'} class="event__offer-checkbox  visually-hidden" id="${`${el.id}${pointId}`}" type="checkbox" name="${`${el.id}${pointId}`}" >
+      <input ${foundCheckedOffer && 'checked'} class="event__offer-checkbox  visually-hidden" id="${`${el.id}${pointId}`}" type="checkbox" name="${`${el.id}${pointId}`}" ${isDisabled ? 'disabled' : ''}>
       <label class="event__offer-label" for="${`${el.id}${pointId}`}">
         <span class="event__offer-title">${el.title}</span>
         &plus;&euro;&nbsp;

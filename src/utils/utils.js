@@ -11,12 +11,12 @@ const createPriceStats = (points) => [...new Set(points.map((point) => point.typ
   .map((type) => {
     const filterType = points.filter((point) => point.type === type);
     const sum = filterType.reduce((acc, val) => (acc + val.baseprice), 0);
-    return [type, sum];
+    return [type.toUpperCase(), sum];
   })
   .sort(([,a],[, b]) => b - a);
 
 const createTypeStats = (points) => [...new Set(points.map((point) => point.type))]
-  .map((type) => [type, points.filter((point) => point.type === type).length])
+  .map((type) => [type.toUpperCase(), points.filter((point) => point.type === type).length])
   .sort(([,a],[, b]) => b - a);
 
 const createTimeStats = (points) => [...new Set(points.map((point) => point.type))]
@@ -24,7 +24,7 @@ const createTimeStats = (points) => [...new Set(points.map((point) => point.type
     let sum = 0;
     const filterType = points.filter((point) => point.type === type);
     sum = filterType.reduce((acc, val) => (dayjs(val.dateTo).diff(val.dateFrom)),0) ;
-    return [type, dayjs(sum).hour()];
+    return [type.toUpperCase(), dayjs(sum).hour()];
   })
   .sort(([,a],[, b]) => b - a);
 
@@ -135,4 +135,10 @@ export const defaultPoint = () => {
     },
     type: someType,
   };
+};
+
+export const makePointsTypes = (items) => {
+  let someArray = [];
+  items.forEach((item) => someArray.push(item.type));
+  return [...new Set(someArray)];
 };

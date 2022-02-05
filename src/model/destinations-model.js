@@ -20,6 +20,6 @@ export default class DestinationsModel extends AbstractObservable {
     } catch(err) {
       this.#destinations= [];
     }
-    this._notify(UpdateType.INIT);
+    this._notify(UpdateType.MAJOR);
   }
 }

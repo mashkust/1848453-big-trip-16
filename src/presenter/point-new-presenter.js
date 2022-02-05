@@ -33,6 +33,12 @@ export default class PointNewPresenter {
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setSaving = () => {
+    this.#taskAddComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
 
   destroy = () => {
     // if (this._destroyCallback !== null) {
@@ -49,13 +55,25 @@ export default class PointNewPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setAborting = () => {
+    const resetFormState = () => {
+      this.#taskAddComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#taskAddComponent.shake(resetFormState);
+  }
+
   #handleFormSubmit = (task) => {
     this.#changeData(
       UserAction.ADD_TASK,
       UpdateType.MINOR,
       task,
     );
-    this.destroy();
+    // this.destroy();
   }
 
   #handleCancelClick = () => {

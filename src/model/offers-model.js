@@ -20,7 +20,7 @@ export default class OffersModel extends AbstractObservable {
     } catch(err) {
       this.#offers = [];
     }
-    this._notify(UpdateType.INIT);
+    this._notify(UpdateType.MAJOR);
   }
 
 }

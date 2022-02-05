@@ -6,7 +6,7 @@ import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
 
 const addPointTemplate = (POINT, destinations ,offers)=> {
-  const {type, destination, baseprice, id, dateFrom, dateTo} = POINT;
+  const {type, destination, baseprice, id, dateFrom, dateTo, isDisabled, isSaving} = POINT;
   return (
     `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -16,7 +16,7 @@ const addPointTemplate = (POINT, destinations ,offers)=> {
           <span class="visually-hidden">Choose event type</span>
           <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
         </label>
-        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? 'disabled' : ''}>
 
         <div class="event__type-list">
           <fieldset class="event__type-group">
@@ -74,7 +74,7 @@ const addPointTemplate = (POINT, destinations ,offers)=> {
         <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" ${isDisabled ? 'disabled' : ''}>
         <datalist id="destination-list-1">
         ${createDestinationsName(destinations)}
         </datalist>
@@ -93,11 +93,11 @@ const addPointTemplate = (POINT, destinations ,offers)=> {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${baseprice}">
+        <input class="event__input  event__input--price" id="event-price-1" type="number" min="1" name="event-price" value="${baseprice}">
       </div>
 
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Cancel</button>
+      <button class="event__save-btn  btn  btn--blue" type="submit"${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+      <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>Cancel</button>
       <span class="visually-hidden">Open event</span>
     </button>
     </header>
@@ -105,7 +105,7 @@ const addPointTemplate = (POINT, destinations ,offers)=> {
       <section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-        ${editOffersPointTemplate(type, id, POINT.offers, offers)}
+        ${editOffersPointTemplate(type, id, POINT.offers, offers, isDisabled)}
         </div>
       </section>
 

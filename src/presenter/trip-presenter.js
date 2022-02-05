@@ -8,6 +8,13 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
+
 export default class TripPresenter {
   #taskListContainer = null;
   #changeData = null;
@@ -48,7 +55,8 @@ export default class TripPresenter {
       replace(this.#taskComponent, prevTaskComponent);
     }
     if (this.#mode === Mode.EDITING) {
-      replace(this.#taskEditComponent, prevTaskEditComponent);
+      replace(this.#taskComponent, prevTaskEditComponent);
+      this.#mode = Mode.DEFAULT;
     }
     remove(prevTaskComponent);
     remove(prevTaskEditComponent);
@@ -102,6 +110,39 @@ export default class TripPresenter {
       UpdateType.MINOR,
       update,
     );
+  }
+
+  setViewState = (state) => {
+    if (this.#mode === Mode.DEFAULT) {
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#taskEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this.#taskEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this.#taskEditComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this.#taskComponent.shake(resetFormState);
+        this.#taskEditComponent.shake(resetFormState);
+        break;
+    }
   }
 
   #handleFormSubmit = (update) => {

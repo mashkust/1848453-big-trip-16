@@ -1,6 +1,6 @@
 import SortView from '../view/sort-view.js';
 import LoadingView from '../view/loading-view.js';
-import TripPresenter from './trip-presenter.js';
+import TripPresenter, {State as TripPresenterViewState} from './trip-presenter.js';
 import PointNewPresenter from './point-new-presenter.js';
 import MessageView from '../view/message-view';
 import {render, RenderPosition,remove} from '../render.js';
@@ -56,13 +56,13 @@ export default class PointsPresenter {
 
   init = () => {
     this.#pointsModel.addObserver(this.#handleModelEvent);
-    this.points.forEach((el) => {
-      this.#renderTask(this.#boardContainer,el);
-    });
-    this.#renderSort();
-    if (this.points.length === 0) {
-      this.#renderMessage();
-    }
+    // this.points.forEach((el) => {
+    //   this.#renderTask(this.#boardContainer,el);
+    // });
+    // this.#renderSort();
+    // if (this.points.length === 0) {
+    //   this.#renderMessage();
+    // }
   }
 
   createPoint(point,callback) {
@@ -82,24 +82,39 @@ export default class PointsPresenter {
     this.#tripPresenter.set(point.id, tripPresenter);
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_TASK:
-        this.#pointsModel.updateTask(updateType, update);
+        this.#tripPresenter.get(update.id).setViewState(TripPresenterViewState.SAVING);
+        try {
+          await this.#pointsModel.updateTask(updateType, update);
+        } catch(err) {
+          this.#tripPresenter.get(update.id).setViewState(TripPresenterViewState.ABORTING);
+        }
         break;
       case UserAction.ADD_TASK:
-        this.#pointsModel.addTask(updateType, update);
+        this.#pointNewPresenter.setSaving();
+        try {
+          await this.#pointsModel.addTask(updateType, update);
+        } catch(err) {
+          this.#pointNewPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_TASK:
-        this.#pointsModel.deleteTask(updateType, update);
-        this.#clearBoard();
-        if ( this.points.length === 1) {
-          this.#renderMessage();
+        this.#tripPresenter.get(update.id).setViewState(TripPresenterViewState.DELETING);
+        try {
+          await this.#pointsModel.deleteTask(updateType, update);
+        } catch(err) {
+          this.#tripPresenter.get(update.id).setViewState(TripPresenterViewState.ABORTING);
         }
-        this.points.forEach((el) => {
-          this.#renderTask(this.#boardContainer,el);
-        });
-        break;
+        // this.#clearBoard();
+        // if ( this.points.length === 1) {
+        //   this.#renderMessage();
+        // }
+        // this.points.forEach((el) => {
+        //   this.#renderTask(this.#boardContainer,el);
+        // });
+        // break;
     }
   }
 
@@ -123,6 +138,16 @@ export default class PointsPresenter {
         this.#renderSort();
         break;
       case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        if (this.#isLoading) {
+          this.#renderLoading();
+          return;
+        }
+        this.points.forEach((el) => {
+          this.#renderTask(this.#boardContainer,el);
+        });
+        this.#renderSort();
         break;
     }
   }
@@ -146,6 +171,9 @@ export default class PointsPresenter {
       this.#renderTask(this.#boardContainer,el);
     });
     this.#renderSort();
+    if (this.points.length === 0) {
+      this.#renderMessage();
+    }
   }
 
   #renderSort = () => {

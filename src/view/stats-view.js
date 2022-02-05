@@ -1,12 +1,13 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart-view.js';
-import {createPriceStats,createTypeStats,createTimeStats} from '../utils/utils.js';
+import {createPriceStats,createTypeStats,createTimeStats,makePointsTypes} from '../utils/utils.js';
 
 const BAR_HEIGHT = 90;
 
 const renderChart = (points, someCtx, title, label) => {
-  someCtx.height = BAR_HEIGHT * 5;
+  const pointsType = makePointsTypes(points);
+  someCtx.height = BAR_HEIGHT * pointsType.length;
 
   const someChart = new Chart(someCtx, {
     plugins: [ChartDataLabels],
