@@ -25,8 +25,6 @@ const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
 const filterModel = new FilterModel();
 const offersModel = new OffersModel(new ApiService(END_POINT, AUTHORIZATION));
 const destinationsModel = new DestinationsModel(new ApiService(END_POINT, AUTHORIZATION));
-destinationsModel.init();
-offersModel.init();
 const siteMenuComponent = new SiteMenuView();
 const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel, filterModel, destinationsModel, offersModel);
 const filterPresenter = new FilterPresenter(siteFiltersElement, filterModel, pointsModel);
@@ -78,4 +76,6 @@ pointsModel.init().finally(() => {
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 });
 
+destinationsModel.init();
+offersModel.init();
 filterPresenter.init(true);

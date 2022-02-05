@@ -35,10 +35,10 @@ export const createFavotiteTemplate = (POINT) => {
 export const createPhotosTemplate = (pictures) => {
   const someArray = [];
   if (pictures !== undefined && pictures.length !== 0) {
-    for (let i=0; i<pictures.length ;i++) {
-      const photo= `<img class="event__photo" src=${pictures[i].src} alt="Event photo">`;
+    pictures.forEach((el) => {
+      const photo= `<img class="event__photo" src=${el.src} alt="Event photo">`;
       someArray.push(photo);
-    }
+    });
   }
   return someArray;
 };
