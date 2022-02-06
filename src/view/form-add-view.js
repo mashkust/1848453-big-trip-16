@@ -6,7 +6,12 @@ import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
 
 const addPointTemplate = (POINT, destinations ,offers)=> {
-  const {type, destination, baseprice, id, dateFrom, dateTo, isDisabled, isSaving} = POINT;
+  const {type, destination, baseprice, id, isDisabled, isSaving} = POINT;
+  if (dayjs(POINT.dateFrom)>= dayjs(POINT.dateTo)) {
+    const someDate =  POINT.dateFrom;
+    POINT.dateFrom=POINT.dateTo;
+    POINT.dateTo=someDate;
+  }
   return (
     `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -82,10 +87,10 @@ const addPointTemplate = (POINT, destinations ,offers)=> {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(dateFrom).format('yy/MM/DD H:mm')}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(POINT.dateFrom).format('yy/MM/DD H:mm')}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(dateTo).format('yy/MM/DD H:mm')}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(POINT.dateTo).format('yy/MM/DD H:mm')}">
       </div>
 
       <div class="event__field-group  event__field-group--price">

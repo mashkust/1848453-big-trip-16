@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {FilterType} from './arrays.js';
-const sec = 60*1000;
+const SEC = 60*1000;
 
 export const filter = {
   [FilterType.EVERYTHING]: (points) => points.slice(),
@@ -25,7 +25,7 @@ const createTimeStats = (points) => [...new Set(points.map((point) => point.type
     let sum = 0;
     const filterType = points.filter((point) => point.type === type);
     sum = filterType.reduce((acc, index) => acc + (dayjs(index.dateTo).diff(index.dateFrom)),0) ;
-    return [type.toUpperCase(), Math.floor(sum/sec)];
+    return [type.toUpperCase(), Math.floor(sum/SEC)];
   })
   .sort(([,a],[, b]) => b - a);
 
