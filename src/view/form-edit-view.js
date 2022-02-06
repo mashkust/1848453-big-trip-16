@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import './../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPointTemplate = (POINT, destinations , offers)=> {
-  const {type, destination, baseprice, id, dateFrom, dateTo, isDisabled, isSaving, isDeleting} = POINT;
+  const {type, destination, baseprice, id, dateFrom, dateTo, isDisabled, isSaving, isDeleting,isOffers} = POINT;
   return (
     `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -86,7 +86,7 @@ const editPointTemplate = (POINT, destinations , offers)=> {
         <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(dateFrom).format('yy/MM/DD H:mm')}" ${isDisabled ? 'disabled' : ''}>
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(dateFrom).format('yy/MM/DD H:mm')}" ${isDisabled ? 'disabled' : ''}>
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(dateTo).format('yy/MM/DD H:mm')}" ${isDisabled ? 'disabled' : ''}>
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -105,14 +105,15 @@ const editPointTemplate = (POINT, destinations , offers)=> {
     </header>
     <section class="event__details">
       <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <h3 class="event__section-title  event__section-title--offers"> Offers
+        </h3>
         <div class="event__available-offers">
         ${editOffersPointTemplate(type, id, POINT.offers, offers, isDisabled)}
         </div>
       </section>
 
       <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <h3 class="event__section-title  event__section-title--destination">${destination.name !=='' ? 'Destination' : ''}</h3>
         <p class="event__destination-description">${destination.description}</p>
 
         <div class="event__photos-container">
@@ -147,7 +148,6 @@ export default class FormEditView extends SmartView  {
   }
 
   get template() {
-
     return editPointTemplate(this._data, this._destinations, this._offers);
   }
 

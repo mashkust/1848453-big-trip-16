@@ -75,6 +75,10 @@ export default class TripPresenter {
     }
   }
 
+  closeView = () => {
+    this.#replaceFormToCard();
+  }
+
   #replaceCardToForm = () => {
     replace(this.#taskEditComponent, this.#taskComponent);
     document.addEventListener('keydown', this.#onEscKeyDown);
@@ -92,6 +96,9 @@ export default class TripPresenter {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#replaceFormToCard();
+    }
+    if (this.#callback) {
+      this.#callback(false);
     }
   }
 
@@ -111,7 +118,7 @@ export default class TripPresenter {
 
   #handleFavoriteClick = () => {
     this.#task.offers.offers = this.#task.offers.offers.map((el) => el.offers);
-    const update = {...this.#task, isFavorite: !this.#task.isFavorite}
+    const update = {...this.#task, isFavorite: !this.#task.isFavorite};
     this.#changeData(
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
@@ -166,5 +173,9 @@ export default class TripPresenter {
       UpdateType.MAJOR,
       update,
     );
+    if (this.#callback) {
+      this.#callback(false);
+    }
+    this.#replaceFormToCard();
   }
 }

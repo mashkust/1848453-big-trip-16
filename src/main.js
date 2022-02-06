@@ -58,13 +58,13 @@ const handleSiteMenuClick = (menuItem) => {
       siteMenuComponent.setMenuItem(MenuItem.TABLE);
       break;
     case MenuItem.STATS:
-      addPointComponent.disabled = true;
       pointsPresenter.destroy();
       filterPresenter.init(false);
       statsComponent = new StatsView(pointsModel.points);
       render(siteEventsListElement, statsComponent.element, RenderPosition.AFTERBEGIN);
       siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.TABLE}"]`).classList.remove('trip-tabs__btn--active');
       siteMenuComponent.setMenuItem(MenuItem.STATS);
+      addPointComponent.disabled = true;
       break;
   }
 };

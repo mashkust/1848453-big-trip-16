@@ -112,14 +112,6 @@ export default class PointsPresenter {
         } catch(err) {
           this.#tripPresenter.get(update.id).setViewState(TripPresenterViewState.ABORTING);
         }
-        // this.#clearBoard();
-        // if ( this.points.length === 1) {
-        //   this.#renderMessage();
-        // }
-        // this.points.forEach((el) => {
-        //   this.#renderTask(this.#boardContainer,el);
-        // });
-        // break;
     }
   }
 
@@ -141,6 +133,9 @@ export default class PointsPresenter {
           this.#renderTask(this.#boardContainer,el);
         });
         this.#renderSort();
+        if (this.points.length === 0) {
+          this.#renderMessage();
+        }
         break;
       case UpdateType.INIT:
         this.#isLoading = false;
@@ -153,6 +148,9 @@ export default class PointsPresenter {
           this.#renderTask(this.#boardContainer,el);
         });
         this.#renderSort();
+        if (this.points.length === 0) {
+          this.#renderMessage();
+        }
         break;
     }
   }
@@ -176,9 +174,6 @@ export default class PointsPresenter {
       this.#renderTask(this.#boardContainer,el);
     });
     this.#renderSort();
-    if (this.points.length === 0) {
-      this.#renderMessage();
-    }
   }
 
   #renderSort = () => {

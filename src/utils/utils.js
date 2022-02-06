@@ -99,6 +99,7 @@ export const generateDestination = (name, destinations) => {
   return someDestination;
 };
 
+
 export const defaultPoint = () => {
   const someType = 'drive';
   return {
@@ -122,8 +123,13 @@ export const defaultPoint = () => {
   };
 };
 
+export const defaultDestinations = {
+  name:'',
+  description:'',
+};
+
 export const makePointsTypes = (items) => {
-  let someArray = [];
+  const someArray = [];
   items.forEach((item) => someArray.push(item.type));
   return [...new Set(someArray)];
 };

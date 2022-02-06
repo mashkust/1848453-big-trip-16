@@ -1,6 +1,6 @@
 import SmartView from './smart-view.js';
 import {createPhotosTemplate, editOffersPointTemplate, createCheckedTemplate, createDestinationsName} from '../utils/templates.js';
-import {generateDestination} from '../utils/utils.js';
+import {generateDestination,defaultDestinations} from '../utils/utils.js';
 import {types} from '../utils/arrays.js';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
@@ -103,14 +103,14 @@ const addPointTemplate = (POINT, destinations ,offers)=> {
     </header>
     <section class="event__details">
       <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <h3 class="event__section-title  event__section-title--offers">${type !=='sightseeing' ? 'Offers' : ''}</h3>
         <div class="event__available-offers">
         ${editOffersPointTemplate(type, id, POINT.offers, offers, isDisabled)}
         </div>
       </section>
 
       <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <h3 class="event__section-title  event__section-title--destination">${destination.name !=='' ? 'Destination' : ''}</h3>
         <p class="event__destination-description">${destination.description}</p>
 
         <div class="event__photos-container">
@@ -133,7 +133,7 @@ export default class FormAddView extends SmartView  {
     this._datepickerFrom = null;
     this._datepickers = {};
     this._destinations = destinationsModel.destinations;
-    this._data.destination = this._destinations[0].destination;
+    this._data.destination = defaultDestinations;
     this._offers = offersModel.offers;
 
     this.#dateFromChangeHandler = this.#dateFromChangeHandler.bind(this);
