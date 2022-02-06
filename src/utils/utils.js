@@ -32,7 +32,7 @@ export const parseServerPoints = (serverPoints) =>
     isFavorite: Boolean(el['is_favorite']),
     offers: {
       offers: el.offers.map((elem) => ({
-        offers: elem,
+        offers: elem
       }))
     },
     id: Number(el.id),
@@ -57,7 +57,7 @@ export const prepareLocalPoint = (point) =>
       ...el.offers
     })) : [],
     type: point.type,
-    destination: point.destination,
+    destination: point.destination
   });
 
 export const preparePoint = (point) => ({
@@ -70,7 +70,7 @@ export const preparePoint = (point) => ({
   })) : [],
   id: String(point.id),
   type: point.type,
-  destination: point.destination,
+  destination: point.destination
 });
 
 export const generateOfferForEdititing = (someType, offersArray) => {
@@ -110,16 +110,16 @@ export const defaultPoint = () => {
           title: String,
           price:Number
         },
-        type:someType,
+        type:someType
       },
     },
-    type: someType,
+    type: someType
   };
 };
 
 export const defaultDestinations = {
   name:'',
-  description:'',
+  description:''
 };
 
 export const makePointsTypes = (items) => {
