@@ -1,8 +1,8 @@
 import SortView from '../view/sort-view.js';
 import LoadingView from '../view/loading-view.js';
+import FilterMessageView from '../view/filter-message-view.js';
 import TripPresenter, {State as TripPresenterViewState} from './trip-presenter.js';
 import PointNewPresenter from './point-new-presenter.js';
-import MessageView from '../view/message-view';
 import {render, RenderPosition,remove} from '../render.js';
 import {FilterType, SortType, UpdateType, UserAction} from '../utils/arrays.js';
 import dayjs from 'dayjs';
@@ -15,13 +15,13 @@ export default class PointsPresenter {
   #pointsModel = null;
   #filterModel = null;
   #sortComponent = null;
-  #messageComponent = null;
   #tripPresenter = new Map();
   #pointNewPresenter = null;
+  #filterListComponent= null;
   #destinationsModel = null;
   #offersModel = null;
   #callback = null;
-  #isLoading = true;
+  #removeFilterMessage = null;
 
   #currentSortType = SortType.DAY;
   #loadingComponent = new LoadingView();
@@ -35,16 +35,27 @@ export default class PointsPresenter {
     this.#filterModel = filterModel;
     this.#callback = callback;
 
-    this.#pointNewPresenter = new PointNewPresenter(this.#boardContainer, this.#handleViewAction, this.#destinationsModel, this.#offersModel);
+    this.#pointNewPresenter = new PointNewPresenter(this.#boardContainer, this.#handleViewAction, this.#destinationsModel, this.#offersModel, this.removeFilterMessage );
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#renderLoading();
   }
 
   get points() {
     const filterType = this.#filterModel._activeFilter;
     let filtredPoints = this.#pointsModel.points.slice();
+    if(filtredPoints.length === 0) {
+      remove(this.#filterListComponent);
+      this.#filterListComponent = new FilterMessageView(filterType);
+      render(this.#boardContainer, this.#filterListComponent, RenderPosition.BEFOREEND);
+    }
     if (filterType !== FilterType.EVERYTHING) {
-      filtredPoints=filtredPoints.filter((point) => filterType === FilterType.FUTURE ? (new Date(point.dateFrom) > new Date() || (new Date(point.dateFrom) < new Date() && new Date(point.dateTo) > new Date())): (new Date(point.dateTo) < new Date()|| (new Date(point.dateFrom) < new Date() && new Date(point.dateTo) > new Date())));
+      filtredPoints=filtredPoints.filter((point) => filterType === FilterType.FUTURE ? (new Date(point.dateFrom) >= new Date() || (new Date(point.dateFrom) < new Date() && new Date(point.dateTo) > new Date())): (new Date(point.dateTo) < new Date()|| (new Date(point.dateFrom) < new Date() && new Date(point.dateTo) > new Date())));
+      if(filtredPoints.length === 0) {
+        remove(this.#filterListComponent );
+        this.#filterListComponent = new FilterMessageView(filterType);
+        render(this.#boardContainer, this.#filterListComponent, RenderPosition.BEFOREEND);
+      }
     }
     switch (this.#currentSortType) {
       case SortType.PRICE:
@@ -58,6 +69,15 @@ export default class PointsPresenter {
 
   init = () => {
     this.#pointsModel.addObserver(this.#handleModelEvent);
+  }
+
+  removeFilterMessage = (state) => {
+    if (state) {
+      remove(this.#filterListComponent);
+    } else {
+      this.#filterListComponent = new FilterMessageView(this.#filterModel._activeFilter);
+      render(this.#boardContainer, this.#filterListComponent, RenderPosition.BEFOREEND);
+    }
   }
 
   createPoint(point,callback) {
@@ -115,11 +135,8 @@ export default class PointsPresenter {
     }
   }
 
-  #handleModelEvent = (updateType, data) => {
+  #handleModelEvent = (updateType) => {
     switch (updateType) {
-      case UpdateType.PATCH:
-        this.#pointsModel.get(data.id).init(data);
-        break;
       case UpdateType.MINOR:
         this.#clearBoard();
         this.points.forEach((el) => {
@@ -133,30 +150,19 @@ export default class PointsPresenter {
           this.#renderTask(this.#boardContainer,el);
         });
         this.#renderSort();
-        if (this.points.length === 0) {
-          this.#renderMessage();
-        }
         break;
       case UpdateType.INIT:
-        this.#isLoading = false;
         remove(this.#loadingComponent);
-        if (this.#isLoading) {
-          this.#renderLoading();
-          return;
-        }
         this.points.forEach((el) => {
           this.#renderTask(this.#boardContainer,el);
         });
         this.#renderSort();
-        if (this.points.length === 0) {
-          this.#renderMessage();
-        }
         break;
     }
   }
 
   #renderLoading = () => {
-    render(this.#boardContainer, this.#loadingComponent, RenderPosition.AFTERBEGIN);
+    render(this.#boardContainer, this.#loadingComponent, RenderPosition.BEFOREEND);
   }
 
   #handleModeChange = () => {
@@ -182,17 +188,12 @@ export default class PointsPresenter {
     render(this.#sortContainer, this.#sortComponent, RenderPosition.BEFOREBEGIN);
   }
 
-  #renderMessage = () => {
-    this.#messageComponent = new MessageView();
-    render(this.#boardContainer, this.#messageComponent, RenderPosition.AFTERBEGIN);
-  }
-
   #clearBoard = ({resetSortType = false} = {}) => {
     this.#tripPresenter.forEach((presenter) => presenter.destroy());
     this.#tripPresenter.clear();
+    remove(this.#filterListComponent);
     remove(this.#loadingComponent);
     remove(this.#sortComponent);
-    remove(this.#messageComponent);
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }

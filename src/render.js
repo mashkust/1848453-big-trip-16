@@ -52,6 +52,7 @@ export const replace = (newElement, oldElement) => {
 };
 
 export const remove = (component) => {
+
   if (component === null) {
     return;
   }
@@ -59,7 +60,6 @@ export const remove = (component) => {
   if (!(component instanceof AbstractView)) {
     throw new Error('Can remove only components');
   }
-
   component.element.remove();
   component.removeElement();
 };

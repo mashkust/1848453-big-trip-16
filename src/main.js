@@ -52,6 +52,7 @@ const handleSiteMenuClick = (menuItem) => {
       addPointComponent.disabled = false;
       pointsPresenter.destroy();
       pointsPresenter.renderTable();
+      pointsPresenter.init();
       filterPresenter.init(true);
       remove(statsComponent);
       siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.STATS}"]`).classList.remove('trip-tabs__btn--active');

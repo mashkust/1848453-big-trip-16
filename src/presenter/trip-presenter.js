@@ -75,10 +75,6 @@ export default class TripPresenter {
     }
   }
 
-  closeView = () => {
-    this.#replaceFormToCard();
-  }
-
   #replaceCardToForm = () => {
     replace(this.#taskEditComponent, this.#taskComponent);
     document.addEventListener('keydown', this.#onEscKeyDown);
@@ -158,17 +154,21 @@ export default class TripPresenter {
     }
   }
 
-  #handleFormSubmit = (update) => {
-    this.#replaceFormToCard();
-    this.#changeData(
+  #handleFormSubmit = async (update) => {
+    await this.#changeData(
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
       update,
     );
+    this.#replaceFormToCard();
+    if (this.#callback) {
+      this.#callback(false);
+    }
   }
 
-  #handleDeleteClick = (update) => {
-    this.#changeData(
+  #handleDeleteClick = async (update) => {
+    remove(this.#taskEditComponent);
+    await this.#changeData(
       UserAction.DELETE_TASK,
       UpdateType.MAJOR,
       update,
@@ -176,6 +176,6 @@ export default class TripPresenter {
     if (this.#callback) {
       this.#callback(false);
     }
-    this.#replaceFormToCard();
+
   }
 }

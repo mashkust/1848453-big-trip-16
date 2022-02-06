@@ -80,7 +80,7 @@ const editPointTemplate = (POINT, destinations , offers)=> {
         <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" ${isDisabled ? 'disabled' : ''}>
+        <input class="event__input  event__input--destination" required id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" ${isDisabled ? 'disabled' : ''}>
         <datalist id="destination-list-1">
         ${createDestinationsName(destinations)}
         </datalist>
@@ -181,7 +181,7 @@ export default class FormEditView extends SmartView  {
     evt.preventDefault();
     this.updateData({
       baseprice: evt.target.value,
-    });
+    }, true);
   }
 
   #destinationChangeHandler = (evt) =>{
@@ -189,7 +189,7 @@ export default class FormEditView extends SmartView  {
     if (newDestination) {
       this.updateData({
         destination: newDestination.destination
-      });
+      },true);
     }
   }
 
@@ -242,7 +242,17 @@ export default class FormEditView extends SmartView  {
     this._callback.formSubmit(this.parseDataToPoint(this._data, checkedLabels));
   }
 
-  parsePointToData = (point) => Object.assign({},{...point,
+  parsePointToData = (point) => Object.assign({},{
+    baseprice: point.baseprice,
+    dateFrom:  point.dateFrom,
+    dateTo:  point.dateTo,
+    isFavorite:  point.isFavorite,
+    offers: {
+      offers: point.offers.offers
+    },
+    id: point.id,
+    type:  point.type,
+    destination: point.destination,
     isDisabled: false,
     isSaving: false,
     isDeleting: false})
@@ -254,7 +264,7 @@ export default class FormEditView extends SmartView  {
       if (offerOfType) {
         const checkedOffers =  offerOfType.offers.offers.slice(0).filter((el) => checkedInputs.includes(el.title));
         if (checkedOffers.length > 0) {
-          data.offers.offers = checkedOffers;
+          data.offers.offers = checkedOffers.map((el)=> ({offers:el}));
         } else {
           data.offers.offers = [];
         }

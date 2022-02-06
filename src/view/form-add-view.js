@@ -79,7 +79,7 @@ const addPointTemplate = (POINT, destinations ,offers)=> {
         <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" ${isDisabled ? 'disabled' : ''}>
+        <input class="event__input  event__input--destination" required id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" ${isDisabled ? 'disabled' : ''}>
         <datalist id="destination-list-1">
         ${createDestinationsName(destinations)}
         </datalist>
@@ -180,7 +180,7 @@ export default class FormAddView extends SmartView  {
     evt.preventDefault();
     this.updateData({
       baseprice: evt.target.value,
-    });
+    }, true);
   }
 
   #destinationChangeHandler =(evt) =>{
@@ -188,7 +188,7 @@ export default class FormAddView extends SmartView  {
     if (newDestination) {
       this.updateData({
         destination: newDestination.destination
-      });
+      },true);
     }
   }
 

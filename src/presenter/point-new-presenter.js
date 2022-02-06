@@ -8,17 +8,22 @@ export default class PointNewPresenter {
   #taskAddComponent = null;
   #destinationsModel = null;
   #offersModel = null;
+  #deleteTextCallback = null;
   _destroyCallback = null
 
-  constructor(taskListContainer, changeData ,destinationsModel, offersModel) {
+  constructor(taskListContainer, changeData ,destinationsModel, offersModel, deleteTextCallback) {
     this.#taskListContainer = taskListContainer;
     this.#changeData = changeData;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
+    this.#deleteTextCallback = deleteTextCallback;
+
   }
 
   init = (point, callback) => {
-
+    if ( this.#deleteTextCallback) {
+      this.#deleteTextCallback(true);
+    }
     this._destroyCallback = callback;
 
     if (this.#taskAddComponent !== null) {
@@ -67,10 +72,10 @@ export default class PointNewPresenter {
     this.#taskAddComponent.shake(resetFormState);
   }
 
-  #handleFormSubmit = (task) => {
-    this.#changeData(
+  #handleFormSubmit = async (task) => {
+    await this.#changeData(
       UserAction.ADD_TASK,
-      UpdateType.MINOR,
+      UpdateType.MAJOR,
       task,
     );
     this.destroy();
@@ -78,6 +83,9 @@ export default class PointNewPresenter {
 
   #handleCancelClick = () => {
     this.destroy();
+    if ( this.#deleteTextCallback) {
+      this.#deleteTextCallback(false);
+    }
   }
 
   #escKeyDownHandler = (evt) => {
