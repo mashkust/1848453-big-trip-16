@@ -1,4 +1,3 @@
-// import FormEditView from '../view/form-edit-view.js';
 import FormAddView from '../view/form-add-view.js';
 import {remove, render, RenderPosition} from '../render.js';
 import {UserAction, UpdateType} from '../utils/arrays.js';
@@ -9,6 +8,7 @@ export default class PointNewPresenter {
   #taskAddComponent = null;
   #destinationsModel = null;
   #offersModel = null;
+  _destroyCallback = null
 
   constructor(taskListContainer, changeData ,destinationsModel, offersModel) {
     this.#taskListContainer = taskListContainer;
@@ -41,9 +41,9 @@ export default class PointNewPresenter {
   }
 
   destroy = () => {
-    // if (this._destroyCallback !== null) {
-    //   this._destroyCallback();
-    // }
+    if (this._destroyCallback !== null) {
+      this._destroyCallback();
+    }
 
     if (this.#taskAddComponent === null) {
       return;
@@ -73,7 +73,7 @@ export default class PointNewPresenter {
       UpdateType.MINOR,
       task,
     );
-    // this.destroy();
+    this.destroy();
   }
 
   #handleCancelClick = () => {

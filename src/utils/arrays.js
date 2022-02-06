@@ -10,6 +10,11 @@ export const types = [
   'restaurant',
 ];
 
+export const chartColors = {
+  WHITE:'#ffffff',
+  BLACK:'#000000',
+};
+
 export const SortType = {
   DAY: 'day',
   TIME: 'time',

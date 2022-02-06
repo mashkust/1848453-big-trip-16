@@ -2,8 +2,9 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart-view.js';
 import {createPriceStats,createTypeStats,createTimeStats,makePointsTypes} from '../utils/utils.js';
+import {chartColors} from '../utils/arrays.js';
 
-const BAR_HEIGHT = 90;
+const BAR_HEIGHT = 300;
 
 const renderChart = (points, someCtx, title, label) => {
   const pointsType = makePointsTypes(points);
@@ -16,8 +17,8 @@ const renderChart = (points, someCtx, title, label) => {
       labels: [...points.keys()].map((type) => type),
       datasets: [{
         data:[...points.values()],
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
+        backgroundColor: chartColors.WHITE,
+        hoverBackgroundColor: chartColors.WHITE,
         anchor: 'start',
         barThickness: 44,
         minBarLength: 50,
@@ -30,7 +31,7 @@ const renderChart = (points, someCtx, title, label) => {
           font: {
             size: 13,
           },
-          color: '#000000',
+          color: chartColors.BLACK,
           anchor: 'end',
           align: 'start',
           formatter: (val) => `${val}${label}`,
@@ -39,14 +40,14 @@ const renderChart = (points, someCtx, title, label) => {
       title: {
         display: true,
         text: title,
-        fontColor: '#000000',
+        fontColor:  chartColors.BLACK,
         fontSize: 23,
         position: 'left',
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: '#000000',
+            fontColor:  chartColors.BLACK,
             padding: 5,
             fontSize: 13,
           },

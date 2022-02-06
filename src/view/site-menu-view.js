@@ -12,8 +12,6 @@ export default class SiteMenuView extends AbstractView {
 
   constructor() {
     super();
-
-    // this.#activeItem = MenuItem.TABLE;
     this.#menuClickHandler = this.#menuClickHandler.bind(this);
   }
 

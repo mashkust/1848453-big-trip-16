@@ -82,10 +82,10 @@ const addPointTemplate = (POINT, destinations ,offers)=> {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(dateFrom).format('DD/MM/YY H:mm')}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(dateFrom).format('yy/MM/DD H:mm')}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(dateTo).format('DD/MM/YY H:mm')}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(dateTo).format('yy/MM/DD H:mm')}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -225,16 +225,30 @@ export default class FormAddView extends SmartView  {
     this._callback.formSubmit(this.parseDataToPoint(this._data, checkedLabels));
   }
 
-  parsePointToData = (point) => Object.assign({}, point)
+  parsePointToData = (point) => Object.assign({},{
+    baseprice: point.baseprice,
+    dateFrom:  point.dateFrom,
+    dateTo:  point.dateTo,
+    isFavorite:  point.isFavorite,
+    offers: {
+      offers: []
+    },
+    id: point.id,
+    type:  point.type,
+    destination: point.destination,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false})
+
 
   parseDataToPoint = (data, checkedInputs) => {
-    data = Object.assign({}, data);
+    data = Object.assign({},data);
     if (checkedInputs) {
       const offerOfType = this._offers.find((el) => el.offers.type === data.type);
       if (offerOfType) {
         const checkedOffers =  offerOfType.offers.offers.slice(0).filter((el) => checkedInputs.includes(el.title));
         if (checkedOffers.length > 0) {
-          data.offers.offers = checkedOffers;
+          data.offers.offers = checkedOffers.map((el)=> ({offers:el}));
         } else {
           data.offers.offers = [];
         }
@@ -272,7 +286,7 @@ export default class FormAddView extends SmartView  {
     }
     const defaults = {
       enableTime: true,
-      dateFormat: 'd/m/Y H:i'
+      dateFormat: 'y/m/d H:i'
     };
 
     const flatpickrConfig = Object.assign({},

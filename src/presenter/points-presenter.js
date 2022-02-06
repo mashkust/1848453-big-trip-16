@@ -20,18 +20,20 @@ export default class PointsPresenter {
   #pointNewPresenter = null;
   #destinationsModel = null;
   #offersModel = null;
+  #callback = null;
   #isLoading = true;
 
   #currentSortType = SortType.DAY;
   #loadingComponent = new LoadingView();
 
-  constructor(boardContainer,pointsModel, filterModel, destinationsModel, offersModel ) {
+  constructor(boardContainer,pointsModel, filterModel, destinationsModel, offersModel, callback) {
     this.#boardContainer = boardContainer;
     this.#sortContainer = boardContainer;
     this.#pointsModel = pointsModel;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
     this.#filterModel = filterModel;
+    this.#callback = callback;
 
     this.#pointNewPresenter = new PointNewPresenter(this.#boardContainer, this.#handleViewAction, this.#destinationsModel, this.#offersModel);
     this.#pointsModel.addObserver(this.#handleModelEvent);
@@ -56,13 +58,6 @@ export default class PointsPresenter {
 
   init = () => {
     this.#pointsModel.addObserver(this.#handleModelEvent);
-    // this.points.forEach((el) => {
-    //   this.#renderTask(this.#boardContainer,el);
-    // });
-    // this.#renderSort();
-    // if (this.points.length === 0) {
-    //   this.#renderMessage();
-    // }
   }
 
   createPoint(point,callback) {
@@ -71,13 +66,23 @@ export default class PointsPresenter {
     this.#pointNewPresenter.init(point, callback);
   }
 
+  renderTable = () => {
+    this.#clearBoard();
+    this.points.forEach((el) => {
+      this.#renderTask(this.#boardContainer,el);
+    });
+    this.#renderSort();
+  }
+
   destroy = () => {
+    this.#pointNewPresenter.destroy();
     this.#clearBoard({resetSortType: true});
+    remove(this.#loadingComponent);
     this.#pointsModel.removeObserver(this.#handleModelEvent);
   }
 
   #renderTask= (taskListElement, point)=>{
-    const tripPresenter = new TripPresenter(taskListElement,this.#handleViewAction, this.#handleModeChange, this.#destinationsModel, this.#offersModel);
+    const tripPresenter = new TripPresenter(taskListElement,this.#handleViewAction, this.#handleModeChange, this.#destinationsModel, this.#offersModel, this.#callback);
     tripPresenter.init(point);
     this.#tripPresenter.set(point.id, tripPresenter);
   };

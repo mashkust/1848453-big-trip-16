@@ -25,7 +25,6 @@ const filterModel = new FilterModel();
 const offersModel = new OffersModel(new ApiService(END_POINT, AUTHORIZATION));
 const destinationsModel = new DestinationsModel(new ApiService(END_POINT, AUTHORIZATION));
 const siteMenuComponent = new SiteMenuView();
-const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel, filterModel, destinationsModel, offersModel);
 const filterPresenter = new FilterPresenter(siteFiltersElement, filterModel, pointsModel);
 
 const addPointComponent = document.querySelector('.trip-main__event-add-btn');
@@ -34,8 +33,13 @@ const handlePointNew = () => {
   addPointComponent.disabled = false;
 };
 
+const handlePoinEdit = (newState) => {
+  addPointComponent.disabled = newState;
+};
+
+const pointsPresenter = new PointsPresenter(siteEventsListElement, pointsModel, filterModel, destinationsModel, offersModel, handlePoinEdit);
+
 let statsComponent = null;
-// console.log('pointsModel',pointsModel.points)
 addPointComponent.addEventListener('click', (evt) => {
   evt.preventDefault();
   pointsPresenter.createPoint(defaultPoint(), handlePointNew);
@@ -47,7 +51,7 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.TABLE:
       addPointComponent.disabled = false;
       pointsPresenter.destroy();
-      pointsPresenter.init();
+      pointsPresenter.renderTable();
       filterPresenter.init(true);
       remove(statsComponent);
       siteMenuComponent.element.querySelector(`[data-menu-type="${MenuItem.STATS}"]`).classList.remove('trip-tabs__btn--active');

@@ -23,16 +23,18 @@ export default class TripPresenter {
   #taskEditComponent = null;
   #destinationsModel = null;
   #offersModel = null;
+  #callback= null;
 
   #task = null;
   #mode = Mode.DEFAULT
 
-  constructor(taskListContainer, changeData, changeMode, destinationsModel, offersModel) {
+  constructor(taskListContainer, changeData, changeMode, destinationsModel, offersModel, callback) {
     this.#taskListContainer = taskListContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
+    this.#callback = callback;
   }
 
   init = (task) => {
@@ -95,11 +97,16 @@ export default class TripPresenter {
 
   #handleEditClick = () => {
     this.#replaceCardToForm();
+    if (this.#callback) {
+      this.#callback(true);
+    }
   };
 
   #handleCloseEditClick = () => {
-    // this._formEditComponent.reset(this._waypoint);
     this.#replaceFormToCard();
+    if (this.#callback) {
+      this.#callback(false);
+    }
   }
 
   #handleFavoriteClick = () => {
@@ -124,7 +131,6 @@ export default class TripPresenter {
         isDeleting: false,
       });
     };
-
     switch (state) {
       case State.SAVING:
         this.#taskEditComponent.updateData({
@@ -147,7 +153,6 @@ export default class TripPresenter {
 
   #handleFormSubmit = (update) => {
     this.#replaceFormToCard();
-    console.log('!',update)
     this.#changeData(
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
