@@ -44,7 +44,7 @@ export default class PointsPresenter {
     const filterType = this.#filterModel._activeFilter;
     let filtredPoints = this.#pointsModel.points.slice();
     if (filterType !== FilterType.EVERYTHING) {
-      filtredPoints=filtredPoints.filter((point) => filterType === FilterType.FUTURE ? new Date(point.dateTo) > new Date() : new Date(point.dateTo) < new Date());
+      filtredPoints=filtredPoints.filter((point) => filterType === FilterType.FUTURE ? (new Date(point.dateFrom) > new Date() || (new Date(point.dateFrom) < new Date() && new Date(point.dateTo) > new Date())): (new Date(point.dateTo) < new Date()|| (new Date(point.dateFrom) < new Date() && new Date(point.dateTo) > new Date())));
     }
     switch (this.#currentSortType) {
       case SortType.PRICE:

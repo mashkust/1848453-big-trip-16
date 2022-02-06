@@ -3,6 +3,10 @@ import {createFavotiteTemplate,createOffersPointTemplate, createDuration} from '
 import dayjs from 'dayjs';
 
 const createPointTemplate = (POINT) => {
+  let priceOffers= 0;
+  if (POINT.offers.offers.length!==0) {
+    POINT.offers.offers.slice().forEach((el)=>(priceOffers= priceOffers + el.offers.price));
+  }
   const point= `<li class="trip-events__item" id=${POINT.id} >
       <div class="event">
         <time class="event__date" datetime="${dayjs(POINT.dateFrom).format('YYYY-MM-DD')}">${dayjs(POINT.dateFrom).format('MMM D')}</time>
@@ -19,7 +23,7 @@ const createPointTemplate = (POINT) => {
           <p class="event__duration">${createDuration(POINT.dateTo, POINT.dateFrom)}</p>
         </div>
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">${POINT.baseprice}</span>
+          &euro;&nbsp;<span class="event__price-value">${ POINT.baseprice + priceOffers}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
