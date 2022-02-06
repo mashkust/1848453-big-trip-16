@@ -136,6 +136,6 @@ export default class StatsView extends SmartView {
 
     this._moneyChart = renderChart(money, moneyCtx, 'MONEY', '€');
     this._typeChart = renderChart(type, typeCtx, 'TYPE', 'x');
-    this._timeChart = renderChart(time, timeCtx, 'TIME', 'H');
+    this._timeChart = renderChart(time, timeCtx, 'TIME', 'M');
   }
 }

@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import './../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPointTemplate = (POINT, destinations , offers)=> {
-  const {type, destination, baseprice, id, dateFrom, dateTo, isDisabled, isSaving, isDeleting,isOffers} = POINT;
+  const {type, destination, baseprice, id, dateFrom, dateTo, isDisabled, isSaving, isDeleting} = POINT;
   return (
     `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -105,8 +105,7 @@ const editPointTemplate = (POINT, destinations , offers)=> {
     </header>
     <section class="event__details">
       <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers"> Offers
-        </h3>
+        <h3 class="event__section-title  event__section-title--offers">${type !=='sightseeing' ? 'Offers' : ''}</h3>
         <div class="event__available-offers">
         ${editOffersPointTemplate(type, id, POINT.offers, offers, isDisabled)}
         </div>

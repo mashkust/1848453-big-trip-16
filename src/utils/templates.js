@@ -1,6 +1,5 @@
 import {generateOfferForEdititing} from './utils.js';
 import dayjs from 'dayjs';
-const MINUTES = 60;
 
 export const createOffersPointTemplate = (POINT) => {
   const someArray = [];
@@ -50,18 +49,30 @@ export const createCheckedTemplate= (type,someValue) => {
   return '';
 };
 
-export const createDuration = (to, from) => {
-  let difference = dayjs(to).diff(from, 'minutes');
+const transformsDuration = (days, hours, minutes) => {
+  if (days !== 0) {
+    const day = dayjs().date(days).format('DD');
+    const hour = dayjs().hour(hours).format('HH');
+    const minute = dayjs().minute(minutes).format('mm');
 
-  if (difference > MINUTES) {
-    difference = `${Math.floor(difference / MINUTES)}H ${difference % MINUTES}M`;
-  } else if (difference % MINUTES === 0) {
-    difference = `${Math.floor(difference / MINUTES)}H`;
+    return `${day}D ${hour}H ${minute}M`;
+  } else if (hours !== 0) {
+    const hour = dayjs().hour(hours).format('HH');
+    const minute = dayjs().minute(minutes).format('mm');
+    return `${hour}H ${minute}M`;
   } else {
-    difference = `${difference} + M`;
+    const minute = dayjs().minute(minutes).format('mm');
+    return `${minute}M`;
   }
+};
 
-  return difference;
+export const createDuration = (to, from) => {
+  const durationMinute = dayjs(to).diff(from, 'm');
+  const durationTimeHour = dayjs(to).diff(from, 'h');
+  const durationTimeDay = dayjs(to).diff(from, 'd');
+  const durationTime = transformsDuration(durationTimeDay, durationTimeHour,  durationMinute);
+
+  return durationTime;
 };
 
 export const editOffersPointTemplate = (type, pointId, checkedOffers, offers, isDisabled) => {

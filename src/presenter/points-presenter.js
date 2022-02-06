@@ -184,7 +184,7 @@ export default class PointsPresenter {
 
   #renderMessage = () => {
     this.#messageComponent = new MessageView();
-    render(this.#boardContainer, this.#messageComponent, RenderPosition.BEFOREBEGIN);
+    render(this.#boardContainer, this.#messageComponent, RenderPosition.AFTERBEGIN);
   }
 
   #clearBoard = ({resetSortType = false} = {}) => {

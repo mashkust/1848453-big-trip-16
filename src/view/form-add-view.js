@@ -263,7 +263,7 @@ export default class FormAddView extends SmartView  {
       '#event-start-time-1',
       {
         defaultDate: this._data.dateFrom,
-        onChange: this.#dateFromChangeHandler
+        onChange: this.#dateFromChangeHandler,
       }
     );
   }
@@ -274,8 +274,7 @@ export default class FormAddView extends SmartView  {
       '#event-end-time-1',
       {
         defaultDate: this._data.dateTo,
-        minDate: this._data.dateFrom,
-        onChange: this.#dateToChangeHandler
+        onChange: this.#dateToChangeHandler,
       }
     );
   }
