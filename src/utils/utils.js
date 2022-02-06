@@ -32,8 +32,8 @@ export const parseServerPoints = (serverPoints) =>
     isFavorite: Boolean(el['is_favorite']),
     offers: {
       offers: el.offers.map((elem) => ({
-        offers: elem
-      }))
+        offers: elem,
+      })),
     },
     id: Number(el.id),
     type: el.type,
@@ -49,28 +49,28 @@ export const parseServerDestinations = (serverDestination) =>
 
 export const prepareLocalPoint = (point) =>
   ({
-    base_price: Number(point.baseprice),
-    date_from: String(point.dateFrom),
-    date_to: String(point.dateTo),
-    is_favorite: point.isFavorite,
+    'base_price': Number(point.baseprice),
+    'date_from': String(point.dateFrom),
+    'date_to': String(point.dateTo),
+    'is_favorite': point.isFavorite,
     offers: point.offers.offers.length > 0 ?  point.offers.offers.map((el) => ({
-      ...el.offers
+      ...el.offers,
     })) : [],
     type: point.type,
-    destination: point.destination
+    destination: point.destination,
   });
 
 export const preparePoint = (point) => ({
-  base_price: Number(point.baseprice),
-  date_from: String(point.dateFrom),
-  date_to: String(point.dateTo),
-  is_favorite: Boolean(point.isFavorite),
+  'base_price': Number(point.baseprice),
+  'date_from': String(point.dateFrom),
+  'date_to': String(point.dateTo),
+  'is_favorite': Boolean(point.isFavorite),
   offers: point.offers.offers.length > 0 ?  point.offers.offers.map((el) => ({
-    ...el.offers
+    ...el.offers,
   })) : [],
   id: String(point.id),
   type: point.type,
-  destination: point.destination
+  destination: point.destination,
 });
 
 export const generateOfferForEdititing = (someType, offersArray) => {
@@ -108,18 +108,18 @@ export const defaultPoint = () => {
         {
           id: Number,
           title: String,
-          price:Number
+          price:Number,
         },
-        type:someType
+        type:someType,
       },
     },
-    type: someType
+    type: someType,
   };
 };
 
 export const defaultDestinations = {
   name:'',
-  description:''
+  description:'',
 };
 
 export const makePointsTypes = (items) => {
