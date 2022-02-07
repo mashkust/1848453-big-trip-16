@@ -177,6 +177,11 @@ export default class FormEditView extends SmartView  {
     });
   }
 
+  // reset = (point) => {
+  //   this.updateData(
+  //     FormEditView.parsePointToData(this._data));
+  // }
+
   #priceChangeHandler = (evt) =>{
     evt.preventDefault();
     this.updateData({
@@ -189,7 +194,7 @@ export default class FormEditView extends SmartView  {
     if (newDestination) {
       this.updateData({
         destination: newDestination.destination
-      },true);
+      },);
     }
   }
 

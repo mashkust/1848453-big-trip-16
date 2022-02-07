@@ -21,7 +21,6 @@ export default class PointsPresenter {
   #destinationsModel = null;
   #offersModel = null;
   #callback = null;
-  #removeFilterMessage = null;
 
   #currentSortType = SortType.DAY;
   #loadingComponent = new LoadingView();
@@ -75,8 +74,10 @@ export default class PointsPresenter {
     if (state) {
       remove(this.#filterListComponent);
     } else {
-      this.#filterListComponent = new FilterMessageView(this.#filterModel._activeFilter);
-      render(this.#boardContainer, this.#filterListComponent, RenderPosition.BEFOREEND);
+      if (this.points.length===0 && state) {
+        this.#filterListComponent = new FilterMessageView(this.#filterModel._activeFilter);
+        render(this.#boardContainer, this.#filterListComponent, RenderPosition.BEFOREEND);
+      }
     }
   }
 
@@ -129,9 +130,11 @@ export default class PointsPresenter {
         this.#tripPresenter.get(update.id).setViewState(TripPresenterViewState.DELETING);
         try {
           await this.#pointsModel.deleteTask(updateType, update);
+          this.#boardContainer.querySelector('li').remove();
         } catch(err) {
           this.#tripPresenter.get(update.id).setViewState(TripPresenterViewState.ABORTING);
         }
+        break;
     }
   }
 
@@ -189,11 +192,11 @@ export default class PointsPresenter {
   }
 
   #clearBoard = ({resetSortType = false} = {}) => {
-    this.#tripPresenter.forEach((presenter) => presenter.destroy());
-    this.#tripPresenter.clear();
     remove(this.#filterListComponent);
     remove(this.#loadingComponent);
     remove(this.#sortComponent);
+    this.#tripPresenter.forEach((presenter) => presenter.destroy());
+    this.#tripPresenter.clear();
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }

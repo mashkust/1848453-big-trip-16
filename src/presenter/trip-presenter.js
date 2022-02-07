@@ -71,6 +71,7 @@ export default class TripPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
+      // this.#taskEditComponent.reset(this.#task);
       this.#replaceFormToCard();
     }
   }
@@ -113,7 +114,6 @@ export default class TripPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#task.offers.offers = this.#task.offers.offers.map((el) => el.offers);
     const update = {...this.#task, isFavorite: !this.#task.isFavorite};
     this.#changeData(
       UserAction.UPDATE_TASK,
@@ -160,22 +160,18 @@ export default class TripPresenter {
       UpdateType.MINOR,
       update,
     );
-    this.#replaceFormToCard();
     if (this.#callback) {
       this.#callback(false);
     }
   }
 
   #handleDeleteClick = async (update) => {
-    remove(this.#taskEditComponent);
     await this.#changeData(
       UserAction.DELETE_TASK,
-      UpdateType.MAJOR,
-      update,
-    );
+      UpdateType.MINOR,
+      update);
     if (this.#callback) {
       this.#callback(false);
     }
-
   }
 }

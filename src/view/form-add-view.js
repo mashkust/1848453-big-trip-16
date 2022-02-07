@@ -188,7 +188,7 @@ export default class FormAddView extends SmartView  {
     if (newDestination) {
       this.updateData({
         destination: newDestination.destination
-      },true);
+      },);
     }
   }
 

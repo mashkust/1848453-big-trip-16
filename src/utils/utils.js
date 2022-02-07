@@ -64,7 +64,7 @@ export const preparePoint = (point) => ({
   'base_price': Number(point.baseprice),
   'date_from': String(point.dateFrom),
   'date_to': String(point.dateTo),
-  'is_favorite': Boolean(point.isFavorite),
+  'is_favorite': point.isFavorite,
   offers: point.offers.offers.length > 0 ?  point.offers.offers.map((el) => ({
     ...el.offers,
   })) : [],
